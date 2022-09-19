@@ -1,9 +1,13 @@
 # Chronicle Examples
 
+// TODO Eliminate this approach so we can share examples with partners
+
 This is simplest done from source, currently these examples do not use the
 builder image in CI, so this is a known working method
 
 ## Build Chronicle
+
+// TODO Eliminate this dependency so we can share examples with partners
 
 Clone catenasys/chronicle and run
 
@@ -13,16 +17,21 @@ ISOLATION_ID=local make build
 
 This should only require docker / make as a dependency
 
-This builds the chronicle build image so it is available as builder:local
+This builds the chronicle build image so it is available as
+`chronicle-builder:local`
 
 ## Checkout Chronicle Examples
 
 Clone catenasys/chronicle-examples
 
+// TODO Eliminate this default so we can share examples with partners
+
 This contains several example domain yaml files and docker and uses
-builder:local by default.
+`chronicle-builder:local` by default.
 
 ## Build Example
+
+// TODO create local Makefiles that do this automagically??
 
 Chose from one of the following examples.
 
