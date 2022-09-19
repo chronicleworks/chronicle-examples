@@ -46,7 +46,7 @@ make clean build
 
 ## Run Example
 
-Once you've built run this command.
+Once you've built your example run this command.
 
 ```bash
 make run-standalone-chronicle
@@ -77,9 +77,10 @@ address = "tcp://localhost:4004"
 [namespace_bindings]
 ```
 
-!!!Note
-    If you update the example domain, you currently need to stop this running
-    image to re-run run-standalone-chronicle as it backgrounds on CTRL-C
+### Note
+
+If you update the example domain, you currently need to stop this running
+image to re-run `run-standalone-chronicle` as it backgrounds on CTRL-C
 
 ## GraphQL playground
 
@@ -103,10 +104,10 @@ of their flyout window usually does the job however.
 Once you get to this point, you are ready to explore the example. To do this,
 consult the relevant guide.
 
-!!!Note
-    The schema / docs tab is good for showing the relationship between
-    domain.yaml config and the resulting api.
+### Notes
 
-!!!Note
-    Shift-refresh on the playground will remove previous result from query tabs,
-    good to do before rerunning your example.
+The schema / docs tab is good for showing the relationship between
+your domain.yaml config and the resulting api.
+
+Shift-refresh on the playground will remove previous result from query tabs,
+good to do before rerunning your example.

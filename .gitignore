@@ -10,6 +10,7 @@ __pycache__/
 *.code-workspace
 
 # chronicle builder
+domain.yaml
 markers/
 
 # Distribution / packaging

@@ -61,10 +61,10 @@ markers/domain: domain.yaml markers
 
 .PHONY: run-standalone-chronicle
 run-standalone-chronicle: markers/domain
-	docker run --env RUST_LOG=debug --publish 9982:9982 -it example-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+	docker run --env RUST_LOG=debug --publish 9982:9982 -it ${EXAMPLE}-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
 
 chronicle.graphql: markers/domain
-	docker run --env RUST_LOG=debug example-chronicle-inmem:local chronicle export-schema > chronicle.graphql
+	docker run --env RUST_LOG=debug ${EXAMPLE}-chronicle-inmem:local chronicle export-schema > chronicle.graphql
 
 .PHONY: sdl
 sdl: crates/consent-api/graphql/schema/chronicle.graphql

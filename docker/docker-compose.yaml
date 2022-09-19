@@ -1,13 +1,13 @@
 version: '3'
 services:
   example-chronicle:
-    image: example-chronicle:${ISOLATION_ID:-local}
+    image: ${EXAMPLE}-chronicle:${ISOLATION_ID:-local}
     build:
       context: ../
       dockerfile: docker/chronicle.dockerfile
       target: example-chronicle
   example-chronicle-inmem:
-    image: example-chronicle-inmem:${ISOLATION_ID:-local}
+    image: ${EXAMPLE}-chronicle-inmem:${ISOLATION_ID:-local}
     build:
       context: ../
       dockerfile: docker/chronicle.dockerfile
