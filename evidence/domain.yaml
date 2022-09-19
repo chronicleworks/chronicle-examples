@@ -17,7 +17,7 @@ entities:
     attributes:
       - CmsId
       - Content
-  Evidence:
+  EvidenceReference:
     attributes:
       - SearchParameter
       - Reference

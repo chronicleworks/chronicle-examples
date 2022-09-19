@@ -38,12 +38,6 @@ run:
 stop:
 	docker-compose -f docker/chronicle.yaml down || true
 
-$(MARKERS)/build:
-	@echo "Building ${EXAMPLE} example ..."
-	cp ${EXAMPLE}/domain.yaml domain.yaml
-	docker-compose -f docker/docker-compose.yaml build
-	touch $@
-
 clean_containers:
 	docker-compose -f docker/chronicle.yaml rm -f || true
 	docker-compose -f docker/docker-compose.yaml rm -f || true
@@ -62,11 +56,13 @@ markers/$(EXAMPLE): $(EXAMPLE)/domain.yaml markers
 	touch $@
 
 .PHONY: run-standalone-chronicle
-run-standalone-chronicle: markers/domain
+run-standalone-chronicle: markers/$(EXAMPLE)
+	docker run --env RUST_LOG=debug --publish 9982:9982 -it $(EXAMPLE)-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+
 sdl: chronicle.graphql
 
-chronicle.graphql: markers/domain
-	docker run --env RUST_LOG=debug ${EXAMPLE}-chronicle-inmem:local chronicle export-schema > chronicle.graphql
+chronicle.graphql: markers/$(EXAMPLE)
+	docker run --env RUST_LOG=debug $(EXAMPLE)-chronicle-inmem:local chronicle export-schema > chronicle.graphql
 
 sdl: crates/consent-api/graphql/schema/chronicle.graphql
 
