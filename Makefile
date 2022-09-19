@@ -55,21 +55,19 @@ clean_docker: stop
 markers:
 	mkdir markers
 
-markers/domain: domain.yaml markers
+markers/$(EXAMPLE): $(EXAMPLE)/domain.yaml markers
 	@echo "Building ${EXAMPLE} example ..."
-	cp ${EXAMPLE}/domain.yaml domain.yaml
+	cp -f $(EXAMPLE)/domain.yaml domain.yaml
 	docker-compose -f docker/docker-compose.yaml build
 	touch $@
 
 .PHONY: run-standalone-chronicle
 run-standalone-chronicle: markers/domain
-	docker run --env RUST_LOG=debug --publish 9982:9982 -it ${EXAMPLE}-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+sdl: chronicle.graphql
 
 chronicle.graphql: markers/domain
 	docker run --env RUST_LOG=debug ${EXAMPLE}-chronicle-inmem:local chronicle export-schema > chronicle.graphql
 
-.PHONY: sdl
 sdl: crates/consent-api/graphql/schema/chronicle.graphql
 
-clean_target:
-	rm -rf target
+sdl: chronicle.graphql

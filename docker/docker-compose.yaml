@@ -6,9 +6,11 @@ services:
       context: ../
       dockerfile: docker/chronicle.dockerfile
       target: example-chronicle
+    init: true
   example-chronicle-inmem:
     image: ${EXAMPLE}-chronicle-inmem:${ISOLATION_ID:-local}
     build:
       context: ../
       dockerfile: docker/chronicle.dockerfile
       target: example-chronicle-inmem
+    init: true

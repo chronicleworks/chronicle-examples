@@ -74,3 +74,6 @@ ENV/
 
 # MkDocs documentation
 site/
+
+
+domain.yaml
