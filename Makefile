@@ -15,7 +15,7 @@ clean: clean_containers clean_target
 
 distclean: clean_docker clean_markers
 
-build: $(MARKERS)/build
+build: $(MARKERS)/$(EXAMPLE)
 
 analyze: analyze_fossa
 
@@ -46,22 +46,22 @@ clean_docker: stop
 	docker-compose -f docker/chronicle.yaml down -v --rmi all || true
 	docker-compose -f docker/docker-compose.yaml down -v --rmi all || true
 
-markers:
-	mkdir markers
+$(MARKERS):
+	mkdir $(MARKERS)
 
-markers/$(EXAMPLE): $(EXAMPLE)/domain.yaml markers
+$(MARKERS)/$(EXAMPLE): $(EXAMPLE)/domain.yaml $(MARKERS)
 	@echo "Building ${EXAMPLE} example ..."
 	cp -f $(EXAMPLE)/domain.yaml domain.yaml
 	docker-compose -f docker/docker-compose.yaml build
 	touch $@
 
 .PHONY: run-standalone-chronicle
-run-standalone-chronicle: markers/$(EXAMPLE)
+run-standalone-chronicle: $(MARKERS)/$(EXAMPLE)
 	docker run --env RUST_LOG=debug --publish 9982:9982 -it $(EXAMPLE)-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
 
 sdl: chronicle.graphql
 
-chronicle.graphql: markers/$(EXAMPLE)
+chronicle.graphql: $(MARKERS)/$(EXAMPLE)
 	docker run --env RUST_LOG=debug $(EXAMPLE)-chronicle-inmem:local chronicle export-schema > chronicle.graphql
 
 sdl: crates/consent-api/graphql/schema/chronicle.graphql
