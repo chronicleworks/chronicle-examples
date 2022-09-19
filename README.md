@@ -46,18 +46,27 @@ make clean build
 
 ## Run Example
 
-Once you've built your example run this command.
+Once you've built your example, you can run it using this command.
 
 ```bash
 make run-standalone-chronicle
 ```
 
-This will build and run your chronicle example. The terminal will prompt you for
-configuration settings. You can just press return to answer with defaults. You
-should then see this in terminal:
+This will default to the `artworld` example unless the environment variable
+`DOMAIN` is set in your shell.
+
+You can also run
 
 ```bash
-docker run --env RUST_LOG=debug --publish 9982:9982 -it example-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+DOMAIN=evidence make run-standalone-chronicle
+```
+
+This will build and run your chronicle example. The terminal will prompt you for
+configuration settings. You can just press return to answer with defaults. You
+should then see something like this in your terminal:
+
+```bash
+docker run --env RUST_LOG=debug --publish 9982:9982 -it artworld-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
 No configuration found at /root/.chronicle/config.toml, create? (Y/n)
 Where should chronicle store state? (/root/.chronicle/store)
 Where should chronicle store secrets? (/root/.chronicle/secrets)
@@ -79,7 +88,7 @@ address = "tcp://localhost:4004"
 
 ### Note
 
-If you update the example domain, you currently need to stop this running
+If you update an example domain, you currently need to stop this running
 image to re-run `run-standalone-chronicle` as it backgrounds on CTRL-C
 
 ## GraphQL playground

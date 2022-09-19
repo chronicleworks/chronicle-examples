@@ -9,6 +9,8 @@ DOMAIN ?= artworld
 
 export EXAMPLE=${DOMAIN}
 
+# TODO - tidy up the rebuild logic when an example domain is modified
+
 clean: clean_containers clean_target
 
 distclean: clean_docker clean_markers
