@@ -1,9 +1,12 @@
 version: '3'
 services:
-  example-chronicle-inmem:
-    image: ${EXAMPLE}-chronicle-inmem:${ISOLATION_ID:-local}
+  example-chronicle:
+    image: chronicle-example:${ISOLATION_ID:-local}
     build:
       context: ../
       dockerfile: docker/chronicle.dockerfile
       target: example-chronicle-inmem
+      args:
+        - DOMAIN
+        - BUILD_MODE
     init: true
