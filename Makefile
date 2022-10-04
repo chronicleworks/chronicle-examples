@@ -55,7 +55,7 @@ $(MARKERS)/example-release-$(1): $(MARKERS)
 
 $(1)/chronicle.graphql: $(MARKERS)/example-inmem-$(1)
 	docker run --env RUST_LOG=debug chronicle-$(1)-inmem:$(ISOLATION_ID) \
-		chronicle export-schema > $(1)/chronicle.graphql
+		export-schema > $(1)/chronicle.graphql
 
 clean-graphql-$(1):
 	rm -f $(1)/chronicle.graphql
