@@ -5,74 +5,54 @@
 This is simplest done from source, currently these examples do not use the
 builder image in CI, so this is a known working method
 
-## Build Chronicle
-
-// TODO Eliminate this dependency so we can share examples with partners
-
-Clone catenasys/chronicle and run
-
-```bash
-ISOLATION_ID=local make build
-```
-
-This should only require docker / make as a dependency
-
-This builds the chronicle build image so it is available as
-`chronicle-builder:local`
-
 ## Checkout Chronicle Examples
 
 Clone catenasys/chronicle-examples
 
-// TODO Eliminate this default so we can share examples with partners
-
 This contains several example domain yaml files and docker and uses
-`chronicle-builder:local` by default.
+`blockahintap/chronicle-builder:BTP2.1.0` as the builder image by default.
 
 ## Build Example
 
-// TODO create local Makefiles that do this automagically??
-
 Chose from one of the following examples.
 
-### Evidence Domain
+### `evidence` Domain
 
 This is the worked example in the Chronicle documentation.
 
 ```bash
-export DOMAIN=evidence
-make clean build
+make clean-evidence example-evidence
 ```
 
-### Artworld Domain
+To run this example you may run the following:
+
+```bash
+make run-evidence
+```
+
+To continue proceed to [Run Example](#run-example)
+
+### `artworld` Domain
 
 This is another example from the world of art.
 
 ```bash
-export DOMAIN=artworld
-make clean build
+make clean-artworld example-artworld
 ```
+
+To run this example you may run the following:
+
+```bash
+make run-artworld
+```
+
+To continue proceed to [Run Example](#run-example)
 
 ## Run Example
 
-Once you've built your example, you can run it using this command.
-
-```bash
-make run-standalone-chronicle
-```
-
-This will default to the `artworld` example unless the environment variable
-`DOMAIN` is set in your shell.
-
-You can also run
-
-```bash
-DOMAIN=evidence make run-standalone-chronicle
-```
-
-This will build and run your chronicle example. The terminal will prompt you for
-configuration settings. You can just press return to answer with defaults. You
-should then see something like this in your terminal:
+Now that you have built and have run your chronicle example. The terminal will
+prompt you for configuration settings. You can just press return to answer with
+defaults. You should then see something like this in your terminal:
 
 ```bash
 docker run --env RUST_LOG=debug --publish 9982:9982 -it artworld-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
@@ -99,6 +79,17 @@ address = "tcp://localhost:4004"
 
 If you update an example domain, you currently need to stop this running
 image to re-run `run-standalone-chronicle` as it backgrounds on CTRL-C
+
+## Generating the Grapql Schemas
+
+Integration with chronicle is done primarily via graphql. The graphql schema is
+particular to the domain and is generated from the `domain.yaml` file. To
+generate your domain's graphql schema simply run
+`make <domain>/chronicle.graphql`.  For example for the artworld domain:
+
+```bash
+make artworld/chronicle.graphql
+```
 
 ## GraphQL playground
 
