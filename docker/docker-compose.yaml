@@ -8,4 +8,5 @@ services:
       target: example-chronicle-inmem
       args:
         - DOMAIN
-        - BUILD_MODE
+        - FEATURES
+        - RELEASE

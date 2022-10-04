@@ -2,12 +2,21 @@ FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP
 
 ARG DOMAIN=artworld
 ARG RELEASE=no
+ARG FEATURES=""
 COPY ${DOMAIN}/domain.yaml chronicle-domain/
 RUN if [ "${RELEASE}" = "yes" ]; then \
-    cargo build --release --frozen --features inmem --bin chronicle; \
+    if [ -n "${FEATURES}" ]; then \
+      cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
+    else \
+      cargo build --release --frozen --bin chronicle; \
+    fi; \
     cp target/release/chronicle /usr/local/bin/; \
   else \
-    cargo build --frozen --features inmem --bin chronicle; \
+    if [ -n "${FEATURES}" ]; then \
+      cargo build --frozen --features "${FEATURES}" --bin chronicle; \
+    else \
+      cargo build --frozen --bin chronicle; \
+    fi; \
     cp target/debug/chronicle /usr/local/bin/; \
   fi;
 

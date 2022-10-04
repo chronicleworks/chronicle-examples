@@ -25,32 +25,61 @@ $(MARKERS):
 
 define domain_tmpl =
 .PHONY: examples
-examples: example-$(1)
+all-domains: $(1)
 
 .PHONY: inmem-examples
-inmem-examples: $(MARKERS)/example-inmem-$(1)
+inmem-examples: $(1)-inmem
 
-.PHONY: release-examples
-release-examples: $(MARKERS)/example-release-$(1)
+.PHONY: stl-examples
+stl-examples: $(1)-stl
 
-example-$(1): $(MARKERS)/example-inmem-$(1) $(MARKERS)/example-release-$(1)
+$(1): example-$(1)-inmem example-$(1)-stl
+example-$(1): example-$(1)-inmem example-$(1)-stl
+
+$(1)-inmem: $(MARKERS)/example-inmem-$(1) $(MARKERS)/example-release-inmem-$(1)
+example-$(1)-inmem: $(MARKERS)/example-inmem-$(1) $(MARKERS)/example-release-inmem-$(1)
+
+$(1)-stl: $(MARKERS)/example-stl-$(1) $(MARKERS)/example-release-stl-$(1)
+example-$(1)-stl: $(MARKERS)/example-stl-$(1) $(MARKERS)/example-release-stl-$(1)
 
 $(MARKERS)/example-inmem-$(1): $(MARKERS)
 	@echo "Building $(1) debug inmem example ..."
 	docker-compose -f docker/docker-compose.yaml build \
 		--build-arg RELEASE=no \
+		--build-arg FEATURES=inmem \
 		--build-arg DOMAIN=$(1)
 	docker tag chronicle-example:$(ISOLATION_ID) \
 		chronicle-$(1)-inmem:$(ISOLATION_ID)
 	@touch $(MARKERS)/$@
 
-$(MARKERS)/example-release-$(1): $(MARKERS)
+$(MARKERS)/example-stl-$(1): $(MARKERS)
+	@echo "Building $(1) debug inmem example ..."
+	docker-compose -f docker/docker-compose.yaml build \
+		--build-arg RELEASE=no \
+		--build-arg FEATURES="" \
+		--build-arg DOMAIN=$(1)
+	docker tag chronicle-example:$(ISOLATION_ID) \
+		chronicle-$(1)-stl:$(ISOLATION_ID)
+	@touch $(MARKERS)/$@
+
+$(MARKERS)/example-release-inmem-$(1): $(MARKERS)
 	@echo "Building $(1) release inmem example ..."
 	docker-compose -f docker/docker-compose.yaml build \
 		--build-arg RELEASE=yes \
+		--build-arg FEATURES="inmem" \
 		--build-arg DOMAIN=$(1)
 	docker tag chronicle-example:$(ISOLATION_ID) \
-		chronicle-$(1)-release:$(ISOLATION_ID)
+		chronicle-$(1)-release-inmem:$(ISOLATION_ID)
+	@touch $(MARKERS)/$@
+
+$(MARKERS)/example-release-stl-$(1): $(MARKERS)
+	@echo "Building $(1) release stl example ..."
+	docker-compose -f docker/docker-compose.yaml build \
+		--build-arg RELEASE=yes \
+		--build-arg FEATURES="" \
+		--build-arg DOMAIN=$(1)
+	docker tag chronicle-example:$(ISOLATION_ID) \
+		chronicle-$(1)-release-stl:$(ISOLATION_ID)
 	@touch $(MARKERS)/$@
 
 $(1)/chronicle.graphql: $(MARKERS)/example-inmem-$(1)
@@ -63,6 +92,9 @@ clean-graphql-$(1):
 .PHONY: sdl
 sdl: $(1)/chronicle.graphql
 
+.PHONY: $(1)-sdl
+$(1)-sdl: $(1)/chronicle.graphql
+
 .PHONY: run-$(1)
 run-$(1): $(MARKERS)/example-inmem-$(1)
 	docker run -it -e RUST_LOG=debug -p 9982:9982 --rm \
@@ -73,7 +105,9 @@ run-$(1): $(MARKERS)/example-inmem-$(1)
 .PHONY: clean-images-$(1)
 clean-images-$(1): $(MARKERS)
 	docker rmi chronicle-$(1)-inmem:$(ISOLATION_ID) || true
-	docker rmi chronicle-$(1)-release:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-stl:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-release-inmem:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-release-stl:$(ISOLATION_ID) || true
 	rm -f $(MARKERS)/*-$(1)
 
 clean-$(1): clean-images-$(1) clean-graphql-$(1)
