@@ -3,7 +3,7 @@ FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP
 ARG DOMAIN=artworld
 ARG RELEASE=no
 ARG FEATURES=""
-COPY ${DOMAIN}/domain.yaml chronicle-domain/
+COPY domains/${DOMAIN}/domain.yaml chronicle-domain/
 RUN if [ "${RELEASE}" = "yes" ]; then \
     if [ -n "${FEATURES}" ]; then \
       cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
