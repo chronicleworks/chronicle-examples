@@ -1,4 +1,4 @@
-FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP2.1.0} as domain-inmem
+FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP2.1.0} as builder
 
 ARG DOMAIN=artworld
 ARG RELEASE=no
@@ -21,8 +21,8 @@ RUN if [ "${RELEASE}" = "yes" ]; then \
   fi;
 
 WORKDIR /
-FROM ubuntu:focal AS example-chronicle-inmem
-COPY --from=domain-inmem --chown=root:bin /usr/local/bin/chronicle /usr/local/bin
+FROM ubuntu:focal AS domain
+COPY --from=builder --chown=root:bin /usr/local/bin/chronicle /usr/local/bin
 COPY --chown=root:bin entrypoint /entrypoint
 RUN chmod 755 \
   /entrypoint \
