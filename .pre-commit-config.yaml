@@ -62,6 +62,9 @@ repos:
     rev: v0.11.0
     hooks:
       - id: markdownlint
+        args:
+          - --config
+          - .mdlrc
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.15.0
     hooks:
