@@ -5,65 +5,81 @@ export OPENSSL_STATIC=1
 
 CLEAN_DIRS := $(CLEAN_DIRS)
 
-DOMAIN ?= artworld
+DOMAINS := $(shell find . -mindepth 2 -maxdepth 2 -name domain.yaml \
+	-exec dirname {} \; | awk -F/ '{print $$NF}')
 
-export EXAMPLE=${DOMAIN}
-
-# TODO - tidy up the rebuild logic when an example domain is modified
-
-clean: clean_containers clean_target
+clean: clean_containers
 
 distclean: clean_docker clean_markers
 
-build: $(MARKERS)/$(EXAMPLE)
-
-analyze: analyze_fossa
-
-publish: gh-create-draft-release
-	container_id=$$(docker create example-chronicle:${ISOLATION_ID}); \
-	  docker cp $$container_id:/usr/local/bin/example-chronicle `pwd`/target/ && \
-		target/example-chronicle export-schema > `pwd`/target/chronicle.graphql 2>&1 && \
-		docker rm $$container_id
-	container_id=$$(docker create example-chronicle-inmem:${ISOLATION_ID}); \
-	  docker cp $$container_id:/usr/local/bin/example-chronicle `pwd`/target/example-chronicle-inmem && \
-		docker rm $$container_id
-	if [ "$(RELEASABLE)" = "yes" ]; then \
-	  $(GH_RELEASE) upload $(VERSION) target/* ; \
-	fi
-
-run:
-	docker-compose -f docker/chronicle.yaml up --force-recreate
-
-.PHONY: stop
-stop:
-	docker-compose -f docker/chronicle.yaml down || true
+build: examples sdl
 
 clean_containers:
-	docker-compose -f docker/chronicle.yaml rm -f || true
 	docker-compose -f docker/docker-compose.yaml rm -f || true
 
-clean_docker: stop
-	docker-compose -f docker/chronicle.yaml down -v --rmi all || true
+clean_docker:
 	docker-compose -f docker/docker-compose.yaml down -v --rmi all || true
 
 $(MARKERS):
 	mkdir $(MARKERS)
 
-$(MARKERS)/$(EXAMPLE): $(EXAMPLE)/domain.yaml $(MARKERS)
-	@echo "Building ${EXAMPLE} example ..."
-	cp -f $(EXAMPLE)/domain.yaml domain.yaml
-	docker-compose -f docker/docker-compose.yaml build
-	touch $@
+define domain_tmpl =
+.PHONY: examples
+examples: example-$(1)
 
-.PHONY: run-standalone-chronicle
-run-standalone-chronicle: $(MARKERS)/$(EXAMPLE)
-	docker run --env RUST_LOG=debug --publish 9982:9982 -it $(EXAMPLE)-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+.PHONY: inmem-examples
+inmem-examples: $(MARKERS)/example-inmem-$(1)
 
-sdl: chronicle.graphql
+.PHONY: release-examples
+release-examples: $(MARKERS)/example-release-$(1)
 
-chronicle.graphql: $(MARKERS)/$(EXAMPLE)
-	docker run --env RUST_LOG=debug $(EXAMPLE)-chronicle-inmem:local chronicle export-schema > chronicle.graphql
+example-$(1): $(MARKERS)/example-inmem-$(1) $(MARKERS)/example-release-$(1)
 
-sdl: crates/consent-api/graphql/schema/chronicle.graphql
+$(MARKERS)/example-inmem-$(1): $(MARKERS)
+	@echo "Building $(1) debug inmem example ..."
+	docker-compose -f docker/docker-compose.yaml build \
+		--build-arg RELEASE=no \
+		--build-arg DOMAIN=$(1)
+	docker tag chronicle-example:$(ISOLATION_ID) \
+		chronicle-$(1)-inmem:$(ISOLATION_ID)
+	@touch $(MARKERS)/$@
 
-sdl: chronicle.graphql
+$(MARKERS)/example-release-$(1): $(MARKERS)
+	@echo "Building $(1) release inmem example ..."
+	docker-compose -f docker/docker-compose.yaml build \
+		--build-arg RELEASE=yes \
+		--build-arg DOMAIN=$(1)
+	docker tag chronicle-example:$(ISOLATION_ID) \
+		chronicle-$(1)-release:$(ISOLATION_ID)
+	@touch $(MARKERS)/$@
+
+$(1)/chronicle.graphql: $(MARKERS)/example-inmem-$(1)
+	docker run --env RUST_LOG=debug chronicle-$(1)-inmem:$(ISOLATION_ID) \
+		chronicle export-schema > $(1)/chronicle.graphql
+
+clean-graphql-$(1):
+	rm -f $(1)/chronicle.graphql
+
+.PHONY: sdl
+sdl: $(1)/chronicle.graphql
+
+.PHONY: run-$(1)
+run-$(1): $(MARKERS)/example-inmem-$(1)
+	docker run -it -e RUST_LOG=debug -p 9982:9982 --rm \
+		chronicle-$(1)-inmem:$(ISOLATION_ID) \
+			--console-logging pretty serve-graphql --interface 0.0.0.0:9982 \
+			--open
+
+.PHONY: clean-images-$(1)
+clean-images-$(1): $(MARKERS)
+	docker rmi chronicle-$(1)-inmem:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-release:$(ISOLATION_ID) || true
+	rm -f $(MARKERS)/*-$(1)
+
+clean-$(1): clean-images-$(1) clean-graphql-$(1)
+
+clean: clean-$(1)
+
+endef
+
+$(foreach domain,$(DOMAINS),$(eval $(call domain_tmpl,$(domain))))

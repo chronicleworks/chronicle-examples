@@ -1,0 +1,7 @@
+#!/bin/bash
+
+exec 2>&1
+
+# Don't change to an exec
+# If this is an exec then it becomes PID 1 and you cannot Ctrl-C out of it
+/usr/local/bin/chronicle "$@"

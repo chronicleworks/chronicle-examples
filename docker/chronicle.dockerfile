@@ -1,17 +1,19 @@
+FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP2.1.0} as domain-inmem
 
-# Build a sawtooth backed Chronicle
-FROM ${CHRONICLE_IMAGE:-chronicle-builder}:${CHRONICLE_VERSION:-local} as domain
-COPY domain.yaml chronicle-domain/
-RUN cargo build --release --frozen --bin chronicle
-
-# Build an in memory Chronicle
-FROM ${CHRONICLE_IMAGE:-chronicle-builder}:${CHRONICLE_VERSION:-local} as domain-inmem
-COPY domain.yaml chronicle-domain/
-RUN cargo build --release --frozen --features inmem --bin chronicle
+ARG DOMAIN=artworld
+ARG RELEASE=no
+COPY ${DOMAIN}/domain.yaml chronicle-domain/
+RUN if [ "${RELEASE}" = "yes" ]; then \
+    cargo build --release --frozen --features inmem --bin chronicle; \
+    cp target/release/chronicle /usr/local/bin/; \
+  else \
+    cargo build --frozen --features inmem --bin chronicle; \
+    cp target/debug/chronicle /usr/local/bin/; \
+  fi;
 
 WORKDIR /
-FROM ubuntu:focal AS example-chronicle
-COPY --from=domain /app/target/release/chronicle /usr/local/bin
-
 FROM ubuntu:focal AS example-chronicle-inmem
-COPY --from=domain-inmem /app/target/release/chronicle /usr/local/bin
+COPY --from=domain-inmem /usr/local/bin/chronicle /usr/local/bin
+COPY --chmod=755 --chown=root:bin entrypoint /entrypoint
+
+ENTRYPOINT [ "/entrypoint" ]
