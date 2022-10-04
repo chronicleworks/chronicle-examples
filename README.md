@@ -1,16 +1,13 @@
 # Chronicle Examples
 
-// TODO Eliminate this approach so we can share examples with partners
+## Clone The Repository
 
-This is simplest done from source, currently these examples do not use the
-builder image in CI, so this is a known working method
-
-## Checkout Chronicle Examples
-
-Clone catenasys/chronicle-examples
+```bash
+git clone https://github.com/blockchaintp/chronicle-examples.git
+```
 
 This contains several example domain yaml files and docker and uses
-`blockahintap/chronicle-builder:BTP2.1.0` as the builder image by default.
+`blockchaintp/chronicle-builder:BTP2.1.0` as the builder image by default.
 
 ## Build Example
 
@@ -21,7 +18,7 @@ Chose from one of the following examples.
 This is the worked example in the Chronicle documentation.
 
 ```bash
-make clean-evidence example-evidence
+make clean evidence
 ```
 
 To run this example you may run the following:
@@ -37,7 +34,7 @@ To continue proceed to [Run Example](#run-example)
 This is another example from the world of art.
 
 ```bash
-make clean-artworld example-artworld
+make clean artworld
 ```
 
 To run this example you may run the following:
@@ -55,7 +52,8 @@ prompt you for configuration settings. You can just press return to answer with
 defaults. You should then see something like this in your terminal:
 
 ```bash
-docker run --env RUST_LOG=debug --publish 9982:9982 -it artworld-chronicle-inmem:local bash -c 'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open'
+$ make run-artworld
+docker run --env RUST_LOG=debug --publish 9982:9982 -it chronicle-artworld-inmem:local --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open
 No configuration found at /root/.chronicle/config.toml, create? (Y/n)
 Where should chronicle store state? (/root/.chronicle/store)
 Where should chronicle store secrets? (/root/.chronicle/secrets)
@@ -78,17 +76,17 @@ address = "tcp://localhost:4004"
 ### Note
 
 If you update an example domain, you currently need to stop this running
-image to re-run `run-standalone-chronicle` as it backgrounds on CTRL-C
+image to re-run `run-<domain>` as it backgrounds on CTRL-C
 
 ## Generating the Grapql Schemas
 
 Integration with chronicle is done primarily via graphql. The graphql schema is
 particular to the domain and is generated from the `domain.yaml` file. To
 generate your domain's graphql schema simply run
-`make <domain>/chronicle.graphql`.  For example for the artworld domain:
+`make <domain>-sdl`.  For example for the artworld domain:
 
 ```bash
-make artworld/chronicle.graphql
+make artworld-sdl
 ```
 
 ## GraphQL playground
