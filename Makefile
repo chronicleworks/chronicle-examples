@@ -5,7 +5,7 @@ export OPENSSL_STATIC=1
 
 CLEAN_DIRS := $(CLEAN_DIRS)
 
-DOMAINS := $(shell find . -mindepth 2 -maxdepth 2 -name domain.yaml \
+DOMAINS := $(shell find . -mindepth 3 -maxdepth 3 -name domain.yaml \
 	-exec dirname {} \; | awk -F/ '{print $$NF}')
 
 clean: clean_containers
@@ -83,9 +83,9 @@ $(MARKERS)/$(1)-stl-release: $(MARKERS)
 	@touch $(MARKERS)/$@
 
 $(1)/chronicle.graphql: $(MARKERS)/$(1)-inmem
-	@echo "Generating $(1) GraphQL schema in file: $(1)/chronicle.graphql"
+	@echo "Generating $(1) GraphQL schema in file: domains/$(1)/chronicle.graphql"
 	@docker run --env RUST_LOG=debug chronicle-$(1)-inmem:$(ISOLATION_ID) \
-		export-schema > $(1)/chronicle.graphql
+		export-schema > domains/$(1)/chronicle.graphql
 
 clean-graphql-$(1):
 	rm -f $(1)/chronicle.graphql

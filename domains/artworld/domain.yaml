@@ -13,7 +13,7 @@ attributes:
   Name:
     type: "String"
 agents:
-  Member:
+  Collector:
     attributes:
       - Name
   Artist:
@@ -38,11 +38,7 @@ activities:
     attributes:
       - PurchaseValue
       - PurchaseValueCurrency
-  Transferred:
-    attributes: []
 roles:
   - Buyer
   - Seller
-  - Broker
-  - Editor
   - Creator
