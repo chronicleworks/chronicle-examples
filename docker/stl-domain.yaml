@@ -1,0 +1,123 @@
+---
+services:
+  settings-tp:
+    image: blockchaintp/sawtooth-settings-tp:BTP2.1.0
+    depends_on:
+      - validator
+    entrypoint: settings-tp --connect tcp://validator:4004
+    volumes: &rngVolumes
+      - /dev/urandom:/dev/random
+      - /dev/urandom:/dev/urandom
+
+  validator:
+    image: blockchaintp/sawtooth-validator:BTP2.1.0
+    expose:
+      - 4004
+      - 8800
+      - 5050
+    ports:
+      - "4004:4004"
+      - "8800:8800"
+      - "5050:5050"
+    entrypoint: /bin/bash
+    command:
+      - -exc
+      - |
+        if [ ! -r /etc/sawtooth/keys/validator.priv ]; then
+          sawadm keygen
+        fi
+        if [ ! -r /root/.sawtooth/keys/root.priv ]; then
+          sawtooth keygen
+        fi
+        if [ ! -r /var/lib/sawtooth/block-chain-id ]; then
+          sawset genesis -k \
+            /etc/sawtooth/keys/validator.priv -o config-genesis.batch
+          sawset proposal create -k /etc/sawtooth/keys/validator.priv \
+            sawtooth.consensus.min_wait_time=0 \
+            sawtooth.consensus.algorithm.name=devmode \
+            sawtooth.consensus.algorithm.version=1.0 \
+            sawtooth.consensus.max_wait_time=0 -o consensus-settings.batch
+          sawadm genesis config-genesis.batch consensus-settings.batch
+        fi
+        sawtooth-validator -vvvv --scheduler parallel \
+          --endpoint tcp://validator:8800 --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 --bind network:tcp://eth0:8800
+    volumes: *rngVolumes
+
+  devmode-engine:
+    image: blockchaintp/sawtooth-devmode-engine-rust:BTP2.1.0
+    depends_on:
+      - validator
+    entrypoint: devmode-engine-rust -C tcp://validator:5050
+    volumes: *rngVolumes
+
+  rest-api:
+    image: blockchaintp/sawtooth-rest-api:BTP2.1.0
+    expose:
+      - 8008
+    ports:
+      - "8008:8008"
+    depends_on:
+      - validator
+    entrypoint: |
+      sawtooth-rest-api --connect tcp://validator:4004 --bind rest-api:8008
+    volumes: *rngVolumes
+
+  chronicle-tp:
+    environment: &rustenv
+      - RUST_BACKTRACE=full
+      - RUST_LOG=debug
+    image: blockchaintp/chronicle-tp:BTP2.1.0
+    entrypoint: /bin/bash
+    command:
+      - -xc
+      - |
+        /usr/local/bin/chronicle_sawtooth_tp \
+          -C tcp://validator:4004 \
+          --console-logging pretty
+    depends_on:
+      - validator
+    volumes: *rngVolumes
+
+  domain:
+    environment: *rustenv
+    image: &chronicleImage ${CHRONICLE_IMAGE}:${ISOLATION_ID:-local}
+    entrypoint: |
+      /usr/local/bin/chronicle
+        -c /root/.chronicle/config.toml
+        --sawtooth tcp://validator:4004
+        --console-logging pretty
+        serve-graphql
+        --interface 0.0.0.0:9982
+        --open
+    expose:
+      - 9982
+    ports:
+      - "9982:9982"
+    depends_on:
+      - validator
+    volumes: *rngVolumes
+
+  # A chronicle container to exec into for CLI operations
+  domain-cli:
+    environment: *rustenv
+    image: *chronicleImage
+    entrypoint: "/bin/sh"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - validator
+    volumes: *rngVolumes
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    expose:
+      - 16686
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"

@@ -103,6 +103,14 @@ run-$(1): $(MARKERS)/$(1)-inmem
 			--console-logging pretty serve-graphql --interface 0.0.0.0:9982 \
 			--open
 
+run-stl-$(1): $(MARKERS)/$(1)-stl
+	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
+	$(DOCKER_COMPOSE) -f docker/stl-domain.yaml up -d
+
+stop-stl-$(1): $(MARKERS)/$(1)-stl
+	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
+	$(DOCKER_COMPOSE) -f docker/stl-domain.yaml down
+
 .PHONY: clean-images-$(1)
 clean-images-$(1): $(MARKERS)
 	docker rmi chronicle-$(1)-inmem:$(ISOLATION_ID) || true
