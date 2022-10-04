@@ -77,3 +77,4 @@ site/
 
 
 domain.yaml
+**/chronicle.graphql
