@@ -89,6 +89,13 @@ generate your domain's graphql schema simply run
 make artworld-sdl
 ```
 
+## Adding a domain
+
+Adding a domain to the examples is as simple as adding a new `domain.yaml` file
+to a directory under `domains`.  The directory name will be used as the name of
+the docker image.  For example, if you add a `domains/mydomain/domain.yaml`
+file, the debug and inmem docker image will be `chronicle-mydomain-inmem:local`.
+
 ## GraphQL playground
 
 This is built into chronicle, and served on the same port as the api. So you
