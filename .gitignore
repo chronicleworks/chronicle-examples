@@ -10,7 +10,6 @@ __pycache__/
 *.code-workspace
 
 # chronicle builder
-domain.yaml
 markers/
 
 # Distribution / packaging
@@ -76,5 +75,4 @@ ENV/
 site/
 
 
-domain.yaml
 **/chronicle.graphql
