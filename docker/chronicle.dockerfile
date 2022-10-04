@@ -14,3 +14,6 @@ RUN if [ "${RELEASE}" = "yes" ]; then \
 WORKDIR /
 FROM ubuntu:focal AS example-chronicle-inmem
 COPY --from=domain-inmem /usr/local/bin/chronicle /usr/local/bin
+COPY --chmod=755 --chown=root:bin entrypoint /entrypoint
+
+ENTRYPOINT [ "/entrypoint" ]

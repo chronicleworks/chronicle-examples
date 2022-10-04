@@ -9,4 +9,3 @@ services:
       args:
         - DOMAIN
         - BUILD_MODE
-    init: true

@@ -65,10 +65,10 @@ sdl: $(1)/chronicle.graphql
 
 .PHONY: run-$(1)
 run-$(1): $(MARKERS)/example-inmem-$(1)
-	docker run --env RUST_LOG=debug --publish 9982:9982 -it --rm \
-		chronicle-$(1)-inmem:$(ISOLATION_ID) bash -c \
-		'chronicle --console-logging pretty serve-graphql --interface 0.0.0.0:9982 \
-		--open'
+	docker run -it -e RUST_LOG=debug -p 9982:9982 --rm \
+		chronicle-$(1)-inmem:$(ISOLATION_ID) \
+			--console-logging pretty serve-graphql --interface 0.0.0.0:9982 \
+			--open
 
 .PHONY: clean-images-$(1)
 clean-images-$(1): $(MARKERS)
