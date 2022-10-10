@@ -1,6 +1,26 @@
 # Chronicle Examples
 
-## Clone The Repository
+This project contains contributed examples for Chronicle.  Documentation for
+Chronicle can be found at
+[https://docs.blockchaintp.com/en/stable/chronicle/](https://docs.blockchaintp.com/en/stable/chronicle/).
+
+## Getting Started
+
+1. [Install Prerequisites](#prerequisites)
+1. [Clone the Repository](#clone-the-repository)
+1. [Build a Domain](#build-a-domain)
+1. [Generate the GraphQL Schema](#generating-the-grapql-schemas)
+
+### Prerequisites
+
+To get started, there are some basic prerequisites which must be installed:
+
+* [Docker](https://docs.docker.com/install/)
+* [GNU Make v4.0+](https://www.gnu.org/software/make/)
+* As of now, an `x86_64` based host is required. We are working on `arm`
+  support for this repository.
+
+### Clone The Repository
 
 ```bash
 git clone https://github.com/blockchaintp/chronicle-examples.git
@@ -9,51 +29,39 @@ git clone https://github.com/blockchaintp/chronicle-examples.git
 This contains several example domain yaml files and docker and uses
 `blockchaintp/chronicle-builder:BTP2.1.0` as the builder image by default.
 
-## Build Example
+### Build A Domain
 
 Chose from one of the following examples.
 
-### `evidence` Domain
+* [Evidence](./domains/evidence/guide.md)
+* [Artworld](./domains/artworld/guide.md)
 
-This is the worked example in the Chronicle documentation.
+For the purposes of these instructions we will use the `evidence` domain, but
+any domain will work.  Simply substitute the name of the domain's directory for
+`evidence` in the following instructions.
+
+#### Building the container images
 
 ```bash
 make clean evidence
 ```
 
-To run this example you may run the following:
+#### Run a standalone node0
+
+Now you can run up a standalone version of chronicle which is a single node with
+a local database rather than backed by a blockchain.
 
 ```bash
 make run-evidence
 ```
-
-To continue proceed to [Run Example](#run-example)
-
-### `artworld` Domain
-
-This is another example from the world of art.
-
-```bash
-make clean artworld
-```
-
-To run this example you may run the following:
-
-```bash
-make run-artworld
-```
-
-To continue proceed to [Run Example](#run-example)
-
-## Run Example
 
 Now that you have built and have run your chronicle example. The terminal will
 prompt you for configuration settings. You can just press return to answer with
 defaults. You should then see something like this in your terminal:
 
 ```bash
-$ make run-artworld
-docker run --env RUST_LOG=debug --publish 9982:9982 -it chronicle-artworld-inmem:local --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open
+$ make run-evidence
+docker run --env RUST_LOG=debug --publish 9982:9982 -it chronicle-evidence-inmem:local --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open
 No configuration found at /root/.chronicle/config.toml, create? (Y/n)
 Where should chronicle store state? (/root/.chronicle/store)
 Where should chronicle store secrets? (/root/.chronicle/secrets)
@@ -73,20 +81,15 @@ address = "tcp://localhost:4004"
 [namespace_bindings]
 ```
 
-### Note
-
-If you update an example domain, you currently need to stop this running
-image to re-run `run-<domain>` as it backgrounds on CTRL-C
-
-## Generating the Grapql Schemas
+### Generating the Grapql Schemas
 
 Integration with chronicle is done primarily via graphql. The graphql schema is
 particular to the domain and is generated from the `domain.yaml` file. To
 generate your domain's graphql schema simply run
-`make <domain>-sdl`.  For example for the artworld domain:
+`make <domain>-sdl`.  For example for the evidence domain:
 
 ```bash
-make artworld-sdl
+make evidence-sdl
 ```
 
 ## Adding a domain
