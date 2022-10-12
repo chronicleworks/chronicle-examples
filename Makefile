@@ -3,6 +3,9 @@ include $(MAKEFILE_DIR)/standard_defs.mk
 
 export OPENSSL_STATIC=1
 
+CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder
+CHRONICLE_VERSION ?= BTP2.1.0
+
 CLEAN_DIRS := $(CLEAN_DIRS)
 
 DOMAINS := $(shell find . -mindepth 3 -maxdepth 3 -name domain.yaml \
@@ -45,6 +48,8 @@ $(1)-stl: $(MARKERS)/$(1)-stl $(MARKERS)/$(1)-stl-release
 $(MARKERS)/$(1)-inmem: $(MARKERS)
 	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
+		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
+		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
 		--build-arg RELEASE=no \
 		--build-arg FEATURES=inmem \
 		--build-arg DOMAIN=$(1)
@@ -55,6 +60,8 @@ $(MARKERS)/$(1)-inmem: $(MARKERS)
 $(MARKERS)/$(1)-stl: $(MARKERS)
 	@echo "Building $(1) debug stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
+		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
+		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
 		--build-arg RELEASE=no \
 		--build-arg FEATURES="" \
 		--build-arg DOMAIN=$(1)
@@ -65,6 +72,8 @@ $(MARKERS)/$(1)-stl: $(MARKERS)
 $(MARKERS)/$(1)-inmem-release: $(MARKERS)
 	@echo "Building $(1) release inmem as docker image chronicle-$(1)-inmem-release:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
+		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
+		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
 		--build-arg RELEASE=yes \
 		--build-arg FEATURES="inmem" \
 		--build-arg DOMAIN=$(1)
@@ -75,6 +84,8 @@ $(MARKERS)/$(1)-inmem-release: $(MARKERS)
 $(MARKERS)/$(1)-stl-release: $(MARKERS)
 	@echo "Building $(1) release stl as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
+		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
+		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
 		--build-arg RELEASE=yes \
 		--build-arg FEATURES="" \
 		--build-arg DOMAIN=$(1)
