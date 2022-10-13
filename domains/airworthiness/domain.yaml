@@ -1,0 +1,32 @@
+name: "airworthiness"
+attributes:
+  CertID:
+    type: "String"
+  BatchID:
+    type: "String"
+  PartID:
+    type: "String"
+  FlagACI:
+    type: Bool
+  Location:
+    type: "String"
+agents:
+  Contractor:
+    attributes:
+      - Location
+entities:
+  Certificate:
+    attributes:
+      - CertID
+  Item:
+    attributes:
+      - PartID
+activities:
+  ItemCertified:
+    attributes: []
+  ItemManufactured:
+    attributes:
+      - BatchID
+roles:
+  - Issuer
+  - Manufacturer
