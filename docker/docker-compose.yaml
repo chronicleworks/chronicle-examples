@@ -9,3 +9,5 @@ services:
         - DOMAIN
         - FEATURES
         - RELEASE
+        - CHRONICLE_BUILDER_IMAGE
+        - CHRONICLE_VERSION

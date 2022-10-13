@@ -1,4 +1,6 @@
-FROM ${CHRONICLE_IMAGE:-blockchaintp/chronicle-builder}:${CHRONICLE_VERSION:-BTP2.1.0} as builder
+ARG CHRONICLE_BUILDER_IMAGE=blockchaintp/chronicle-builder
+ARG CHRONICLE_VERSION=BTP2.1.0
+FROM ${CHRONICLE_BUILDER_IMAGE}:${CHRONICLE_VERSION} as builder
 
 ARG DOMAIN=artworld
 ARG RELEASE=no
