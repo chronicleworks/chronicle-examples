@@ -1,7 +1,7 @@
 # Evidence Guide
 
-## Modelling Provenance
+## Modelling Evidence
 
-## Recording Provenance
+## Recording Evidence
 
-## Querying Provenance
+## Querying Evidence

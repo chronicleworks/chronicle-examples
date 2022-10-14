@@ -1,4 +1,4 @@
-name: "airworthiness"
+name: "manufacturing"
 attributes:
   CertID:
     type: "String"
@@ -6,8 +6,6 @@ attributes:
     type: "String"
   PartID:
     type: "String"
-  FlagACI:
-    type: Bool
   Location:
     type: "String"
 agents:
@@ -28,5 +26,5 @@ activities:
     attributes:
       - BatchID
 roles:
-  - Issuer
+  - Certifier
   - Manufacturer

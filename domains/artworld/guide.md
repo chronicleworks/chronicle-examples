@@ -1,7 +1,7 @@
 # Artworld Guide
 
-## Modelling Provenance
+## Modelling the Artworld
 
-## Recording Provenance
+## Recording the Artworld
 
-## Querying Provenance
+## Querying the Artworld
