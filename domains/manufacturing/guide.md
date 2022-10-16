@@ -2,16 +2,134 @@
 
 ## Modelling Manufacturing
 
-We want to be able to manufacture high specification items such as rotorblades
-in batches but then certify them individually.
+We want to record the batch manufacture of high specification items such as
+rotor blades by a contractor, which then certifies these individually.
 
 ### Manufacturing Items
 
-// TODO
+Although various agents could be involved in the manufacturing activity, in this
+example, the contractor is the only agent responsible for the manufacturing of
+high specification items such rotor blades, which it does so in batches.
+
+![Item Manufactured](./diagrams/ItemManufactured.png){ .shadow}
+
+#### Modelling the Contractor Agent
+
+The `Contractor` agent has one attribute, its `Location`. In our Chronicle
+domain specification this is captured as follows -
+
+```yaml
+attributes:
+  Location:
+    type: "String"
+agents:
+  Contractor:
+    attributes:
+      - Location
+```
+
+#### Modelling the Item Entity
+
+The `Item` entity has one attribute, its `PartID`.
+
+```yaml
+attributes:
+  PartID:
+    type: "String"
+entities:
+  Item:
+    attributes:
+      - PartID
+```
+
+#### Modellng the ItemManufactured Activity
+
+The `ItemManufactured` activity has one attribute, its `BatchID`. It also has a
+role `Manufacturer`.
+
+```yaml
+attributes:
+  BatchID:
+    type: "String"
+activities:
+  ItemManufactured:
+    attributes:
+      - BatchID
+roles:
+  - Manufacturer
+```
 
 ### Certifying Items
 
-// TODO
+Although various agents could be involved in the certification activity, in this
+example, the contractor is the only agent responsible for the certification of
+high specification items such rotor blades, which it does so individually.
+Therefore this activity uses the item and issues a certificate for it.
+
+![Item Manufactured](./diagrams/ItemCertified.png){ .shadow}
+
+#### Modelling the Certificate Entity
+
+The `Certificate` entity has one attribute, its `CertID`.
+
+```yaml
+attributes:
+  CertID:
+    type: "String"
+entities:
+  Item:
+    attributes:
+      - CertID
+```
+
+#### Modelling the ItemCertified Activity
+
+The `ItemCertified` activity has no attributes but it has a role `Certifier`.
+
+```yaml
+activities:
+  ItemCertified:
+    attributes: []
+roles:
+  - Certifier
+```
+
+### Chronicle Domain
+
+Combining these fragments gives us our Chronicle `manufacturing` domain.
+
+```yaml
+name: "manufacturing"
+attributes:
+  CertID:
+    type: "String"
+  BatchID:
+    type: "String"
+  PartID:
+    type: "String"
+  Location:
+    type: "String"
+agents:
+  Contractor:
+    attributes:
+      - Location
+entities:
+  Certificate:
+    attributes:
+      - CertID
+  Item:
+    attributes:
+      - PartID
+activities:
+  ItemCertified:
+    attributes: []
+  ItemManufactured:
+    attributes:
+      - BatchID
+roles:
+  - Certifier
+  - Manufacturer
+```
 
 ## Recording Manufacturing
 
