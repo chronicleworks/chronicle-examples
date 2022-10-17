@@ -11,7 +11,7 @@ Although various agents could be involved in the manufacturing activity, in this
 example, the contractor is the only agent responsible for the manufacturing of
 high specification items such rotor blades, which it does so in batches.
 
-![Item Manufactured](./diagrams/ItemManufactured.png){ .shadow}
+![Item Manufactured](./diagrams/ItemManufactured.png)
 
 #### Modelling the Contractor Agent
 
@@ -66,7 +66,7 @@ example, the contractor is the only agent responsible for the certification of
 high specification items such rotor blades, which it does so individually.
 Therefore this activity uses the item and issues a certificate for it.
 
-![Item Manufactured](./diagrams/ItemCertified.png){ .shadow}
+![Item Manufactured](./diagrams/ItemCertified.png)
 
 #### Modelling the Certificate Entity
 

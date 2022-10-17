@@ -9,6 +9,7 @@ Chronicle can be found at
 To get started, there are some basic prerequisites which must be installed:
 
 * [Docker](https://docs.docker.com/install/)
+* [Docker Compose](https://docs.docker.com/compose/install/)
 * [GNU Make v4.0+](https://www.gnu.org/software/make/)
 * As of now, an `x86_64` based host is required. We are working on `arm`
   support for this repository.
