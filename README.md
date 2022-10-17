@@ -9,6 +9,7 @@ Chronicle can be found at
 To get started, there are some basic prerequisites which must be installed:
 
 * [Docker](https://docs.docker.com/install/)
+* [Docker Compose](https://docs.docker.com/compose/install/)
 * [GNU Make v4.0+](https://www.gnu.org/software/make/)
 * As of now, an `x86_64` based host is required. We are working on `arm`
   support for this repository.
@@ -36,12 +37,6 @@ Chose from one of the following examples.
 For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work.  Simply substitute the name of the domain's directory
 for `manufacturing` in the following instructions.
-
-### Build the Container Images
-
-```bash
-make clean manufacturing
-```
 
 ### Run a Standalone Node
 
@@ -76,6 +71,14 @@ path = "/root/.chronicle/store"
 [validator]
 address = "tcp://localhost:4004"
 [namespace_bindings]
+```
+
+Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
+
+### Build the Container Images
+
+```bash
+make clean manufacturing
 ```
 
 ## Generate the GraphQL Schema
