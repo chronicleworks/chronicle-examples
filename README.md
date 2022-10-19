@@ -1,8 +1,8 @@
 # Chronicle Examples
 
 This project contains contributed examples for Chronicle.  Documentation for
-Chronicle can be found at
-[https://docs.blockchaintp.com/en/stable/chronicle/](https://docs.blockchaintp.com/en/stable/chronicle/).
+Chronicle can be found
+[here](https://docs.blockchaintp.com/chronicle/).
 
 ## Prerequisites
 
@@ -38,12 +38,6 @@ For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work.  Simply substitute the name of the domain's directory
 for `manufacturing` in the following instructions.
 
-### Build the Container Images
-
-```bash
-make clean manufacturing
-```
-
 ### Run a Standalone Node
 
 Now you can run up a standalone version of Chronicle which is a single node with
@@ -77,6 +71,14 @@ path = "/root/.chronicle/store"
 [validator]
 address = "tcp://localhost:4004"
 [namespace_bindings]
+```
+
+Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
+
+### Build the Container Images
+
+```bash
+make clean manufacturing
 ```
 
 ## Generate the GraphQL Schema
