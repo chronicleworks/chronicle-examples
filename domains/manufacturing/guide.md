@@ -139,7 +139,9 @@ the following activities:
 1. An `ItemManufactured` activity to manufacture a batch of rotor blades
 1. A series of `ItemCertified` activities to certify each rotor blade in turn
 
-### Record Contractor Creation
+### Record Contractor
+
+First record that there a contractor Helicopters PLC based in Bristol.
 
 ```graphql
 mutation {
@@ -165,7 +167,7 @@ Output should look something like this -
 
 ### Manufacturing Rotor Blades
 
-#### Record Manufacturing Activity Creation
+#### Record Manufacturing Activity
 
 ```graphql
 mutation {
@@ -184,6 +186,36 @@ Output should look something like this -
     "itemManufactured": {
       "correlationId": "6e847156-3692-465a-85a7-c34357df5670",
       "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+    }
+  }
+}
+```
+
+#### Record Contractor's Role in the Manufacturing Activity
+
+We assert that contractor was responsible for this activity in its role
+as a `Manufacturer` using the `wasAssociatedWith` relationship -
+
+```graphql
+mutation {
+    wasAssociatedWith(
+    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001",
+    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
+    role:MANUFACTURER) {
+    correlationId
+    context
+  }
+}
+```
+
+Output should look something like this -
+
+```graphql
+{
+  "data": {
+    "wasAssociatedWith": {
+      "correlationId": "9846db0a-be54-43b8-9466-313f715cf613",
+      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
     }
   }
 }
@@ -301,36 +333,6 @@ end.
 
 #### Record End of Manufacturing Activity
 
-First we assert that contractor was responsible for this activity in its role
-as a `Manufacturer` using the `wasAssociatedWith` relationship -
-
-```graphql
-mutation {
-    wasAssociatedWith(
-    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001",
-    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
-    role:MANUFACTURER) {
-    correlationId
-    context
-  }
-}
-```
-
-Output should look something like this -
-
-```graphql
-{
-  "data": {
-    "wasAssociatedWith": {
-      "correlationId": "9846db0a-be54-43b8-9466-313f715cf613",
-      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
-    }
-  }
-}
-```
-
-Then we end the activity.
-
 ```graphql
 mutation {
   endActivity(
@@ -358,7 +360,7 @@ Output should look something like this -
 
 In this example each a rotor blade is certified using a distinct activity.
 
-#### Record Certification Activity Creation
+#### Record Certification Activity
 
 Here the identity of the activity can incorporate (if we chose) the partID.
 
@@ -379,6 +381,36 @@ Output should look something like this -
     "itemCertified": {
       "correlationId": "9555462c-87c9-42bb-b3ed-485880a50734",
       "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001"
+    }
+  }
+}
+```
+
+#### Record Contractor's Role in the Certification Activity
+
+We assert that contractor was responsible for this activity in its role
+as a `CERTIFIER` using the `wasAssociatedWith` relationship -
+
+```graphql
+mutation {
+    wasAssociatedWith(
+    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001",
+    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
+    role:CERTIFIER) {
+    correlationId
+    context
+  }
+}
+```
+
+Output should look something like this -
+
+```graphql
+{
+  "data": {
+    "wasAssociatedWith": {
+      "correlationId": "3a8a66df-ea08-46ed-a67f-50f0c7fcaf7b",
+      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
     }
   }
 }
@@ -502,36 +534,6 @@ Given the scope of this activity is limited to a single rotor blade we now end
 it.
 
 #### Record End of Certifying Activity
-
-First we assert that contractor was responsible for this activity in its role
-as a `CERTIFIER` using the `wasAssociatedWith` relationship -
-
-```graphql
-mutation {
-    wasAssociatedWith(
-    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001",
-    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
-    role:CERTIFIER) {
-    correlationId
-    context
-  }
-}
-```
-
-Output should look something like this -
-
-```graphql
-{
-  "data": {
-    "wasAssociatedWith": {
-      "correlationId": "3a8a66df-ea08-46ed-a67f-50f0c7fcaf7b",
-      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
-    }
-  }
-}
-```
-
-Then we end the activity.
 
 ```graphql
 mutation {
