@@ -77,7 +77,7 @@ attributes:
   CertID:
     type: "String"
 entities:
-  Item:
+  Certificate:
     attributes:
       - CertID
 ```
