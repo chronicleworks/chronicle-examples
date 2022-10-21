@@ -9,7 +9,7 @@ rotor blades by a contractor, which then certifies these individually.
 
 Although various agents could be involved in the manufacturing activity, in this
 example, the contractor is the only agent responsible for the manufacturing of
-high specification items such rotor blades, which it does so in batches.
+high specification rotor blades, which it does so in batches.
 
 ![Item Manufactured](./diagrams/ItemManufactured.png)
 
@@ -42,10 +42,10 @@ entities:
       - PartID
 ```
 
-#### Modellng the ItemManufactured Activity
+#### Modelling the ItemManufactured Activity
 
 The `ItemManufactured` activity has one attribute, its `BatchID`. It also has a
-role `Manufacturer`.
+`Manufacturer` role.
 
 ```yaml
 attributes:
@@ -63,7 +63,7 @@ roles:
 
 Although various agents could be involved in the certification activity, in this
 example, the contractor is the only agent responsible for the certification of
-high specification items such rotor blades, which it does so individually.
+high specification rotor blades, which it does so individually.
 Therefore this activity uses the item and issues a certificate for it.
 
 ![Item Manufactured](./diagrams/ItemCertified.png)
@@ -77,7 +77,7 @@ attributes:
   CertID:
     type: "String"
 entities:
-  Item:
+  Certificate:
     attributes:
       - CertID
 ```
@@ -141,7 +141,7 @@ the following activities:
 
 ### Record Contractor
 
-First record that there a contractor Helicopters PLC based in Bristol.
+First record that there was a contractor Helicopters PLC based in Bristol.
 
 ```graphql
 mutation {
@@ -246,7 +246,7 @@ Output should look something like this -
 }
 ```
 
-#### Record Manufacture of Batch of Rotor Blades
+#### Record Manufacture of a Batch of Rotor Blades
 
 For each rotor blade produced by this activity we first record its creation.
 
@@ -276,7 +276,7 @@ Output should look something like this -
 }
 ```
 
-Then we assert that it `wasGeneratedBy` by the relevant manufacturing activity.
+Then we assert that it `wasGeneratedBy` the relevant manufacturing activity.
 
 ```graphql
 mutation {
@@ -358,7 +358,7 @@ Output should look something like this -
 
 ### Certifying Rotor Blades
 
-In this example each a rotor blade is certified using a distinct activity.
+In this example each rotor blade is certified using a distinct activity.
 
 #### Record Certification Activity
 
@@ -388,7 +388,7 @@ Output should look something like this -
 
 #### Record Contractor's Role in the Certification Activity
 
-We assert that contractor was responsible for this activity in its role
+We assert that the contractor was responsible for this activity in its role
 as a `CERTIFIER` using the `wasAssociatedWith` relationship -
 
 ```graphql
@@ -469,7 +469,7 @@ Output should look something like this -
 }
 ```
 
-Then we assert that it `wasGeneratedBy` by the certification activity.
+Then we assert that it `wasGeneratedBy` the certification activity.
 
 ```graphql
 mutation {
