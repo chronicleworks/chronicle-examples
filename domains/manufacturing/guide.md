@@ -145,7 +145,7 @@ First record that there was a contractor Helicopters PLC based in Bristol.
 
 ```graphql
 mutation {
-  contractor(name:"helicoptersplc",attributes:{locationAttribute:"Bristol"}) {
+  contractor(externalId"helicoptersplc",attributes:{locationAttribute:"Bristol"}) {
     context
     correlationId
   }
@@ -171,7 +171,7 @@ Output should look something like this -
 
 ```graphql
 mutation {
-  itemManufactured(name:"rotorbladefab-20221014-001",attributes:{batchIdAttribute:"20221014-001"}) {
+  itemManufactured(externalId"rotorbladefab-20221014-001",attributes:{batchIdAttribute:"20221014-001"}) {
     correlationId,
     context
   }
@@ -256,7 +256,7 @@ the identity and partID were incremented.
 
 ```graphql
 mutation {
-  item(name:"rotorblade-20221014-0001",attributes:{partIdAttribute:"20221014-0001"}) {
+  item(externalId"rotorblade-20221014-0001",attributes:{partIdAttribute:"20221014-0001"}) {
     context,
     correlationId
   }
@@ -366,7 +366,7 @@ Here the identity of the activity can incorporate (if we chose) the partID.
 
 ```graphql
 mutation {
-  itemCertified(name:"rotorbladecert-20221014-0001") {
+  itemCertified(externalId"rotorbladecert-20221014-0001") {
     correlationId,
     context
   }
@@ -449,7 +449,7 @@ example the certID is the same as the partID of the rotor blade.
 
 ```graphql
 mutation {
-  certificate(name:"rotorbladecert-20221014-0001",attributes:{certIdAttribute:"20221014-0001"}) {
+  certificate(externalId"rotorbladecert-20221014-0001",attributes:{certIdAttribute:"20221014-0001"}) {
     context,
     correlationId
   }
