@@ -122,7 +122,7 @@ in one of the tabs.
 ```graphql
 subscription {
   commitNotifications {
-    correlationId
+    txId
   }
 }
 ```
