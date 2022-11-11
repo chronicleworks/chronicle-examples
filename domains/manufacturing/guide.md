@@ -305,8 +305,8 @@ The output should look something like this -
 For each rotor blade produced by this activity, we first record its creation.
 
 **NOTE** that here we are focusing on a single rotor blade. However, in a real
-world example, this process would be repeated and we would need to make sure that
-the `name` (in future release `external_id`) and `partId` were incremented.
+world example, this process would be repeated and we would need to make sure
+that the `externalId` and `partId` were incremented.
 
 ```graphql
 mutation {
