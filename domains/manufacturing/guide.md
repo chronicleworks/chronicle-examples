@@ -17,7 +17,7 @@ high specification rotor blades, which it does so in batches.
 #### Modelling the Contractor Agent
 
 The `Contractor` agent has two attributes, its `CompanyName` and its `Location`.
-In our Chronicl domain specification this is captured as follows -
+In our Chronicle domain specification this is captured as follows -
 
 ```yaml
 attributes:
