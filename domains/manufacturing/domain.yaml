@@ -1,8 +1,10 @@
 name: "manufacturing"
 attributes:
+  BatchID:
+    type: "String"
   CertID:
     type: "String"
-  BatchID:
+  CompanyName:
     type: "String"
   PartID:
     type: "String"
@@ -11,6 +13,7 @@ attributes:
 agents:
   Contractor:
     attributes:
+      - CompanyName
       - Location
 entities:
   Certificate:
@@ -26,5 +29,5 @@ activities:
     attributes:
       - BatchID
 roles:
-  - Certifier
-  - Manufacturer
+  - CERTIFIER
+  - MANUFACTURER
