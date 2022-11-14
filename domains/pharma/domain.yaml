@@ -1,0 +1,105 @@
+name: "Research"
+attributes:
+  ChemID:
+    type: "String"
+  BatchID:
+    type: "String"
+  MSDS:
+    type: "String"
+  Mass:
+    type: "Number"
+  RawData:
+    type: "Number"
+  DataGraph:
+    type: "Number"
+  RawDataURL:
+    type: "String"
+  DataGraphURL:
+    type: "String"
+  LocationID:
+    type: "String"
+  ProjectID:
+    type: "String"
+  GMPCompliance:
+    type: "Boolean"
+  Approval:
+    type: "Boolean"
+  ModelSystem:
+    type: "String"
+  AssayName:
+    type: "String"
+  ScreenPhase:
+    type: "String"
+  Consent:
+    type: "String"
+  ParticipantID:
+    type: "String"
+agents:
+  Scientist:
+    attributes:
+      - LocationID
+      - ProjectID
+entities:
+  Drug:
+    attributes:
+      - ChemID
+      - MSDS
+      - Mass
+  Results:
+    attributes:
+      - RawData
+      - DataGraph
+      - RawDataURL
+      - DataGraphURL
+  PreclinicalResults:
+    attributes:
+      - RawData
+      - DataGraph
+      - RawDataURL
+      - DataGraphURL
+  ClinicalResults:
+    attributes:
+      - RawData
+      - DataGraph
+      - RawDataURL
+      - DataGraphURL
+activities:
+  DrugSynthesized:
+    attributes:
+      - LocationID
+      - BatchID
+      - MSDS
+      - GMPCompliance
+      - Approval
+      - Mass
+  DrugScreen:
+    attributes:
+      - ProjectID
+      - LocationID
+      - MSDS
+      - AssayName
+      - ModelSystem
+      - ScreenPhase
+      - ChemID
+      - Mass
+  PreClinicalTesting:
+    attributes:
+      - Approval
+      - LocationID
+      - ModelSystem
+      - ChemID
+      - Mass
+  ClinicalTesting:
+    attributes:
+      - Approval
+      - Consent
+      - GMPCompliance
+      - Location
+      - ChemID
+      - ParticipantID
+      - Mass
+roles:
+  - Chemist
+  - MedChem
+  - Biologist
+  - Clinician
