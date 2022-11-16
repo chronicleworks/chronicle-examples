@@ -1,0 +1,52 @@
+name: "Time Recording"
+attributes:
+  Name:
+    type: String
+  Task:
+    type: String
+  Start:
+    type: Int
+  Duration:
+    type: Int
+  Reason:
+    type: String
+agents:
+  Person:
+    attributes:
+      - Name
+entities:
+  Project:
+    attributes:
+      - Name
+  Timesheet:
+    attributes:
+      - Start
+      - Duration
+  Summary:
+    attributes:
+      - Start
+      - Duration
+activities:
+  Work:
+    attributes:
+      - Task
+      - Duration
+  Report:
+    attributes: []
+  Submit:
+    attributes: []
+  View:
+    attributes: []
+  Approve:
+    attributes: []
+  Reject:
+    attributes:
+      - Reason
+  Revise:
+    attributes:
+      - Reason
+roles:
+  - WORKER
+  - SUPERVISOR
+  - PROJECT_LEAD
+  - ADMINISTRATOR
