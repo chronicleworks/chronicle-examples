@@ -3,8 +3,11 @@ include $(MAKEFILE_DIR)/standard_defs.mk
 
 export OPENSSL_STATIC=1
 
-CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder
+ARCH_TYPE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
+
+CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder-$(ARCH_TYPE)
 CHRONICLE_VERSION ?= BTP2.1.0
+
 
 CLEAN_DIRS := $(CLEAN_DIRS)
 

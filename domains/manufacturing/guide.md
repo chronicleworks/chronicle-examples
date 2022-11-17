@@ -3,7 +3,8 @@
 ## Modelling Manufacturing
 
 We want to record the batch manufacture of high specification items such as
-rotor blades by a contractor, which then certifies these individually.
+rotor blades by a contractor, which then inspects these individually and issues
+a certificate.
 
 ### Manufacturing Items
 
@@ -15,16 +16,19 @@ high specification rotor blades, which it does so in batches.
 
 #### Modelling the Contractor Agent
 
-The `Contractor` agent has one attribute, its `Location`. In our Chronicle
-domain specification this is captured as follows -
+The `Contractor` agent has two attributes, its `CompanyName` and its `Location`.
+In our Chronicle domain specification this is captured as follows -
 
 ```yaml
 attributes:
+  CompanyName:
+    type: "String"
   Location:
     type: "String"
 agents:
   Contractor:
     attributes:
+      - CompanyName
       - Location
 ```
 
@@ -101,9 +105,11 @@ Combining these fragments gives us our Chronicle `manufacturing` domain.
 ```yaml
 name: "manufacturing"
 attributes:
+  BatchID:
+    type: "String"
   CertID:
     type: "String"
-  BatchID:
+  CompanyName:
     type: "String"
   PartID:
     type: "String"
@@ -141,25 +147,73 @@ the following activities:
 
 ### Record Contractor
 
-First record that there was a contractor Helicopters PLC based in Bristol.
+The first record is that there is a contractor called Helicopters PLC based in
+Bristol.
 
 ```graphql
 mutation {
-  contractor(name:"helicoptersplc",attributes:{locationAttribute:"Bristol"}) {
+  defineContractor(externalId:"helicoptersplc",attributes:{
+    companyNameAttribute: "Helicopters PLC",
+    locationAttribute:"Bristol"}) {
     context
-    correlationId
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
-    "contractor": {
-      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
-      "correlationId": "21a78773-67ff-4ca5-9887-a376086a5e7a"
+    "defineContractor": {
+      "context": "chronicle:agent:helicoptersplc",
+      "txId": "492c4827-d3c5-4427-8b43-d35f9ad58687"
+    }
+  }
+}
+```
+
+#### Obtaining the list of Contractors
+
+Note that you can always obtain the list of contractors known to Chronicle
+using this query -
+
+```graphql
+query {
+  agentsByType(agentType: Contractor) {
+    nodes {
+      __typename
+      ... on Contractor {
+        externalId
+        companyNameAttribute
+        locationAttribute
+      }
+    }
+  }
+}
+```
+
+The output should look something like this -
+
+```graphql
+{
+  "data": {
+    "agentsByType": {
+      "nodes": [
+        {
+          "__typename": "Contractor",
+          "externalId": "acmecorp",
+          "companyNameAttribute": "ACME Corp",
+          "locationAttribute": "Burbank, California"
+        },
+        {
+          "__typename": "Contractor",
+          "externalId": "helicoptersplc",
+          "companyNameAttribute": "Helicopters PLC",
+          "locationAttribute": "Bristol"
+        }
+      ]
     }
   }
 }
@@ -167,25 +221,25 @@ Output should look something like this -
 
 ### Manufacturing Rotor Blades
 
-#### Record Manufacturing Activity
+#### Record Manufacturing Activity Instance
 
 ```graphql
 mutation {
-  itemManufactured(name:"rotorbladefab-20221014-001",attributes:{batchIdAttribute:"20221014-001"}) {
-    correlationId,
+  defineItemManufactured(externalId:"rotorblademake-run-001",attributes:{batchIdAttribute:"run-001"}) {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
-    "itemManufactured": {
-      "correlationId": "6e847156-3692-465a-85a7-c34357df5670",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+    "defineItemManufactured": {
+      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "txId": "93ad8dd6-4e97-45e0-9c60-ddb079863830"
     }
   }
 }
@@ -199,23 +253,23 @@ as a `Manufacturer` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001",
-    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
+    activity: "chronicle:activity:rotorblademake%2Drun%2D001",
+    responsible:"chronicle:agent:helicoptersplc",
     role:MANUFACTURER) {
-    correlationId
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "wasAssociatedWith": {
-      "correlationId": "9846db0a-be54-43b8-9466-313f715cf613",
-      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
+      "context": "chronicle:agent:helicoptersplc",
+      "txId": "59b26631-db0f-4c5d-a79d-9ff8d85564d4"
     }
   }
 }
@@ -226,109 +280,109 @@ Output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id:"http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001")    {
-    correlationId,
+    id:"chronicle:activity:rotorblademake%2Drun%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "startActivity": {
-      "correlationId": "951d545c-7f3e-447e-89d5-f3edcaec47c4",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "txId": "36d58122-35ec-4e66-a31b-1534710e310b"
     }
   }
 }
 ```
 
-#### Record Manufacture of a Batch of Rotor Blades
+#### Record the Manufacturing of Batch of Rotor Blades
 
-For each rotor blade produced by this activity we first record its creation.
+For each rotor blade produced by this activity, we first record its creation.
 
 **NOTE** that here we are focusing on a single rotor blade. However, in a real
-world example this process would be repeated and we would need to make sure that
-the identity and partID were incremented.
+world example, this process would be repeated and we would need to make sure
+that the `externalId` and `partId` were incremented.
 
 ```graphql
 mutation {
-  item(name:"rotorblade-20221014-0001",attributes:{partIdAttribute:"20221014-0001"}) {
-    context,
-    correlationId
+  defineItem(externalId:"rotorblade-run-001-001",attributes:{partIdAttribute:"run-001-001"}) {
+    context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
-    "item": {
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001",
-      "correlationId": "e11aae24-d683-4a0a-81c2-3da3b5739b2b"
+    "defineItem": {
+      "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
+      "txId": "630356af-01e1-42cd-9513-f52b59c70d53"
     }
   }
 }
 ```
 
-Then we assert that it `wasGeneratedBy` the relevant manufacturing activity.
+Then we assert that it `wasGeneratedBy` by the relevant manufacturing activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id:"http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001",
-    activity:"http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001") {
-    correlationId,
+  wasGeneratedBy(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
+    activity:"chronicle:activity:rotorblademake%2Drun%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "wasGeneratedBy": {
-      "correlationId": "2878bea4-4ed1-42ca-bc54-c2e647571738",
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001"
+      "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
+      "txId": "edde4708-e451-4bb6-b548-0cf818db5b3b"
     }
   }
 }
 ```
 
-For completeness we record that the activity `used` it. (In a future release
-this will be replaced by `Generated`.)
+For completeness, we record that the activity `used` it. (In a future release,
+this will be replaced by `generated`.)
 
 ```graphql
 mutation {
-  used(id:"http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001",
-    activity:"http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001") {
-    correlationId,
+  used(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
+    activity:"chronicle:activity:rotorblademake%2Drun%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "used": {
-      "correlationId": "787e5d34-328b-4844-807e-9804a7c593f3",
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001"
+      "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
+      "txId": "87a1fcde-beff-48ea-85a0-b67bb40114e3"
     }
   }
 }
 ```
 
-In this guide we are only showing the recording of a single rotor blade but in
-practice a batch will be associated with this activity before it comes to an
+In this guide, we are only showing the recording of a single rotor blade, however, in
+practice, a batch will be associated with this activity, before the activity comes to an
 end.
 
 #### Record End of Manufacturing Activity
@@ -336,21 +390,21 @@ end.
 ```graphql
 mutation {
   endActivity(
-    id:"http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001") {
-    correlationId,
+    id:"chronicle:activity:rotorblademake%2Drun%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "endActivity": {
-      "correlationId": "938dda55-f91b-44c2-9aa4-62b97ddba2ee",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "txId": "51839346-b068-4946-9491-334d465faa56"
     }
   }
 }
@@ -358,29 +412,29 @@ Output should look something like this -
 
 ### Certifying Rotor Blades
 
-In this example each rotor blade is certified using a distinct activity.
+In this example, each rotor blade is certified, using a distinct activity.
 
-#### Record Certification Activity
+#### Record Certification Activity Instance
 
-Here the identity of the activity can incorporate (if we chose) the partID.
+Here, the identity of the activity can incorporate the partId.
 
 ```graphql
 mutation {
-  itemCertified(name:"rotorbladecert-20221014-0001") {
-    correlationId,
+  defineItemCertified(externalId:"rotorbladecert-run-001-001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
-    "itemCertified": {
-      "correlationId": "9555462c-87c9-42bb-b3ed-485880a50734",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001"
+    "defineItemCertified": {
+      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "e2ca580a-f0dd-4ea5-8bce-297a4f6800b7"
     }
   }
 }
@@ -388,29 +442,29 @@ Output should look something like this -
 
 #### Record Contractor's Role in the Certification Activity
 
-We assert that the contractor was responsible for this activity in its role
+We assert that contractor was responsible for this activity in its role
 as a `CERTIFIER` using the `wasAssociatedWith` relationship -
 
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001",
-    responsible:"http://blockchaintp.com/chronicle/ns#agent:helicoptersplc",
+    activity: "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+    responsible:"chronicle:agent:helicoptersplc",
     role:CERTIFIER) {
-    correlationId
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "wasAssociatedWith": {
-      "correlationId": "3a8a66df-ea08-46ed-a67f-50f0c7fcaf7b",
-      "context": "http://blockchaintp.com/chronicle/ns#agent:helicoptersplc"
+      "context": "chronicle:agent:helicoptersplc",
+      "txId": "e2998de6-1629-4924-aa90-b93b8ddd1c85"
     }
   }
 }
@@ -421,21 +475,21 @@ Output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id:"http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001") {
-    correlationId,
+    id:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "startActivity": {
-      "correlationId": "951d545c-7f3e-447e-89d5-f3edcaec47c4",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "fc1570a7-1077-4839-9277-c906c834a8b4"
     }
   }
 }
@@ -443,116 +497,116 @@ Output should look something like this -
 
 #### Record the Certification of a Rotor Blade
 
-For each rotor blade certified by this activity we first record its
-corresponding certificate creation along with its certID. In this simple
-example the certID is the same as the partID of the rotor blade.
+For each rotor blade certified by this activity, we first record its
+corresponding certificate generation along with its certId. In this simplified
+example, the certId of the rotor blade is the same as its partId.
 
 ```graphql
 mutation {
-  certificate(name:"rotorbladecert-20221014-0001",attributes:{certIdAttribute:"20221014-0001"}) {
-    context,
-    correlationId
+  defineCertificate(externalId:"rotorbladecert-run-001-001",attributes:{certIdAttribute:"run-001-001"}) {
+    context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
-    "certificate": {
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001",
-      "correlationId": "6d6bb3cd-95f1-469e-981e-640d22ad194c"
+    "defineCertificate": {
+      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "2db682a4-c1cf-4ebd-8f07-8f81d6c9da2f"
     }
   }
 }
 ```
 
-Then we assert that it `wasGeneratedBy` the certification activity.
+Then, we assert that it `wasGeneratedBy` by the certification activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id:"http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001",
-    activity:"http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001") {
-    correlationId,
+  wasGeneratedBy(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "wasGeneratedBy": {
-      "correlationId": "a09642f2-2b88-4ccd-868d-f3e990ec5e04",
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001"
+      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "83acf7e3-afcc-4685-8f76-b34a91acff7f"
     }
   }
 }
 ```
 
-For completeness we record that the activity `used` the certificate. (In a
-future release this will be replaced by `Generated`.) However, this time we also
+For completeness, we record that the activity `used` the certificate. (In a
+future release, this will be replaced by `generated`.) However, this time we also
 record the fact that the activity `used` the rotor blade.
 
 ```graphql
 mutation {
-  cert: used(id:"http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001",
-    activity:"http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001") {
-    correlationId,
+  cert: used(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
     context
+    txId
   }
-  blade: used(id:"http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001",
-    activity:"http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001") {
-    correlationId,
+  blade: used(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
+    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "cert": {
-      "correlationId": "4d2323e7-49ad-4031-89fb-20cf7eceedc9",
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001"
+      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "6eb76aa2-4e87-45ec-bdad-37a930f1970d"
     },
     "blade": {
-      "correlationId": "adba37c9-8d37-4a54-bb02-f28a7ba1f342",
-      "context": "http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001"
+      "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
+      "txId": "d0eb8691-29e0-4264-aebb-31733f4ffb21"
     }
   }
 }
 ```
 
-Given the scope of this activity is limited to a single rotor blade we now end
-it.
+Given the scope of this activity is limited to a single rotor blade, we now end
+the activity.
 
 #### Record End of Certifying Activity
 
 ```graphql
 mutation {
   endActivity(
-    id:"http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001") {
-    correlationId,
+    id:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
     context
+    txId
   }
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "endActivity": {
-      "correlationId": "75874c77-e50a-4b4b-87f7-0e00ade3e2a0",
-      "context": "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001"
+      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "txId": "ae86576a-9e1f-4bef-9b74-c5c45c8b6ff7"
     }
   }
 }
@@ -566,13 +620,13 @@ There are many queries that can be run. Here are a couple of examples.
 
 ```graphql
 query {
-  q1: entityById(id:"http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001") {
+  q1: entityById(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001") {
     ... on Item {
       partIdAttribute
       wasGeneratedBy { ... on ItemManufactured { id } }
     }
   }
-  q2: entityById(id:"http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001") {
+  q2: entityById(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001") {
     ... on Certificate {
       certIdAttribute
       wasGeneratedBy { ... on ItemCertified { id } }
@@ -581,24 +635,24 @@ query {
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
   "data": {
     "q1": {
-      "partIdAttribute": "20221014-0001",
+      "partIdAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
-          "id": "http://blockchaintp.com/chronicle/ns#activity:rotorbladefab%2D20221014%2D001"
+          "id": "chronicle:activity:rotorblademake%2Drun%2D001"
         }
       ]
     },
     "q2": {
-      "certIdAttribute": "20221014-0001",
+      "certIdAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
-          "id": "http://blockchaintp.com/chronicle/ns#activity:rotorbladecert%2D20221014%2D0001"
+          "id": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001"
         }
       ]
     }
@@ -610,7 +664,7 @@ Output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: ["http://blockchaintp.com/chronicle/ns#entity:rotorblade%2D20221014%2D0001"],
+  activityTimeline(forEntity: ["chronicle:entity:rotorblade%2Drun%2D001%2D001"],
                   activityTypes: [],
                   forAgent:[]
                   ) {
@@ -632,7 +686,7 @@ query {
                     agent {
                       __typename
                       ... on Contractor {
-                        name
+                        companyNameAttribute
                       }
                     }
                   }
@@ -647,7 +701,7 @@ query {
                     agent {
                       __typename
                       ... on Contractor {
-                        name
+                        companyNameAttribute
                       }
                     }
                   }
@@ -660,7 +714,7 @@ query {
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
@@ -676,15 +730,15 @@ Output should look something like this -
         {
           "node": {
             "__typename": "ItemCertified",
-            "started": "2022-10-14T20:12:37.865949122+00:00",
-            "ended": "2022-10-14T20:12:37.865949122+00:00",
+            "started": "2022-11-10T11:25:27.525043763+00:00",
+            "ended": "2022-11-10T11:30:46.038513324+00:00",
             "wasAssociatedWith": [
               {
                 "responsible": {
                   "role": "CERTIFIER",
                   "agent": {
                     "__typename": "Contractor",
-                    "name": "helicoptersplc"
+                    "companyNameAttribute": "Helicopters PLC"
                   }
                 }
               }
@@ -695,15 +749,15 @@ Output should look something like this -
         {
           "node": {
             "__typename": "ItemManufactured",
-            "started": "2022-10-14T18:36:28.955763872+00:00",
-            "ended": "2022-10-14T19:23:53.589009662+00:00",
+            "started": "2022-11-10T11:11:22.766341245+00:00",
+            "ended": "2022-11-10T11:20:37.201544076+00:00",
             "wasAssociatedWith": [
               {
                 "responsible": {
                   "role": "MANUFACTURER",
                   "agent": {
                     "__typename": "Contractor",
-                    "name": "helicoptersplc"
+                    "companyNameAttribute": "Helicopters PLC"
                   }
                 }
               }
@@ -721,7 +775,7 @@ Output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: ["http://blockchaintp.com/chronicle/ns#entity:rotorbladecert%2D20221014%2D0001"],
+  activityTimeline(forEntity: ["chronicle:entity:rotorblade%2Drun%2D001%2D001"],
                   activityTypes: [],
                   forAgent:[]
                   ) {
@@ -743,7 +797,7 @@ query {
                     agent {
                       __typename
                       ... on Contractor {
-                        name
+                        companyNameAttribute
                       }
                     }
                   }
@@ -756,7 +810,7 @@ query {
 }
 ```
 
-Output should look something like this -
+The output should look something like this -
 
 ```graphql
 {
@@ -772,15 +826,15 @@ Output should look something like this -
         {
           "node": {
             "__typename": "ItemCertified",
-            "started": "2022-10-14T20:12:37.865949122+00:00",
-            "ended": "2022-10-14T20:12:37.865949122+00:00",
+            "started": "2022-11-10T11:25:27.525043763+00:00",
+            "ended": "2022-11-10T11:30:46.038513324+00:00",
             "wasAssociatedWith": [
               {
                 "responsible": {
                   "role": "CERTIFIER",
                   "agent": {
                     "__typename": "Contractor",
-                    "name": "helicoptersplc"
+                    "companyNameAttribute": "Helicopters PLC"
                   }
                 }
               }
@@ -790,20 +844,7 @@ Output should look something like this -
         },
         {
           "node": {
-            "__typename": "ItemCertified",
-            "started": "2022-10-14T20:12:37.865949122+00:00",
-            "ended": "2022-10-14T20:12:37.865949122+00:00",
-            "wasAssociatedWith": [
-              {
-                "responsible": {
-                  "role": "CERTIFIER",
-                  "agent": {
-                    "__typename": "Contractor",
-                    "name": "helicoptersplc"
-                  }
-                }
-              }
-            ]
+            "__typename": "ItemManufactured"
           },
           "cursor": "1"
         }
