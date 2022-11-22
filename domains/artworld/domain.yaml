@@ -39,6 +39,6 @@ activities:
       - PurchaseValue
       - PurchaseValueCurrency
 roles:
-  - Buyer
-  - Seller
-  - Creator
+  - BUYER
+  - SELLER
+  - CREATOR

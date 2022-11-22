@@ -48,7 +48,7 @@ agents:
     attributes:
       - Title
 roles:
-  - Stakeholder
-  - Author
-  - Researcher
-  - Editor
+  - STAKEHOLDER
+  - AUTHOR
+  - RESEARCHER
+  - EDITOR
