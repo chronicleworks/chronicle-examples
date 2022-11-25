@@ -12,8 +12,6 @@ attributes:
     type: String
   Version:
     type: Int
-  Versionies:
-    type: Int
 entities:
   Question:
     attributes:
