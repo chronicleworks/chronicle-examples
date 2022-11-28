@@ -9,19 +9,19 @@ COPY domains/${DOMAIN}/domain.yaml crates/chronicle-domain/
 RUN /usr/local/bin/chronicle-domain-lint crates/chronicle-domain/domain.yaml
 RUN cat crates/chronicle-domain/domain.yaml
 RUN if [ "${RELEASE}" = "yes" ]; then \
-  if [ -n "${FEATURES}" ]; then \
-  cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
+    if [ -n "${FEATURES}" ]; then \
+      cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
+    else \
+      cargo build --release --frozen --bin chronicle; \
+    fi \
+    && cp target/release/chronicle /usr/local/bin/; \
   else \
-  cargo build --release --frozen --bin chronicle; \
-  fi \
-  && cp target/release/chronicle /usr/local/bin/; \
-  else \
-  if [ -n "${FEATURES}" ]; then \
-  cargo build --frozen --features "${FEATURES}" --bin chronicle; \
-  else \
-  cargo build --frozen --bin chronicle; \
-  fi \
-  && cp target/debug/chronicle /usr/local/bin/; \
+    if [ -n "${FEATURES}" ]; then \
+      cargo build --frozen --features "${FEATURES}" --bin chronicle; \
+    else \
+      cargo build --frozen --bin chronicle; \
+    fi \
+    && cp target/debug/chronicle /usr/local/bin/; \
   fi;
 
 WORKDIR /
