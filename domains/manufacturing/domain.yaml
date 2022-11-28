@@ -1,15 +1,15 @@
 name: "manufacturing"
 attributes:
   BatchID:
-    type: "String"
+    type: String
   CertID:
-    type: "String"
+    type: String
   CompanyName:
-    type: "String"
+    type: String
   PartID:
-    type: "String"
+    type: String
   Location:
-    type: "String"
+    type: String
 agents:
   Contractor:
     attributes:

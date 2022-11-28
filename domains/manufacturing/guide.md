@@ -22,9 +22,9 @@ In our Chronicle domain specification this is captured as follows -
 ```yaml
 attributes:
   CompanyName:
-    type: "String"
+    type: String
   Location:
-    type: "String"
+    type: String
 agents:
   Contractor:
     attributes:
@@ -39,7 +39,7 @@ The `Item` entity has one attribute, its `PartID`.
 ```yaml
 attributes:
   PartID:
-    type: "String"
+    type: String
 entities:
   Item:
     attributes:
@@ -54,7 +54,7 @@ The `ItemManufactured` activity has one attribute, its `BatchID`. It also has a
 ```yaml
 attributes:
   BatchID:
-    type: "String"
+    type: String
 activities:
   ItemManufactured:
     attributes:
@@ -79,7 +79,7 @@ The `Certificate` entity has one attribute, its `CertID`.
 ```yaml
 attributes:
   CertID:
-    type: "String"
+    type: String
 entities:
   Certificate:
     attributes:
@@ -106,15 +106,15 @@ Combining these fragments gives us our Chronicle `manufacturing` domain.
 name: "manufacturing"
 attributes:
   BatchID:
-    type: "String"
+    type: String
   CertID:
-    type: "String"
+    type: String
   CompanyName:
-    type: "String"
+    type: String
   PartID:
-    type: "String"
+    type: String
   Location:
-    type: "String"
+    type: String
 agents:
   Contractor:
     attributes:
@@ -152,7 +152,7 @@ Bristol.
 
 ```graphql
 mutation {
-  defineContractor(externalId:"helicoptersplc",attributes:{
+  defineContractorAgent(externalId: "helicoptersplc", attributes:{
     companyNameAttribute: "Helicopters PLC",
     locationAttribute:"Bristol"}) {
     context
@@ -166,7 +166,7 @@ The output should look something like this -
 ```graphql
 {
   "data": {
-    "defineContractor": {
+    "defineContractorAgent": {
       "context": "chronicle:agent:helicoptersplc",
       "txId": "492c4827-d3c5-4427-8b43-d35f9ad58687"
     }
@@ -181,10 +181,10 @@ using this query -
 
 ```graphql
 query {
-  agentsByType(agentType: Contractor) {
+  agentsByType(agentType: ContractorAgent) {
     nodes {
       __typename
-      ... on Contractor {
+      ... on ContractorAgent {
         externalId
         companyNameAttribute
         locationAttribute
@@ -202,13 +202,13 @@ The output should look something like this -
     "agentsByType": {
       "nodes": [
         {
-          "__typename": "Contractor",
+          "__typename": "ContractorAgent",
           "externalId": "acmecorp",
           "companyNameAttribute": "ACME Corp",
           "locationAttribute": "Burbank, California"
         },
         {
-          "__typename": "Contractor",
+          "__typename": "ContractorAgent",
           "externalId": "helicoptersplc",
           "companyNameAttribute": "Helicopters PLC",
           "locationAttribute": "Bristol"
@@ -225,7 +225,7 @@ The output should look something like this -
 
 ```graphql
 mutation {
-  defineItemManufactured(externalId:"rotorblademake-run-001",attributes:{batchIdAttribute:"run-001"}) {
+  defineItemManufacturedActivity(externalId: "rotorblademake-run-001", attributes:{ batchIdAttribute: "run-001" }) {
     context
     txId
   }
@@ -237,7 +237,7 @@ The output should look something like this -
 ```graphql
 {
   "data": {
-    "defineItemManufactured": {
+    "defineItemManufacturedActivity": {
       "context": "chronicle:activity:rotorblademake%2Drun%2D001",
       "txId": "93ad8dd6-4e97-45e0-9c60-ddb079863830"
     }
@@ -253,9 +253,9 @@ as a `Manufacturer` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: { externalId: "rotorblademake-run-001"},
+    activity: { externalId: "rotorblademake-run-001" },
     responsible: { externalId: "helicoptersplc" },
-    role:MANUFACTURER) {
+    role: MANUFACTURER) {
     context
     txId
   }
@@ -280,7 +280,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id: { externalId: "rotorblademake-run-001"}) {
+    id: { externalId: "rotorblademake-run-001" }) {
     context
     txId
   }
@@ -310,7 +310,7 @@ that the `externalId` and `partId` were incremented.
 
 ```graphql
 mutation {
-  defineItem(externalId:"rotorblade-run-001-001",attributes:{partIdAttribute:"run-001-001"}) {
+  defineItemEntity(externalId:"rotorblade-run-001-001",attributes:{partIdAttribute:"run-001-001"}) {
     context
     txId
   }
@@ -322,7 +322,7 @@ The output should look something like this -
 ```graphql
 {
   "data": {
-    "defineItem": {
+    "defineItemEntity": {
       "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
       "txId": "630356af-01e1-42cd-9513-f52b59c70d53"
     }
@@ -334,8 +334,8 @@ Then we assert that it `wasGeneratedBy` by the relevant manufacturing activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id: {externalId: "rotorblade-run-001-001",
-    activity: {externalId: "rotorblademake-run-001"}) {
+  wasGeneratedBy(id: { externalId: "rotorblade-run-001-001" },
+    activity: { externalId: "rotorblademake-run-001" }) {
     context
     txId
   }
@@ -359,8 +359,8 @@ For completeness, we record that the activity `used` it.
 
 ```graphql
 mutation {
-  used(id: {externalId: "rotorblade-run-001-001"},
-    activity: {externalId: "rotorblademake-run-001"}) {
+  used(id: { externalId: "rotorblade-run-001-001" },
+    activity: { externalId: "rotorblademake-run-001" }) {
     context
     txId
   }
@@ -380,16 +380,16 @@ The output should look something like this -
 }
 ```
 
-In this guide, we are only showing the recording of a single rotor blade, however, in
-practice, a batch will be associated with this activity, before the activity comes to an
-end.
+In this guide, we are only showing the recording of a single rotor blade, however,
+in practice, a batch will be associated with this activity, before the activity comes
+to an end.
 
 #### Record End of Manufacturing Activity
 
 ```graphql
 mutation {
   endActivity(
-    id:{externalId: "rotorblademake-run-001"}) {
+    id:{ externalId: "rotorblademake-run-001" }) {
     context
     txId
   }
@@ -419,7 +419,7 @@ Here, the identity of the activity can incorporate the partId.
 
 ```graphql
 mutation {
-  defineItemCertified(externalId:"rotorbladecert-run-001-001") {
+  defineItemCertifiedActivity(externalId: "rotorbladecert-run-001-001") {
     context
     txId
   }
@@ -431,7 +431,7 @@ The output should look something like this -
 ```graphql
 {
   "data": {
-    "defineItemCertified": {
+    "defineItemCertifiedActivity": {
       "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
       "txId": "e2ca580a-f0dd-4ea5-8bce-297a4f6800b7"
     }
@@ -447,9 +447,9 @@ as a `CERTIFIER` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: {externalId: "rotorbladecert-run-D001-D001"},
-    responsible: {externalId: "helicoptersplc"},
-    role:CERTIFIER) {
+    activity: { externalId: "rotorbladecert-run-D001-D001" },
+    responsible: { externalId: "helicoptersplc" },
+    role: CERTIFIER) {
     context
     txId
   }
@@ -474,7 +474,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id: {externalId: "rotorbladecert-run-001-001"}) {
+    id: { externalId: "rotorbladecert-run-001-001" }) {
     context
     txId
   }
@@ -502,7 +502,7 @@ example, the certId of the rotor blade is the same as its partId.
 
 ```graphql
 mutation {
-  defineCertificate(externalId:"rotorbladecert-run-001-001",attributes:{certIdAttribute:"run-001-001"}) {
+  defineCertificateEntity(externalId: "rotorbladecert-run-001-001", attributes:{ certIdAttribute: "run-001-001" }) {
     context
     txId
   }
@@ -514,7 +514,7 @@ The output should look something like this -
 ```graphql
 {
   "data": {
-    "defineCertificate": {
+    "defineCertificateEntity": {
       "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
       "txId": "2db682a4-c1cf-4ebd-8f07-8f81d6c9da2f"
     }
@@ -526,8 +526,8 @@ Then, we assert that it `wasGeneratedBy` by the certification activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id: {externalId: "chronicle:entity:rotorbladecert-run-001-001"},
-    activity: {externalId: "rotorbladecert-run-001-001"}) {
+  wasGeneratedBy(id: { externalId: "rotorbladecert-run-001-001" },
+    activity: { externalId: "rotorbladecert-run-001-001" }) {
     context
     txId
   }
@@ -553,13 +553,13 @@ record the fact that the activity `used` the rotor blade.
 
 ```graphql
 mutation {
-  cert: used(id: {externalId: "chronicle:entity:rotorbladecert-run-001-001"},
-    activity: {externalId: "rotorbladecert-run-001-001"}) {
+  cert: used(id: { externalId: "rotorbladecert-run-001-001" },
+    activity: { externalId: "rotorbladecert-run-001-001" }) {
     context
     txId
   }
-  blade: used(id: {externalId: "rotorblade-run-001-001"},
-    activity: {externalId: "rotorbladecert-run-001-001"}) {
+  blade: used(id: { externalId: "rotorblade-run-001-001" },
+    activity: { externalId: "rotorbladecert-run-001-001" }) {
     context
     txId
   }
@@ -591,7 +591,7 @@ the activity.
 ```graphql
 mutation {
   endActivity(
-    id: {externalId: "rotorbladecert-run-001-001"}) {
+    id: { externalId: "rotorbladecert-run-001-001" }) {
     context
     txId
   }
@@ -619,16 +619,16 @@ There are many queries that can be run. Here are a couple of examples.
 
 ```graphql
 query {
-  q1: entityById(id: {externalId: "rotorblade-run-001-001"}) {
-    ... on Item {
+  q1: entityById(id: { externalId: "rotorblade-run-001-001" }) {
+    ... on ItemEntity {
       partIdAttribute
-      wasGeneratedBy { ... on ItemManufactured { id } }
+      wasGeneratedBy { ... on ItemManufacturedActivity { id } }
     }
   }
   q2: entityById(id: {externalId: "rotorbladecert-run-001-001"}) {
-    ... on Certificate {
+    ... on CertificateEntity {
       certIdAttribute
-      wasGeneratedBy { ... on ItemCertified { id } }
+      wasGeneratedBy { ... on ItemCertifiedActivity { id } }
     }
   }
 }
@@ -663,7 +663,7 @@ The output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: [{externalId: "chronicle:entity:rotorblade-run-001-001"}],
+  activityTimeline(forEntity: [{ externalId: "rotorblade-run-001-001" }],
                   activityTypes: [],
                   forAgent:[]
                   ) {
@@ -676,7 +676,7 @@ query {
       edges {
           node {
               __typename
-             ... on ItemCertified {
+             ... on ItemCertifiedActivity {
                 started
                 ended
                 wasAssociatedWith {
@@ -684,14 +684,14 @@ query {
                     role
                     agent {
                       __typename
-                      ... on Contractor {
+                      ... on ContractorAgent {
                         companyNameAttribute
                       }
                     }
                   }
                 }
               }
-              ... on ItemManufactured {
+              ... on ItemManufacturedActivity {
                 started
                 ended
                 wasAssociatedWith {
@@ -699,7 +699,7 @@ query {
                     role
                     agent {
                       __typename
-                      ... on Contractor {
+                      ... on ContractorAgent {
                         companyNameAttribute
                       }
                     }
@@ -728,7 +728,7 @@ The output should look something like this -
       "edges": [
         {
           "node": {
-            "__typename": "ItemCertified",
+            "__typename": "ItemCertifiedActivity",
             "started": "2022-11-10T11:25:27.525043763+00:00",
             "ended": "2022-11-10T11:30:46.038513324+00:00",
             "wasAssociatedWith": [
@@ -736,7 +736,7 @@ The output should look something like this -
                 "responsible": {
                   "role": "CERTIFIER",
                   "agent": {
-                    "__typename": "Contractor",
+                    "__typename": "ContractorAgent",
                     "companyNameAttribute": "Helicopters PLC"
                   }
                 }
@@ -747,7 +747,7 @@ The output should look something like this -
         },
         {
           "node": {
-            "__typename": "ItemManufactured",
+            "__typename": "ItemManufacturedActivity",
             "started": "2022-11-10T11:11:22.766341245+00:00",
             "ended": "2022-11-10T11:20:37.201544076+00:00",
             "wasAssociatedWith": [
@@ -755,7 +755,7 @@ The output should look something like this -
                 "responsible": {
                   "role": "MANUFACTURER",
                   "agent": {
-                    "__typename": "Contractor",
+                    "__typename": "ContractorAgent",
                     "companyNameAttribute": "Helicopters PLC"
                   }
                 }
@@ -774,7 +774,7 @@ The output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: [{externalId: "chronicle:entity:rotorblade-run-001-001"}],
+  activityTimeline(forEntity: [{ externalId: "rotorblade-run-001-001" }],
                   activityTypes: [],
                   forAgent:[]
                   ) {
@@ -787,7 +787,7 @@ query {
       edges {
           node {
               __typename
-             ... on ItemCertified {
+             ... on ItemCertifiedActivity {
                 started
                 ended
                 wasAssociatedWith {
@@ -795,7 +795,7 @@ query {
                     role
                     agent {
                       __typename
-                      ... on Contractor {
+                      ... on ContractorAgent {
                         companyNameAttribute
                       }
                     }
@@ -824,7 +824,7 @@ The output should look something like this -
       "edges": [
         {
           "node": {
-            "__typename": "ItemCertified",
+            "__typename": "ItemCertifiedActivity",
             "started": "2022-11-10T11:25:27.525043763+00:00",
             "ended": "2022-11-10T11:30:46.038513324+00:00",
             "wasAssociatedWith": [
@@ -832,7 +832,7 @@ The output should look something like this -
                 "responsible": {
                   "role": "CERTIFIER",
                   "agent": {
-                    "__typename": "Contractor",
+                    "__typename": "ContractorAgent",
                     "companyNameAttribute": "Helicopters PLC"
                   }
                 }
@@ -843,7 +843,7 @@ The output should look something like this -
         },
         {
           "node": {
-            "__typename": "ItemManufactured"
+            "__typename": "ItemManufacturedActivity"
           },
           "cursor": "1"
         }
