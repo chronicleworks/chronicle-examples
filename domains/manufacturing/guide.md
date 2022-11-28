@@ -253,8 +253,8 @@ as a `Manufacturer` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: "chronicle:activity:rotorblademake%2Drun%2D001",
-    responsible:"chronicle:agent:helicoptersplc",
+    activity: { externalId: "rotorblademake-run-001"},
+    responsible: { externalId: "helicoptersplc" },
     role:MANUFACTURER) {
     context
     txId
@@ -280,7 +280,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id:"chronicle:activity:rotorblademake%2Drun%2D001") {
+    id: { externalId: "rotorblademake-run-001"}) {
     context
     txId
   }
@@ -334,8 +334,8 @@ Then we assert that it `wasGeneratedBy` by the relevant manufacturing activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
-    activity:"chronicle:activity:rotorblademake%2Drun%2D001") {
+  wasGeneratedBy(id: {externalId: "rotorblade-run-001-001",
+    activity: {externalId: "rotorblademake-run-001"}) {
     context
     txId
   }
@@ -355,13 +355,12 @@ The output should look something like this -
 }
 ```
 
-For completeness, we record that the activity `used` it. (In a future release,
-this will be replaced by `generated`.)
+For completeness, we record that the activity `used` it.
 
 ```graphql
 mutation {
-  used(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
-    activity:"chronicle:activity:rotorblademake%2Drun%2D001") {
+  used(id: {externalId: "rotorblade-run-001-001"},
+    activity: {externalId: "rotorblademake-run-001"}) {
     context
     txId
   }
@@ -390,7 +389,7 @@ end.
 ```graphql
 mutation {
   endActivity(
-    id:"chronicle:activity:rotorblademake%2Drun%2D001") {
+    id:{externalId: "rotorblademake-run-001"}) {
     context
     txId
   }
@@ -448,8 +447,8 @@ as a `CERTIFIER` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
-    responsible:"chronicle:agent:helicoptersplc",
+    activity: {externalId: "rotorbladecert-run-D001-D001"},
+    responsible: {externalId: "helicoptersplc"},
     role:CERTIFIER) {
     context
     txId
@@ -475,7 +474,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
+    id: {externalId: "rotorbladecert-run-001-001"}) {
     context
     txId
   }
@@ -527,8 +526,8 @@ Then, we assert that it `wasGeneratedBy` by the certification activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
-    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
+  wasGeneratedBy(id: {externalId: "chronicle:entity:rotorbladecert-run-001-001"},
+    activity: {externalId: "rotorbladecert-run-001-001"}) {
     context
     txId
   }
@@ -554,13 +553,13 @@ record the fact that the activity `used` the rotor blade.
 
 ```graphql
 mutation {
-  cert: used(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
-    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
+  cert: used(id: {externalId: "chronicle:entity:rotorbladecert-run-001-001"},
+    activity: {externalId: "rotorbladecert-run-001-001"}) {
     context
     txId
   }
-  blade: used(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001",
-    activity:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
+  blade: used(id: {externalId: "rotorblade-run-001-001"},
+    activity: {externalId: "rotorbladecert-run-001-001"}) {
     context
     txId
   }
@@ -592,7 +591,7 @@ the activity.
 ```graphql
 mutation {
   endActivity(
-    id:"chronicle:activity:rotorbladecert%2Drun%2D001%2D001") {
+    id: {externalId: "rotorbladecert-run-001-001"}) {
     context
     txId
   }
@@ -620,13 +619,13 @@ There are many queries that can be run. Here are a couple of examples.
 
 ```graphql
 query {
-  q1: entityById(id:"chronicle:entity:rotorblade%2Drun%2D001%2D001") {
+  q1: entityById(id: {externalId: "rotorblade-run-001-001"}) {
     ... on Item {
       partIdAttribute
       wasGeneratedBy { ... on ItemManufactured { id } }
     }
   }
-  q2: entityById(id:"chronicle:entity:rotorbladecert%2Drun%2D001%2D001") {
+  q2: entityById(id: {externalId: "rotorbladecert-run-001-001"}) {
     ... on Certificate {
       certIdAttribute
       wasGeneratedBy { ... on ItemCertified { id } }
@@ -664,7 +663,7 @@ The output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: ["chronicle:entity:rotorblade%2Drun%2D001%2D001"],
+  activityTimeline(forEntity: [{externalId: "chronicle:entity:rotorblade-run-001-001"}],
                   activityTypes: [],
                   forAgent:[]
                   ) {
@@ -775,7 +774,7 @@ The output should look something like this -
 
 ```graphql
 query {
-  activityTimeline(forEntity: ["chronicle:entity:rotorblade%2Drun%2D001%2D001"],
+  activityTimeline(forEntity: [{externalId: "chronicle:entity:rotorblade-run-001-001"}],
                   activityTypes: [],
                   forAgent:[]
                   ) {
