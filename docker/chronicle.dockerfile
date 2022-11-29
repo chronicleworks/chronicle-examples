@@ -5,7 +5,9 @@ FROM ${CHRONICLE_BUILDER_IMAGE}:${CHRONICLE_VERSION} as builder
 ARG DOMAIN=artworld
 ARG RELEASE=no
 ARG FEATURES=""
-COPY domains/${DOMAIN}/domain.yaml chronicle-domain/
+COPY domains/${DOMAIN}/domain.yaml crates/chronicle-domain/
+RUN /usr/local/bin/chronicle-domain-lint crates/chronicle-domain/domain.yaml
+RUN cat crates/chronicle-domain/domain.yaml
 RUN if [ "${RELEASE}" = "yes" ]; then \
     if [ -n "${FEATURES}" ]; then \
       cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
