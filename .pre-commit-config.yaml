@@ -40,16 +40,6 @@ repos:
     hooks:
       - id: prettier
         files: ".*(js|jsx|ts|tsx)"
-  - repo: https://github.com/gherynos/pre-commit-java
-    rev: v0.2.0
-    hooks:
-      - id: checkstyle
-        args:
-          - -c
-          - google_checks.xml
-        exclude: ".*/src/test/.*"
-      - id: cpd
-        exclude: ".*/src/test/.*"
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 3.0.0
     hooks:
