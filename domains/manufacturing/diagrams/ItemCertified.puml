@@ -1,0 +1,43 @@
+@startuml
+
+left to right direction
+
+class Contractor
+Contractor : Location: String
+
+class Item
+Item : PartID: String
+
+class Certificate
+Certificate : CertID: String
+
+class ItemCertified
+
+class Agent
+Agent : id: String
+Agent : name: String
+
+class Entity
+Entity : id: String
+Entity : name: String
+
+class Activity
+Activity : id: String
+Activity : name: String
+Activity : startedAtTime: String
+Activity : endedAtTime: String
+
+Contractor --> ItemCertified : wasAssociatedWith
+note on link: Role=Certifier
+
+Certificate --> ItemCertified : wasGeneratedBy
+ItemCertified --> Certificate : generated*
+
+ItemCertified --> Item : used
+
+Agent --|> Contractor
+Entity --|> Certificate
+Entity --|> Item
+Activity --|> ItemCertified
+
+@enduml

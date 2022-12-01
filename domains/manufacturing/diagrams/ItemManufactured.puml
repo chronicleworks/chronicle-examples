@@ -1,0 +1,38 @@
+@startuml
+
+left to right direction
+
+class Contractor
+Contractor : Location: String
+
+class Item
+Item : PartID: String
+
+class ItemManufactured
+ItemManufactured : BatchId: String
+
+class Agent
+Agent : id: String
+Agent : name: String
+
+class Entity
+Entity : id: String
+Entity : name: String
+
+class Activity
+Activity : id: String
+Activity : name: String
+Activity : startedAtTime: String
+Activity : endedAtTime: String
+
+Contractor --> ItemManufactured : wasAssociatedWith
+note on link: Role=Manufacturer
+
+Item --> ItemManufactured : wasGeneratedBy
+ItemManufactured --> Item : generated*
+
+Agent --|> Contractor
+Entity --|> Item
+Activity --|> ItemManufactured
+
+@enduml
