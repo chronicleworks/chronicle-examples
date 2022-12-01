@@ -15,15 +15,15 @@ class ItemCertified
 
 class Agent
 Agent : id: String
-Agent : name: String
+Agent : externalId: String
 
 class Entity
 Entity : id: String
-Entity : name: String
+Entity : externalId: String
 
 class Activity
 Activity : id: String
-Activity : name: String
+Activity : externalId: String
 Activity : startedAtTime: String
 Activity : endedAtTime: String
 
