@@ -44,11 +44,19 @@ inmem: $(1)-inmem
 .PHONY: stl
 stl: $(1)-stl
 
-$(1): $(1)-inmem $(1)-stl $(1)-sdl
+$(1): $(1)-inmem $(1)-stl $(1)-sdl $(1)-diagrams
 
 $(1)-inmem: $(MARKERS)/$(1)-inmem $(MARKERS)/$(1)-inmem-release
 
 $(1)-stl: $(MARKERS)/$(1)-stl $(MARKERS)/$(1)-stl-release
+
+$(1)-diagrams:
+ifeq (,$(shell command -v plantuml))
+	@echo "Skipping $(1) diagrams, no plantuml"
+else
+	@echo "Building $(1) diagrams"
+	$(foreach DIAGRAM,$(wildcard domains/$(1)/diagrams/*.puml),plantuml -tsvg "$(DIAGRAM)";)
+endif
 
 $(MARKERS)/$(1)-inmem: $(MARKERS)
 	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
