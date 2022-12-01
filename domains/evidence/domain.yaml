@@ -2,7 +2,7 @@ name: "evidence"
 attributes:
   Content:
     type: String
-  CmsId:
+  CMSId:
     type: String
   Title:
     type: String
@@ -15,7 +15,7 @@ attributes:
 entities:
   Question:
     attributes:
-      - CmsId
+      - CMSId
       - Content
   EvidenceReference:
     attributes:
@@ -38,12 +38,12 @@ activities:
       - Version
   Revised:
     attributes:
-      - CmsId
+      - CMSId
       - Version
 agents:
   Person:
     attributes:
-      - CmsId
+      - CMSId
   Organization:
     attributes:
       - Title
