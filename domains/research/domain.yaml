@@ -1,17 +1,17 @@
-name: "Research"
+name: "research"
 attributes:
   ChemID:
     type: "String"
   BatchID:
     type: "String"
-  MSDS:
+  Msds:
     type: "String"
   Mass:
-    type: "Number"
+    type: "Int"
   RawData:
-    type: "Number"
+    type: "Int"
   DataGraph:
-    type: "Number"
+    type: "String"
   RawDataURL:
     type: "String"
   DataGraphURL:
@@ -20,10 +20,10 @@ attributes:
     type: "String"
   ProjectID:
     type: "String"
-  GMPCompliance:
-    type: "Boolean"
+  GmPCompliance:
+    type: "String"
   Approval:
-    type: "Boolean"
+    type: "Bool"
   ModelSystem:
     type: "String"
   AssayName:
@@ -43,7 +43,7 @@ entities:
   Drug:
     attributes:
       - ChemID
-      - MSDS
+      - Msds
       - Mass
   Results:
     attributes:
@@ -68,15 +68,15 @@ activities:
     attributes:
       - LocationID
       - BatchID
-      - MSDS
-      - GMPCompliance
+      - Msds
+      - GmPCompliance
       - Approval
       - Mass
   DrugScreen:
     attributes:
       - ProjectID
       - LocationID
-      - MSDS
+      - Msds
       - AssayName
       - ModelSystem
       - ScreenPhase
@@ -93,13 +93,13 @@ activities:
     attributes:
       - Approval
       - Consent
-      - GMPCompliance
-      - Location
+      - GmPCompliance
+      - LocationID
       - ChemID
       - ParticipantID
       - Mass
 roles:
-  - Chemist
-  - MedChem
-  - Biologist
-  - Clinician
+  - CHEMIST
+  - MEDCHEM
+  - BIOLOGIST
+  - CLINICIAN
