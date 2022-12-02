@@ -151,12 +151,12 @@ full `domain.yaml`. Note that `yaml` can be specified for the highlighting in
 domain definitions.
 
 For producing those diagrams, ensure that [PlantUML](https://plantuml.com/) is
-installed, and follow the lead from other domains. Specifically, we use class
-diagrams with *extension* `--|>` arrows showing which are agents, entities, and
-activities, and *directed association* `-->` arrows for how those relate to
-each other. Include typed attributes as fields in the class boxes where
-appropriate. `make <domain>-diagrams` compiles these to the SVG files for
-linking to in your guide.
+installed, and follow the lead from other domains. Specifically, we use [class
+diagrams](https://plantuml.com/class-diagram) with *extension* `--|>` arrows
+showing which are agents, entities, and activities, and *directed association*
+`-->` arrows for how those relate to each other. Include typed attributes as
+fields in the class boxes where appropriate. `make <domain>-diagrams` compiles
+these to the SVG files for linking to in your guide.
 
 Follow with some example `mutation`s and `query`s expressed in GraphQL, and
 show how the responses should look, to give users some simple stories to try
