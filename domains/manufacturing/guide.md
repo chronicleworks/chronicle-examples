@@ -163,7 +163,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "defineContractorAgent": {
@@ -196,7 +196,7 @@ query {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "agentsByType": {
@@ -234,7 +234,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "defineItemManufacturedActivity": {
@@ -264,7 +264,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "wasAssociatedWith": {
@@ -289,7 +289,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "startActivity": {
@@ -319,7 +319,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "defineItemEntity": {
@@ -344,7 +344,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "wasGeneratedBy": {
@@ -369,7 +369,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "used": {
@@ -398,7 +398,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "endActivity": {
@@ -428,7 +428,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "defineItemCertifiedActivity": {
@@ -458,7 +458,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "wasAssociatedWith": {
@@ -483,7 +483,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "startActivity": {
@@ -511,7 +511,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "defineCertificateEntity": {
@@ -536,7 +536,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "wasGeneratedBy": {
@@ -568,7 +568,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "cert": {
@@ -600,7 +600,7 @@ mutation {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "endActivity": {
@@ -636,7 +636,7 @@ query {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "q1": {
@@ -715,7 +715,7 @@ query {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "activityTimeline": {
@@ -811,7 +811,7 @@ query {
 
 The output should look something like this -
 
-```graphql
+```json
 {
   "data": {
     "activityTimeline": {
