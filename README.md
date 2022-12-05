@@ -129,7 +129,37 @@ subscription {
 
 ## Adding a Domain
 
+### Chronicle Definition
+
 Adding a domain to the examples is as simple as adding a new `domain.yaml` file
 to a directory under `domains`.  The directory name will be used as the name of
 the docker image.  For example, if you add a `domains/mydomain/domain.yaml`
 file, the debug and inmem docker image will be `chronicle-mydomain-inmem:local`.
+
+### User's Guide
+
+The `domain.yaml` definition is typically the smaller part of what there is to
+say about the domain's usage. Users will appreciate an accompanying `guide.md`
+markdown document that follows the form of those for other example domains.
+Suggested layout is:
+
+Briefly explain what the domain is then, for each of the most important
+activities, describe the participating agents and entities, provide a diagram
+of how they relate to the activity, then show how each is modeled in the
+`domain.yaml`. Conclude these by bringing those descriptions together as the
+full `domain.yaml`. Note that `yaml` can be specified for the highlighting in
+domain definitions.
+
+For producing those diagrams, ensure that [PlantUML](https://plantuml.com/) is
+installed, and follow the lead from other domains. Specifically, we use [class
+diagrams](https://plantuml.com/class-diagram) with *extension* `--|>` arrows
+showing which are agents, entities, and activities, and *directed association*
+`-->` arrows for how those relate to each other. Include typed attributes as
+fields in the class boxes where appropriate. `make <domain>-diagrams` compiles
+these to the SVG files for linking to in your guide.
+
+Follow with some example `mutation`s and `query`s expressed in GraphQL, and
+show how the responses should look, to give users some simple stories to try
+out in the Apollo Sandbox in their browser. These examples should lead them
+through the core usage of your domain. Note that `graphql` for requests and
+`json` for responses can be specified for highlighting those interactions.
