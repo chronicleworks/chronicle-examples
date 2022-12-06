@@ -246,7 +246,7 @@ which will then embark on the following activities:
 1. A `ShareholdingUpdated` activity to that the `TransferAgent` acting on behalf
    of the company updated the investor's `Shareholding`.
 
-### Recording Agents
+### Record Agents
 
 ```graphql
   mutation defineAgents {
@@ -293,7 +293,7 @@ which will then embark on the following activities:
 }
 ```
 
-### Recording ShareholdingAcquired
+### Record ShareholdingAcquiredActivity
 
 ```graphql
   mutation defineActivities {
@@ -315,7 +315,7 @@ which will then embark on the following activities:
 }
 ```
 
-### Recording the Agents' Role in the Activity
+### Record the Agents' Role in the ShareholdingAcquiredActivity
 
 ```graphql
 mutation issuerAssociate {
@@ -363,7 +363,7 @@ mutation shareholderAssociate{
 }
 ```
 
-### Record the Execution of the Activity
+### Record the Execution of the ShareholdingAcquiredActivity
 
 ```graphql
 mutation executeActivity {
@@ -585,7 +585,7 @@ mutation shareholdingUpdated {
 }
 ```
 
-### Record the Role of the Agent in the Activity
+### Record the Role of the TransferAgent in the ShareholdingUpdatedActivity
 
 ```graphql
 mutation associateUpdated {
