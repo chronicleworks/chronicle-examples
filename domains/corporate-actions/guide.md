@@ -243,8 +243,8 @@ which will then embark on the following activities:
 
 1. A `SplitAnnounced` activity to record that the company announces a stock split.
 
-1. A `ShareholdingUpdated` activity to that the `TransferAgent` acting on behalf
-   of the company updated the investor's `Shareholding`.
+1. A `ShareholdingUpdated` activity to record that the `TransferAgent`, acting on behalf
+   of the company, updated the investor's `Shareholding`.
 
 ### Record Agents
 
@@ -350,7 +350,7 @@ The output should look something like this -
 
 
 ```graphql
-mutation shareholderAssociate{
+mutation shareholderAssociate {
   wasAssociatedWith(
     activity: { externalId: "ShareholdingAcquired" },
     responsible: { externalId: "NinjaCsilla" },
@@ -405,7 +405,7 @@ The output should look something like this -
 mutation defineShareholding {
   defineShareHoldingEntity(
     externalId: "Shareholding"
-    attributes: { quantityAttribute: 1, nominalPriceAttribute: "one pound" }
+    attributes: { quantityAttribute: 1, nominalPriceAttribute: "$1.00" }
   ) {
     context
   }
@@ -723,7 +723,7 @@ The output should look something like this -
 mutation defineRevisedShareholding {
   defineShareHoldingEntity(
     externalId: "RevisedShareholding"
-    attributes: { quantityAttribute: 2, nominalPriceAttribute: "one pound" }
+    attributes: { quantityAttribute: 2, nominalPriceAttribute: "$0.50" }
   ) {
     context
   }
