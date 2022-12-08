@@ -274,6 +274,8 @@ which will then embark on the following activities:
   }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -304,6 +306,8 @@ which will then embark on the following activities:
   }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -315,7 +319,7 @@ which will then embark on the following activities:
 }
 ```
 
-### Record the Agents' Role in the ShareholdingAcquiredActivity
+### Record the Agent's Role in the ShareholdingAcquiredActivity
 
 ```graphql
 mutation issuerAssociate {
@@ -329,6 +333,8 @@ mutation issuerAssociate {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -339,6 +345,9 @@ mutation issuerAssociate {
   }
 }
 ```
+
+### Record the Shareholder's Role in the ShareholdingAcquiredActivity
+
 
 ```graphql
 mutation shareholderAssociate{
@@ -351,6 +360,8 @@ mutation shareholderAssociate{
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -374,6 +385,8 @@ mutation executeActivity {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -399,6 +412,8 @@ mutation defineShareholding {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -420,6 +435,8 @@ mutation generated {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -445,6 +462,8 @@ mutation splitAnnounced {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -472,6 +491,8 @@ mutation associateSplit {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -496,6 +517,8 @@ mutation announce {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -527,6 +550,8 @@ mutation announcementEntity {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -552,6 +577,8 @@ mutation generatedBySplit {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -573,6 +600,8 @@ mutation shareholdingUpdated {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -600,6 +629,8 @@ mutation associateUpdated {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -613,6 +644,8 @@ mutation associateUpdated {
 
 ### Record that the ShareholdingUpdatedActivity Used Previously Created Entities
 
+The announcement -
+
 ```graphql
 mutation used1 {
   used(activity: {externalId: "ShareholdingUpdated"}, id: {externalId: "Announcement"}) {
@@ -620,6 +653,8 @@ mutation used1 {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -631,6 +666,8 @@ mutation used1 {
 }
 ```
 
+The shareholding -
+
 ```graphql
 mutation used2 {
   used(activity: {externalId: "ShareholdingUpdated"}, id: {externalId: "Shareholding"}) {
@@ -638,6 +675,8 @@ mutation used2 {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
@@ -665,6 +704,8 @@ mutation actedOnBehalf {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -689,6 +730,8 @@ mutation defineRevisedShareholding {
 }
 ```
 
+The output should look something like this -
+
 ```json
 {
   "data": {
@@ -698,6 +741,8 @@ mutation defineRevisedShareholding {
   }
 }
 ```
+
+Assert it is a revision.
 
 ```graphql
 mutation revision {
@@ -710,6 +755,8 @@ mutation revision {
   }
 }
 ```
+
+The output should look something like this -
 
 ```json
 {
