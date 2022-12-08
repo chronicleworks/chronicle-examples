@@ -51,7 +51,8 @@ agents:
 
 #### Modelling the Shareholding Entity
 
-The `Shareholding` entity has two attributes, its `Quantity` and its `NominalPrice`.
+The `Shareholding` entity has two attributes, its `Quantity` and the `NominalPrice`
+per share.
 
 ```yaml
 attributes:
@@ -249,29 +250,29 @@ which will then embark on the following activities:
 ### Record Agents
 
 ```graphql
-  mutation defineAgents {
-    defineCompanyAgent(
-      externalId: "FTXCorp"
-      attributes: { nameAttribute: "FTXCorp", locationAttribute: "Bahamas" }
-    ) {
-      context
-      txId
-    }
-    definePersonAgent(
-      externalId: "NinjaCsilla"
-      attributes: { nameAttribute: "NinjaCsilla", locationAttribute: "Barcelona" }
-    ) {
-      context
-      txId
-    }
-    defineTransferAgentAgent(
-      externalId: "Bank"
-      attributes: { nameAttribute: "Bank", locationAttribute: "London" }
-    ) {
-      context
-      txId
-    }
+mutation defineAgents {
+  defineCompanyAgent(
+    externalId: "FTXCorp"
+    attributes: { nameAttribute: "FTXCorp", locationAttribute: "Bahamas" }
+  ) {
+    context
+    txId
   }
+  definePersonAgent(
+    externalId: "NinjaCsilla"
+    attributes: { nameAttribute: "NinjaCsilla", locationAttribute: "Barcelona" }
+  ) {
+    context
+    txId
+  }
+  defineTransferAgentAgent(
+    externalId: "Bank"
+    attributes: { nameAttribute: "Bank", locationAttribute: "London" }
+  ) {
+    context
+    txId
+  }
+}
 ```
 
 The output should look something like this -
@@ -295,15 +296,34 @@ The output should look something like this -
 }
 ```
 
-### Record ShareholdingAcquiredActivity
+### Record a ShareholdingAcquiredActivity
+
+Here we define the activity and the roles of the company as the `ISSUER` and the individual
+investor as the `SHAREHOLDER`.
 
 ```graphql
-  mutation defineActivities {
-    defineShareholdingAcquiredActivity(externalId: "ShareholdingAcquired") {
-      context
-      txId
-    }
+mutation defineShareholdingAcquisition {
+  defineShareholdingAcquiredActivity(externalId: "ShareholdingAcquired") {
+    context
+    txId
   }
+  company: wasAssociatedWith(
+    activity: { externalId: "ShareholdingAcquired" }
+    responsible: { externalId: "FTXCorp" }
+    role: ISSUER
+  ) {
+    context
+    txId
+  }
+  shareholder: wasAssociatedWith(
+    activity: { externalId: "ShareholdingAcquired" }
+    responsible: { externalId: "NinjaCsilla" }
+    role: SHAREHOLDER
+  ) {
+    context
+    txId
+  }
+}
 ```
 
 The output should look something like this -
@@ -313,62 +333,15 @@ The output should look something like this -
   "data": {
     "defineShareholdingAcquiredActivity": {
       "context": "chronicle:activity:ShareholdingAcquired",
-      "txId": "b9211c6b-7b44-4031-827e-6410d10f79f4"
-    }
-  }
-}
-```
-
-### Record the Agent's Role in the ShareholdingAcquiredActivity
-
-```graphql
-mutation issuerAssociate {
-  wasAssociatedWith(
-    activity: { externalId: "ShareholdingAcquired" },
-    responsible: { externalId: "FTXCorp" },
-    role: ISSUER) {
-    context
-    txId
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "wasAssociatedWith": {
+      "txId": "0e4070cd-a096-4e60-93ec-3b4434999a9c"
+    },
+    "company": {
       "context": "chronicle:agent:FTXCorp",
-      "txId": "f43ce9dd-b9e4-41ee-a183-51ee4d1ed2c0"
-    }
-  }
-}
-```
-
-### Record the Shareholder's Role in the ShareholdingAcquiredActivity
-
-
-```graphql
-mutation shareholderAssociate {
-  wasAssociatedWith(
-    activity: { externalId: "ShareholdingAcquired" },
-    responsible: { externalId: "NinjaCsilla" },
-    role: SHAREHOLDER) {
-    context
-    txId
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "wasAssociatedWith": {
+      "txId": "f885d54a-b74f-41ce-a6ae-6907f0008c2a"
+    },
+    "shareholder": {
       "context": "chronicle:agent:NinjaCsilla",
-      "txId": "5df4650b-ed11-41a7-8517-eacf001be125"
+      "txId": "b54054c4-98ef-4126-aa17-d339db31fde5"
     }
   }
 }
@@ -376,10 +349,25 @@ The output should look something like this -
 
 ### Record the Execution of the ShareholdingAcquiredActivity
 
+Here we record the instantaneous execution of a shareholding acquisition along with the
+details of the shareholding, in this case 100 shares each with a nominal value of $1.00.
+
 ```graphql
-mutation executeActivity {
-  instantActivity(
-    id: { externalId: "ShareholdingAcquired" }) {
+mutation recordShareholdingAcquisition {
+  instantActivity(id: { externalId: "ShareholdingAcquired" }) {
+    context
+    txId
+  }
+  defineShareHoldingEntity(
+    externalId: "Shareholding"
+    attributes: { quantityAttribute: 100, nominalPriceAttribute: "$1.00" }
+  ) {
+    context
+  }
+  wasGeneratedBy(
+    id: { externalId: "Shareholding" }
+    activity: { externalId: "ShareholdingAcquired" }
+  ) {
     context
     txId
   }
@@ -393,57 +381,14 @@ The output should look something like this -
   "data": {
     "instantActivity": {
       "context": "chronicle:activity:ShareholdingAcquired",
-      "txId": "4f61af7f-c39a-4bd9-a60a-97a505c747a1"
-    }
-  }
-}
-```
-
-### Record the Creation of the ShareholdingEntity
-
-```graphql
-mutation defineShareholding {
-  defineShareHoldingEntity(
-    externalId: "Shareholding"
-    attributes: { quantityAttribute: 1, nominalPriceAttribute: "$1.00" }
-  ) {
-    context
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
+      "txId": "4ac7acad-d92e-41dc-9afc-9b0a10263fc8"
+    },
     "defineShareHoldingEntity": {
       "context": "chronicle:entity:Shareholding"
-    }
-  }
-}
-```
-
-### Record that ShareholdingAcquired Generated the Shareholding
-
-```graphql
-mutation generated {
-  wasGeneratedBy(id: { externalId: "Shareholding" },
-    activity: { externalId: "ShareholdingAcquired" }) {
-    context
-    txId
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
+    },
     "wasGeneratedBy": {
       "context": "chronicle:entity:Shareholding",
-      "txId": "e2d02121-94a2-49e8-9c2b-c2956fcf28da"
+      "txId": "0533c114-9c29-4c5d-ae44-345eae5d2d03"
     }
   }
 }
@@ -451,11 +396,21 @@ The output should look something like this -
 
 ### Record the SplitAnnouncedActivity
 
+Here we define the activity and the role of the company as the `ISSUER`.
+
 ```graphql
-mutation splitAnnounced {
+mutation defineSplitAnnouncement {
   defineSplitAnnouncedActivity(
     externalId: "SplitAnnounced"
     attributes: { pressDateAttribute: "Yesterday" }
+  ) {
+    context
+    txId
+  }
+  wasAssociatedWith(
+    activity: { externalId: "SplitAnnounced" }
+    responsible: { externalId: "FTXCorp" }
+    role: ISSUER
   ) {
     context
     txId
@@ -470,35 +425,11 @@ The output should look something like this -
   "data": {
     "defineSplitAnnouncedActivity": {
       "context": "chronicle:activity:SplitAnnounced",
-      "txId": "87696d17-ab8b-4e36-986e-2ae745ab66d5"
-    }
-  }
-}
-```
-
-### Record the Role of the CompanyAgent in the SplitAnnouncedActivity
-
-```graphql
-mutation associateSplit {
-  wasAssociatedWith(
-    activity: {externalId: "SplitAnnounced"}
-    responsible: {externalId: "FTXCorp"}
-    role: ISSUER
-  ) {
-    context
-    txId
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
+      "txId": "7df145b2-1ae9-4fc3-94fd-350c0cc6c91f"
+    },
     "wasAssociatedWith": {
       "context": "chronicle:agent:FTXCorp",
-      "txId": "44c5a646-52f5-4cbc-85f3-d5b16d6072fd"
+      "txId": "8f26649f-292c-4470-a8c7-aa1224579564"
     }
   }
 }
@@ -506,8 +437,11 @@ The output should look something like this -
 
 ### Record the Execution of the SplitAnnouncedActivity
 
+Here we record the instantaneous execution of a stock split announcement along with the
+details of the stock split, in this case 2:1.
+
 ```graphql
-mutation announce {
+mutation recordSplitAnnouncement {
   instantActivity(
     id: { externalId: "SplitAnnounced" }
     agent: { externalId: "FTXCorp" }
@@ -515,26 +449,6 @@ mutation announce {
     context
     txId
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "instantActivity": {
-      "context": "chronicle:activity:SplitAnnounced",
-      "txId": "e7170a8e-d233-4445-ac1f-bc47534c56e2"
-    }
-  }
-}
-```
-
-### Record the Creation of the AnnouncementEntity
-
-```graphql
-mutation announcementEntity {
   defineAnnouncementEntity(
     externalId: "Announcement"
     attributes: {
@@ -547,26 +461,6 @@ mutation announcementEntity {
     context
     txId
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "defineAnnouncementEntity": {
-      "context": "chronicle:entity:Announcement",
-      "txId": "fcb55142-9b11-4dd3-8db6-eb233530544c"
-    }
-  }
-}
-```
-
-### Record that the SplitAnnouncedActivity Generated the Announcement
-
-```graphql
-mutation generatedBySplit {
   wasGeneratedBy(
     activity: { externalId: "SplitAnnounced" }
     id: { externalId: "Announcement" }
@@ -582,9 +476,17 @@ The output should look something like this -
 ```json
 {
   "data": {
+    "instantActivity": {
+      "context": "chronicle:activity:SplitAnnounced",
+      "txId": "e02a9a52-9b38-4aff-ae7f-1c609a2c661b"
+    },
+    "defineAnnouncementEntity": {
+      "context": "chronicle:entity:Announcement",
+      "txId": "d379ab66-9502-4d8a-8a99-ee776de98742"
+    },
     "wasGeneratedBy": {
       "context": "chronicle:entity:Announcement",
-      "txId": "a8580faf-e010-45b2-8143-0be9ce5e80b7"
+      "txId": "1253bc46-3d1c-41a4-99c2-a0a145957f3a"
     }
   }
 }
@@ -592,32 +494,17 @@ The output should look something like this -
 
 ### Record the ShareholdingUpdatedActivity
 
+Here we define the activity, the role of the transfer agent as the `REGISTRAR`, the
+fact that it is acting on behalf of the company as its `REGISTRAR`, and the fact that
+it uses both the original shareholding and the announcement.
+
+
 ```graphql
-mutation shareholdingUpdated {
+mutation defineShareholdingUpdate {
   defineShareholdingUpdatedActivity(externalId: "ShareholdingUpdated") {
     context
     txId
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "defineShareholdingUpdatedActivity": {
-      "context": "chronicle:activity:ShareholdingUpdated",
-      "txId": "35e6b17c-b512-4825-86ab-b7886cb8f654"
-    }
-  }
-}
-```
-
-### Record the Role of the TransferAgent in the ShareholdingUpdatedActivity
-
-```graphql
-mutation associateUpdated {
   wasAssociatedWith(
     activity: { externalId: "ShareholdingUpdated" }
     responsible: { externalId: "Bank" }
@@ -626,72 +513,18 @@ mutation associateUpdated {
     context
     txId
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "wasAssociatedWith": {
-      "context": "chronicle:agent:Bank",
-      "txId": "401e0ff2-aac7-471e-9e9d-e3b7f7d43a84"
-    }
-  }
-}
-```
-
-### Record that the ShareholdingUpdatedActivity Used Previously Created Entities
-
-The announcement -
-
-```graphql
-mutation used1 {
-  used(activity: {externalId: "ShareholdingUpdated"}, id: {externalId: "Announcement"}) {
+  annoucement: used(
+    activity: { externalId: "ShareholdingUpdated" }
+    id: { externalId: "Announcement" }
+  ) {
     context
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "used": {
-      "context": "chronicle:entity:Announcement"
-    }
-  }
-}
-```
-
-The shareholding -
-
-```graphql
-mutation used2 {
-  used(activity: {externalId: "ShareholdingUpdated"}, id: {externalId: "Shareholding"}) {
+  shareholding: used(
+    activity: { externalId: "ShareholdingUpdated" }
+    id: { externalId: "Shareholding" }
+  ) {
     context
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "used": {
-      "context": "chronicle:entity:Shareholding"
-    }
-  }
-}
-```
-
-### Record that the TransferAgent Acted on Behalf of the Company
-
-```graphql
-mutation actedOnBehalf {
   actedOnBehalfOf(
     responsible: { externalId: "FTXCorp" }
     activity: { externalId: "ShareholdingUpdated" }
@@ -709,43 +542,42 @@ The output should look something like this -
 ```json
 {
   "data": {
+    "defineShareholdingUpdatedActivity": {
+      "context": "chronicle:activity:ShareholdingUpdated",
+      "txId": "2612cc21-4bc6-4fe2-b60f-e847f2ec145b"
+    },
+    "wasAssociatedWith": {
+      "context": "chronicle:agent:Bank",
+      "txId": "2c3e0855-0bf4-4d87-9667-5ad3964f6289"
+    },
+    "annoucement": {
+      "context": "chronicle:entity:Announcement"
+    },
+    "shareholding": {
+      "context": "chronicle:entity:Shareholding"
+    },
     "actedOnBehalfOf": {
       "context": "chronicle:agent:FTXCorp",
-      "txId": "8a9b1b4f-de8b-4bdc-bb87-d85a2f82d812"
+      "txId": "45d4187c-f19c-4daf-b7a8-7dc8976d8590"
     }
   }
 }
 ```
 
-### Record Revision of the ShareholdingEntity
+### Record the revision of the ShareholdingEntity
+
+Here we create a revised version of the shareholding, in this case 200 shares
+each with a nominal value of $0.50, as a consequence of the split.
 
 ```graphql
-mutation defineRevisedShareholding {
+mutation recordShareholdingUpdate {
   defineShareHoldingEntity(
     externalId: "RevisedShareholding"
-    attributes: { quantityAttribute: 2, nominalPriceAttribute: "$0.50" }
+    attributes: { quantityAttribute: 200, nominalPriceAttribute: "$0.50" }
   ) {
     context
+    txId
   }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "defineShareHoldingEntity": {
-      "context": "chronicle:entity:RevisedShareholding"
-    }
-  }
-}
-```
-
-Assert it is a revision.
-
-```graphql
-mutation revision {
   wasRevisionOf(
     generatedEntity: { externalId: "RevisedShareholding" }
     usedEntity: { externalId: "Shareholding" }
@@ -761,9 +593,13 @@ The output should look something like this -
 ```json
 {
   "data": {
+    "defineShareHoldingEntity": {
+      "context": "chronicle:entity:RevisedShareholding",
+      "txId": "2a880631-112f-40b8-b331-cf757a7cbd01"
+    },
     "wasRevisionOf": {
       "context": "chronicle:entity:RevisedShareholding",
-      "txId": "74c246f4-511d-4ea3-a272-293f6a8148a6"
+      "txId": "0ade083b-8fba-4bef-81b1-cd28c171466e"
     }
   }
 }
