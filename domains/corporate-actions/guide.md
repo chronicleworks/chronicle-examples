@@ -244,8 +244,8 @@ which will then embark on the following activities:
 
 1. A `SplitAnnounced` activity to record that the company announces a stock split.
 
-1. A `ShareholdingUpdated` activity to record that the `TransferAgent`, acting on behalf
-   of the company, updated the investor's `Shareholding`.
+1. A `ShareholdingUpdated` activity to record that the `TransferAgent`, acting on
+   behalf of the company, updated the investor's `Shareholding`.
 
 ### Record Agents
 
@@ -298,8 +298,8 @@ The output should look something like this -
 
 ### Record a ShareholdingAcquiredActivity
 
-Here we define the activity and the roles of the company as the `ISSUER` and the individual
-investor as the `SHAREHOLDER`.
+Here we define the activity and the roles of the company as the `ISSUER` and the
+individual investor as the `SHAREHOLDER`.
 
 ```graphql
 mutation defineShareholdingAcquisition {
@@ -349,12 +349,19 @@ The output should look something like this -
 
 ### Record the Execution of the ShareholdingAcquiredActivity
 
-Here we record the instantaneous execution of a shareholding acquisition along with the
-details of the shareholding, in this case 100 shares each with a nominal value of $1.00.
+Here we record the instantaneous execution of a shareholding acquisition along with
+the details of the shareholding, in this case 100 shares each with a nominal value
+of $1.00.
 
 ```graphql
 mutation recordShareholdingAcquisition {
-  instantActivity(id: { externalId: "ShareholdingAcquired" }) {
+  startActivity(
+    id: { externalId: "ShareholdingAcquired" }) {
+    context
+    txId
+  }
+  endActivity(
+    id:{ externalId: "ShareholdingAcquired" }) {
     context
     txId
   }
@@ -379,9 +386,13 @@ The output should look something like this -
 ```json
 {
   "data": {
-    "instantActivity": {
+    "startActivity": {
       "context": "chronicle:activity:ShareholdingAcquired",
-      "txId": "4ac7acad-d92e-41dc-9afc-9b0a10263fc8"
+      "txId": "936751a4-7cd7-4d55-b4ba-bdefb342369e"
+    },
+    "endActivity": {
+      "context": "chronicle:activity:ShareholdingAcquired",
+      "txId": "0cd11f20-da9b-4c5e-b2d5-b573b9f48ca6"
     },
     "defineShareHoldingEntity": {
       "context": "chronicle:entity:Shareholding"
@@ -437,15 +448,18 @@ The output should look something like this -
 
 ### Record the Execution of the SplitAnnouncedActivity
 
-Here we record the instantaneous execution of a stock split announcement along with the
-details of the stock split, in this case 2:1.
+Here we record the instantaneous execution of a stock split announcement along with
+the details of the stock split, in this case 2:1.
 
 ```graphql
 mutation recordSplitAnnouncement {
-  instantActivity(
-    id: { externalId: "SplitAnnounced" }
-    agent: { externalId: "FTXCorp" }
-  ) {
+  startActivity(
+    id: { externalId: "SplitAnnounced" }) {
+    context
+    txId
+  }
+  endActivity(
+    id:{ externalId: "SplitAnnounced" }) {
     context
     txId
   }
@@ -476,9 +490,13 @@ The output should look something like this -
 ```json
 {
   "data": {
-    "instantActivity": {
+    "startActivity": {
       "context": "chronicle:activity:SplitAnnounced",
-      "txId": "e02a9a52-9b38-4aff-ae7f-1c609a2c661b"
+      "txId": "4fb5455e-6182-42f0-b500-d6784a6b5fbc"
+    },
+    "endActivity": {
+      "context": "chronicle:activity:SplitAnnounced",
+      "txId": "f4496008-ab63-4f1b-ac5b-63b9a3798965"
     },
     "defineAnnouncementEntity": {
       "context": "chronicle:entity:Announcement",
@@ -495,9 +513,8 @@ The output should look something like this -
 ### Record the ShareholdingUpdatedActivity
 
 Here we define the activity, the role of the transfer agent as the `REGISTRAR`, the
-fact that it is acting on behalf of the company as its `REGISTRAR`, and the fact that
-it uses both the original shareholding and the announcement.
-
+fact that it is acting on behalf of the company as its `REGISTRAR`, and the fact
+that it uses both the original shareholding and the announcement.
 
 ```graphql
 mutation defineShareholdingUpdate {
@@ -683,36 +700,6 @@ Here are the results of the timeline query:
                   "__typename": "CompanyAgent"
                 },
                 "role": "ISSUER"
-              }
-            },
-            {
-              "responsible": {
-                "agent": {
-                  "__typename": "CompanyAgent"
-                },
-                "role": "UNSPECIFIED"
-              }
-            }
-          ]
-        },
-        {
-          "__typename": "ShareholdingAcquiredActivity",
-          "id": "chronicle:activity:ShareholdingAcquired",
-          "wasAssociatedWith": [
-            {
-              "responsible": {
-                "agent": {
-                  "__typename": "CompanyAgent"
-                },
-                "role": "ISSUER"
-              }
-            },
-            {
-              "responsible": {
-                "agent": {
-                  "__typename": "PersonAgent"
-                },
-                "role": "SHAREHOLDER"
               }
             }
           ]
