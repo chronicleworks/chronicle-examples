@@ -444,7 +444,6 @@ details of the stock split, in this case 2:1.
 mutation recordSplitAnnouncement {
   instantActivity(
     id: { externalId: "SplitAnnounced" }
-    agent: { externalId: "FTXCorp" }
   ) {
     context
     txId
@@ -513,7 +512,7 @@ mutation defineShareholdingUpdate {
     context
     txId
   }
-  annoucement: used(
+  announcement: used(
     activity: { externalId: "ShareholdingUpdated" }
     id: { externalId: "Announcement" }
   ) {
@@ -550,7 +549,7 @@ The output should look something like this -
       "context": "chronicle:agent:Bank",
       "txId": "2c3e0855-0bf4-4d87-9667-5ad3964f6289"
     },
-    "annoucement": {
+    "announcement": {
       "context": "chronicle:entity:Announcement"
     },
     "shareholding": {
@@ -683,14 +682,6 @@ Here are the results of the timeline query:
                   "__typename": "CompanyAgent"
                 },
                 "role": "ISSUER"
-              }
-            },
-            {
-              "responsible": {
-                "agent": {
-                  "__typename": "CompanyAgent"
-                },
-                "role": "UNSPECIFIED"
               }
             }
           ]
