@@ -1,0 +1,4 @@
+abstract TransferAgent {
+    + name
+    + location
+}

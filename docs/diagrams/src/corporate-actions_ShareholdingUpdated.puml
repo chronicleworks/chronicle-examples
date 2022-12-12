@@ -1,0 +1,29 @@
+@startuml
+
+!include ../include/default.iuml
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
+!include ../include/corporate-actions_announcement.iuml
+!include ../include/corporate-actions_company.iuml
+!include ../include/corporate-actions_shareholding.iuml
+!include ../include/corporate-actions_transfer_agent.iuml
+
+Company <|-- Agent
+TransferAgent <|-- Agent
+Announcement <|-- Entity
+Shareholding <|-- Entity
+ShareholdingUpdated <|-- Activity
+
+Company -> TransferAgent : actedOnBehalfOf
+TransferAgent -> Company : actedOnBehalfOf
+Company -> ShareholdingUpdated : wasAssociatedWith
+note on link: Role: Issuer
+TransferAgent -> ShareholdingUpdated : wasAssociatedWith
+note on link: Role: Registrar
+Shareholding -up-> ShareholdingUpdated : wasGeneratedBy
+ShareholdingUpdated -down-> Shareholding : used
+Shareholding -> Shareholding : wasRevisionOf
+ShareholdingUpdated -> Announcement : used
+
+@enduml

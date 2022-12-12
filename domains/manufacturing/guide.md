@@ -70,7 +70,7 @@ example, the contractor is the only agent responsible for the certification of
 high specification rotor blades, which it does so individually.
 Therefore this activity uses the item and issues a certificate for it.
 
-![Item Manufactured](/docs/diagrams/out/manufacturing_diagrams/ItemCertified.svg)
+![Item Manufactured](/docs/diagrams/out/manufacturing_ItemCertified.svg)
 
 #### Modelling the Certificate Entity
 

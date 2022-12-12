@@ -1,0 +1,18 @@
+@startuml
+
+!include ../include/default.iuml
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
+!include ../include/corporate-actions_announcement.iuml
+!include ../include/corporate-actions_company.iuml
+
+Company <|-- Agent
+Announcement <|-- Entity
+SplitAnnounced <|-- Activity
+
+Company -> SplitAnnounced : wasAssociatedWith
+note on link: Role: Issuer
+Announcement -> SplitAnnounced : wasGeneratedBy
+
+@enduml

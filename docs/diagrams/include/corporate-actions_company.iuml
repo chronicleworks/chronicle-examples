@@ -1,0 +1,4 @@
+abstract Company {
+    + name
+    + location
+}
