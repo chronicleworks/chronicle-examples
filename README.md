@@ -21,12 +21,12 @@ a good starting point is [Introduction to GraphQL](https://graphql.org/learn/).
 git clone https://github.com/btpworks/chronicle-examples.git
 ```
 
-This contains several example domain yaml files and docker and uses
+This contains several example domain yaml files, and Docker uses
 `blockchaintp/chronicle-builder:BTP2.1.0` as the builder image by default.
 
 ## Build a Domain
 
-Chose from one of the following examples.
+Choose from one of the following examples:
 
 * [Artworld](./domains/artworld/guide)
 * [Corporate Actions](./domains/corporate-actions/guide)
@@ -47,8 +47,8 @@ a local database rather than backed by a blockchain.
 make run-manufacturing
 ```
 
-Now that you have built and have run your Chronicle example. The terminal will
-prompt you for configuration settings. You can just press return to answer with
+Now that you have built and run your Chronicle example, the terminal will
+prompt you for configuration settings. You can just press Enter to answer with
 defaults. You should then see something like this in your terminal:
 
 ```bash
@@ -86,7 +86,7 @@ make clean manufacturing
 Integration with Chronicle is done primarily via GraphQL. The GraphQL schema is
 particular to the domain and is generated from the `domain.yaml` file. To
 generate your domain's GraphQL schema simply run
-`make <domain>-sdl`.  For example for the manufacturing domain:
+`make <domain>-sdl`.  For example, for the manufacturing domain:
 
 ```bash
 make manufacturing-sdl
@@ -102,7 +102,7 @@ are running locally.
 The GraphQL playground is persistent via cookies etc, so running the same
 browser on the same machine will remember all your queries and tab positions.
 
-To add a new mutation or query tab, there is a `+` on the right hand side of the
+To add a new mutation or query tab, there is a `+` on the right-hand side of the
 tab bar.
 
 Once you get to this point, you are ready to explore the example. To do this,

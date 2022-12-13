@@ -797,7 +797,7 @@ mutation {
 }
 ```
 
-and note that they did so
+and note that they did so,
 
 ```graphql
 mutation {
