@@ -55,7 +55,7 @@ ifeq (,$(shell command -v plantuml))
 	@echo "Skipping $(1) diagrams, no plantuml"
 else
 	@echo "Building $(1) diagrams"
-	$(foreach DIAGRAM,$(wildcard domains/$(1)/diagrams/*.puml),plantuml -tsvg "$(DIAGRAM)";)
+	$(foreach DIAGRAM,$(wildcard domains/$(1)/diagrams/*.puml),plantuml -tsvg -nometadata "$(DIAGRAM)";)
 endif
 
 $(MARKERS)/$(1)-inmem: $(MARKERS)

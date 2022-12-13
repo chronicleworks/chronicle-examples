@@ -161,7 +161,8 @@ diagrams](https://plantuml.com/class-diagram) with *extension* `--|>` arrows
 showing which are agents, entities, and activities, and *directed association*
 `-->` arrows for how those relate to each other. Include typed attributes as
 fields in the class boxes where appropriate. `make <domain>-diagrams` compiles
-these to the SVG files for linking to in your guide.
+the diagrams in your domain's `diagrams/` folder into the SVG files to which
+you link in your guide.
 
 Follow with some example mutations and queries expressed in GraphQL, and
 show how the responses should look, to give users some simple stories to try
