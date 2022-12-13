@@ -1,0 +1,45 @@
+@startuml
+
+left to right direction
+
+' core types
+
+class Agent
+Agent : id: String
+Agent : externalId: String
+
+class Activity
+Activity : id: String
+Activity : externalId: String
+Activity : startedAtTime: String
+Activity : endedAtTime: String
+
+class Entity
+Entity : id: String
+Entity : externalId: String
+
+' domain classes
+
+class Person
+Person : Name: String
+
+class Work
+Work : Task: String
+
+class Project
+Project : Name: String
+
+' types
+
+Agent --|> Person
+Activity --|> Work
+Entity --|> Project
+
+' relations
+
+Work --> Person : wasAssociatedWith
+note on link: Role=WORKER
+
+Work --> Project : used
+
+@enduml

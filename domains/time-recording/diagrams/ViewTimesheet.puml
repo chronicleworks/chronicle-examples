@@ -1,0 +1,32 @@
+@startuml
+
+left to right direction
+
+' core types
+
+class Activity
+Activity : id: String
+Activity : externalId: String
+Activity : startedAtTime: String
+Activity : endedAtTime: String
+
+' domain classes
+
+class Person
+Person : Name: String
+
+class Timesheet
+
+class View
+
+' types
+
+Activity --|> View
+
+' relations
+
+View --> Timesheet : wasInformedBy
+View --> Person : wasAssociatedWith
+note on link: Role=SUPERVISOR
+
+@enduml

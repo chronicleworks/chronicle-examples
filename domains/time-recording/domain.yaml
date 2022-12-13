@@ -1,0 +1,41 @@
+name: Time Recording
+attributes:
+  Name:
+    type: String
+  Task:
+    type: String
+  Reason:
+    type: String
+agents:
+  Person:
+    attributes:
+      - Name
+entities:
+  Project:
+    attributes:
+      - Name
+activities:
+  Work:
+    attributes:
+      - Task
+  Timesheet:
+    attributes: []
+  Revision:
+    attributes:
+      - Reason
+  Summary:
+    attributes: []
+  Submit:
+    attributes: []
+  View:
+    attributes: []
+  Approve:
+    attributes: []
+  Reject:
+    attributes:
+      - Reason
+roles:
+  - WORKER
+  - SUPERVISOR
+  - PROJECT_LEAD
+  - ADMINISTRATOR

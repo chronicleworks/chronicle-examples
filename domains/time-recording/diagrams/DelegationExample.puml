@@ -1,0 +1,49 @@
+@startuml
+
+' domain classes
+
+class Person1 as "Person"
+Person1 : Name: String
+note left: staff-4366
+
+class Person2 as "Person"
+Person2 : Name: String
+note right: staff-3621
+
+class Person3 as "Person"
+Person3 : Name: String
+note right: staff-3150
+
+class Timesheet
+note top: ts-32205
+
+class Revision
+note top: rts-2130
+
+class Submit
+note top: submit-32470
+
+class Approve
+note top: approve-31305
+
+' relations
+
+Revision --> Timesheet : wasInformedBy
+Submit --> Revision : wasInformedBy
+Approve -> Submit : wasInformedBy
+
+Timesheet --> Person1 : wasAssociatedWith
+note on link: Role=WORKER
+
+Revision --> Person1 : wasAssociatedWith
+note on link: Role=WORKER
+
+Submit --> Person1 : wasAssociatedWith
+note on link: Role=WORKER
+
+Approve --> Person3 : wasAssociatedWith
+note on link: Role=ADMINISTRATOR
+
+Person3 --> Person2 : actedOnBehalfOf
+
+@enduml

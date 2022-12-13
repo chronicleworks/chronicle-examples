@@ -1,0 +1,42 @@
+@startuml
+
+left to right direction
+
+' core types
+
+class Activity
+Activity : id: String
+Activity : externalId: String
+Activity : startedAtTime: String
+Activity : endedAtTime: String
+
+' domain classes
+
+class Person
+Person : Name: String
+
+class Project
+Project : Name: String
+
+class Work
+Work : Task: String
+
+class Timesheet
+
+' types
+
+Activity --|> Timesheet
+
+' relations
+
+Timesheet --> Work : wasInformedBy
+
+Timesheet --> Person : wasAssociatedWith
+note on link: Role=WORKER
+
+Work --> Person : wasAssociatedWith
+note on link: Role=WORKER
+
+Work --> Project : used
+
+@enduml
