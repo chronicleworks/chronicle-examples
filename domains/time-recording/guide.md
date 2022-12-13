@@ -37,7 +37,7 @@ domain, with start and end times matching their work under role `WORKER`. A
 subsequent diagrams may omit relations shown previously, e.g., `Person` will
 not again depict that they are an `Agent`.
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 attributes:
@@ -80,7 +80,7 @@ period identified by the start and end times of the `Timesheet`.
 
 ![Report Time Worked](./diagrams/ReportTime.svg)
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 activities:
@@ -98,7 +98,7 @@ described below, a `Revision` thereof).
 
 ![Submit Timesheet](./diagrams/SubmitTimesheet.svg)
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 attributes:
@@ -134,7 +134,7 @@ same `Person`, collating the contribution of possibly many employees.
 
 ![Project Summary](./diagrams/ProjectSummary.svg)
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 entities:
@@ -156,7 +156,7 @@ the basis of their judgments, so a `View` activity is also captured.
 
 ![View Timesheet](./diagrams/ViewTimesheet.svg)
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 activities:
@@ -192,7 +192,7 @@ then submit it for the supervisor's review,
 - `wasAssociatedWith` a `WORKER` or an `ADMINISTRATOR`
 - `wasInformedBy` the new `Work` and the previous `Timesheet`
 
-#### Domain representation
+#### Domain Representation
 
 ```yaml
 activities:
@@ -255,7 +255,7 @@ roles:
 
 ### Recording
 
-#### Define a worker and a project
+#### Define a Worker and a Project
 
 First, we need a worker defined,
 
@@ -322,7 +322,7 @@ with response like,
 Observed responses will vary a little as Chronicle generates IDs as
 necesssary.
 
-#### Define the performed task
+#### Define the Performed Task
 
 In tracking that the worker performed a task, first we define the task,
 
@@ -391,7 +391,7 @@ mutation {
 Henceforth, we shall miss out many of the responses, unless they contain
 anything interesting, because the above provide a good idea of what to expect.
 
-#### Define the performed task's relationships
+#### Define the Performed Task's Relationships
 
 We associate the task performance with a project,
 
