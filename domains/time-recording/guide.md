@@ -1144,3 +1144,66 @@ This shows both the original and the corrected tasks,
   }
 }
 ```
+
+To understand what happened, we can connect the tasks with timesheets,
+
+```graphql
+{
+  activityTimeline(
+    activityTypes: [TimesheetActivity, RevisionActivity]
+    forAgent: { externalId: "staff-4366" }
+    forEntity: []
+  ) {
+    nodes {
+      ... on TimesheetActivity {
+        externalId
+        wasInformedBy {
+          ... on WorkActivity {
+            externalId
+          }
+        }
+      }
+      ... on RevisionActivity {
+        externalId
+        reasonAttribute
+        wasInformedBy {
+          ... on WorkActivity {
+            externalId
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+to see this timeline,
+
+```json
+{
+  "activityTimeline": {
+    "nodes": [
+      {
+        "externalId": "rts-2130",
+        "reasonAttribute": "misremembered which day",
+        "wasInformedBy": [
+          {
+            "externalId": "entry-3556230"
+          },
+          {}
+        ]
+      },
+      {
+        "externalId": "ts-32205",
+        "wasInformedBy": [
+          {
+            "externalId": "entry-3555103"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+showing both the original and the revised timesheets, with one task each.
