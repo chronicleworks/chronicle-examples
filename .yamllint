@@ -1,0 +1,7 @@
+---
+extends: default
+
+rules:
+  # override default 80 chars line length
+  line-length:
+    max: 120

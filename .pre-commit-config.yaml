@@ -44,7 +44,7 @@ repos:
     rev: 3.0.0
     hooks:
       - id: forbid-binary
-        exclude: ".*.(png|jpg|jpeg)$"
+        exclude: ".*.(png|jpg|jpeg|ico)$"
       - id: shellcheck
         args:
           - -a
