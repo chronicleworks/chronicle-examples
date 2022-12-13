@@ -1,13 +1,9 @@
-name: "Time Recording"
+name: Time Recording
 attributes:
   Name:
     type: String
   Task:
     type: String
-  Start:
-    type: Int
-  Duration:
-    type: Int
   Reason:
     type: String
 agents:
@@ -18,20 +14,16 @@ entities:
   Project:
     attributes:
       - Name
-  Timesheet:
-    attributes:
-      - Start
-      - Duration
-  Summary:
-    attributes:
-      - Start
-      - Duration
 activities:
   Work:
     attributes:
       - Task
-      - Duration
-  Report:
+  Timesheet:
+    attributes: []
+  Revision:
+    attributes:
+      - Reason
+  Summary:
     attributes: []
   Submit:
     attributes: []
@@ -40,9 +32,6 @@ activities:
   Approve:
     attributes: []
   Reject:
-    attributes:
-      - Reason
-  Revise:
     attributes:
       - Reason
 roles:
