@@ -1,0 +1,40 @@
+---
+site_name: Chronicle Examples
+docs_dir: .
+theme:
+  name: material
+  palette:
+    scheme: btp
+  logo: docs/assets/logos/logo.png
+  favicon: docs/assets/logos/favicon.png
+copyright: Copyright &copy; 2022 BTP
+plugins:
+  - same-dir
+  - search
+  - build_plantuml:
+      theme_enabled: false
+      render: "server" # or "local" for local rendering
+      server: "https://www.plantuml.com/plantuml" # official plantuml server
+      disable_ssl_certificate_validation: false # for self-signed and invalid certs
+      output_format: "svg" # or "png"
+      diagram_root: "docs/diagrams" # should reside under docs_dir
+      output_folder: "out"
+      input_folder: "src"
+      input_extensions: "" # comma separated list of extensions to parse, by default every file is parsed
+markdown_extensions:
+  - attr_list
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+nav:
+  - Overview: README.md
+  - Artworld: domains/artworld/guide.md
+  - Corporate Actions: domains/corporate-actions/guide.md
+  - Evidence: domains/evidence/guide.md
+  - Manufacturing: domains/manufacturing/guide.md
+  - Time Recording: domains/time-recording/guide.md

@@ -1,0 +1,6 @@
+mkdocs==1.4.2
+mkdocs-build-plantuml-plugin
+mkdocs-material
+mkdocs-same-dir
+pymdown-extensions
+pygments
