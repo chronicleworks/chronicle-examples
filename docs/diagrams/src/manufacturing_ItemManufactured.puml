@@ -1,38 +1,21 @@
 @startuml
 
-left to right direction
+!include ../include/default.iuml
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
+!include ../include/manufacturing_contractor.iuml
+!include ../include/manufacturing_item.iuml
+!include ../include/manufacturing_item_manufactured.iuml
 
-class Contractor
-Contractor : Location: String
+Contractor <|-- Agent
+Item <|-- Entity
+ItemManufactured <|-- Activity
 
-class Item
-Item : PartID: String
-
-class ItemManufactured
-ItemManufactured : BatchId: String
-
-class Agent
-Agent : id: String
-Agent : externalId: String
-
-class Entity
-Entity : id: String
-Entity : externalId: String
-
-class Activity
-Activity : id: String
-Activity : externalId: String
-Activity : startedAtTime: String
-Activity : endedAtTime: String
-
-Contractor --> ItemManufactured : wasAssociatedWith
-note on link: Role=Manufacturer
-
-Item --> ItemManufactured : wasGeneratedBy
-ItemManufactured --> Item : generated*
-
-Agent --|> Contractor
-Entity --|> Item
-Activity --|> ItemManufactured
+Contractor -> ItemManufactured : wasAssociatedWith
+note on link: Role: Manufacturer
+Item -up-> ItemManufactured : wasGeneratedBy
+ItemManufactured -down-> Item : generated*
+ItemCertified -> Item : used
 
 @enduml

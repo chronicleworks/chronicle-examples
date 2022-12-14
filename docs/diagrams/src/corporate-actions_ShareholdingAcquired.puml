@@ -1,0 +1,22 @@
+@startuml
+
+!include ../include/default.iuml
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
+!include ../include/corporate-actions_company.iuml
+!include ../include/corporate-actions_person.iuml
+!include ../include/corporate-actions_shareholding.iuml
+
+Company <|-- Agent
+Person <|-- Agent
+Shareholding <|-- Entity
+ShareholdingAcquired <|-- Activity
+
+Company -> ShareholdingAcquired : wasAssociatedWith
+note on link: Role: Issuer
+Person -> ShareholdingAcquired : wasAssociatedWith
+note on link: Role: Shareholder
+Shareholding -> ShareholdingAcquired : wasGeneratedBy
+
+@enduml

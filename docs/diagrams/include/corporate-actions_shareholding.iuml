@@ -1,0 +1,4 @@
+abstract Shareholding {
+    + quantity
+    + nominalPrice
+}

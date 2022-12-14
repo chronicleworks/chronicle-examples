@@ -11,7 +11,7 @@ including its announcement and the registration of shares owned.
 First we record that an individual investor has become a shareholder in the company.
 This is prior to the stock split.
 
-![Shareholding Acquired](./diagrams/ShareholdingAcquired.png)
+![Shareholding Acquired](/docs/diagrams/out/corporate-actions_ShareholdingAcquired.svg)
 
 #### Modelling the Company Agent
 
@@ -87,7 +87,7 @@ roles:
 Here we record that the company announces a stock split. The announcement includes
 information about the split ratio, record date, pay date, and exdate.
 
-![Split Announced](./diagrams/SplitAnnounced.png)
+![Split Announced](/docs/diagrams/out/corporate-actions_SplitAnnounced.svg)
 
 #### Modelling the Announcement Entity
 
@@ -136,7 +136,7 @@ Here we record that the transfer agent, typically a bank or trust company who ac
 on behalf of the company, has updated the person's shareholding as a result of the
 stock split.
 
-![Shareholding Updated](./diagrams/ShareholdingUpdated.png)
+![Shareholding Updated](/docs/diagrams/out/corporate-actions_ShareholdingUpdated.svg)
 
 #### Modelling the TransferAgent Agent
 
