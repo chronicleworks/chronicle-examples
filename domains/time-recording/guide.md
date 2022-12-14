@@ -31,7 +31,7 @@ domain, with start and end times matching their work under role `WORKER`. A
 - `used` a `Project`
 - `started` and `ended`
 
-![Record Time Worked](./diagrams/RecordTime.svg)
+![Record Time Worked](/docs/diagrams/out/time-recording_RecordTime.svg)
 
 *Note:* In this first diagram, much is depicted explicitly. For clarity,
 subsequent diagrams may omit relations shown previously, e.g., `Person` will
@@ -78,7 +78,7 @@ period identified by the start and end times of the `Timesheet`.
 - `wasInformedBy` their `Work`
 - `started` and `ended`
 
-![Report Time Worked](./diagrams/ReportTime.svg)
+![Report Time Worked](/docs/diagrams/out/time-recording_ReportTime.svg)
 
 #### Domain Representation
 
@@ -96,7 +96,7 @@ aspect of the workflows that the following definitions allow, capturing how a
 are informed by `Submit` which is informed by the `Timesheet` (or, as
 described below, a `Revision` thereof).
 
-![Submit Timesheet](./diagrams/SubmitTimesheet.svg)
+![Submit Timesheet](/docs/diagrams/out/time-recording_SubmitTimesheet.svg)
 
 #### Domain Representation
 
@@ -132,7 +132,7 @@ same `Person`, collating the contribution of possibly many employees.
 - `started` and `ended`
 - `used` a `Project`
 
-![Project Summary](./diagrams/ProjectSummary.svg)
+![Project Summary](/docs/diagrams/out/time-recording_ProjectSummary.svg)
 
 #### Domain Representation
 
@@ -154,7 +154,7 @@ the basis of their judgments, so a `View` activity is also captured.
 - `used` a `Timesheet` or `Summary`
 - `wasAssociatedWith` whoever viewed it
 
-![View Timesheet](./diagrams/ViewTimesheet.svg)
+![View Timesheet](/docs/diagrams/out/time-recording_ViewTimesheet.svg)
 
 #### Domain Representation
 
@@ -181,11 +181,11 @@ supervisor, that employee may have now left the organization and it may fall
 to an administrator to correct any issues so that the remaining work can be
 billed. So, they issue the correction,
 
-![ReviseOnBehalf](./diagrams/ReviseOnBehalf.svg)
+![ReviseOnBehalf](/docs/diagrams/out/time-recording_ReviseOnBehalf.svg)
 
 then submit it for the supervisor's review,
 
-![SubmitOnBehalf](./diagrams/SubmitOnBehalf.svg)
+![SubmitOnBehalf](/docs/diagrams/out/time-recording_SubmitOnBehalf.svg)
 
 #### Revision (the activity)
 
@@ -813,7 +813,7 @@ mutation {
 }
 ```
 
-![Delegation Example](./diagrams/DelegationExample.svg)
+![Delegation Example](/docs/diagrams/out/time-recording_DelegationExample.svg)
 
 ## Querying
 
