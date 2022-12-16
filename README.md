@@ -2,7 +2,7 @@
 
 This project contains contributed examples for Chronicle.  Documentation for
 Chronicle can be found
-[here](https://docs.blockchaintp.com/chronicle/).
+[here](https://docs.btp.works/chronicle/).
 
 ## Prerequisites
 
@@ -18,7 +18,7 @@ a good starting point is [Introduction to GraphQL](https://graphql.org/learn/).
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/blockchaintp/chronicle-examples.git
+git clone https://github.com/btpworks/chronicle-examples.git
 ```
 
 This contains several example domain yaml files and docker and uses
@@ -28,10 +28,11 @@ This contains several example domain yaml files and docker and uses
 
 Chose from one of the following examples.
 
-* [Artworld](./domains/artworld/guide.md)
-* [Corporate Actions](./domains/corporate-actions/guide.md)
-* [Evidence](./domains/evidence/guide.md)
-* [Manufacturing](./domains/manufacturing/guide.md)
+* [Artworld](./domains/artworld/guide)
+* [Corporate Actions](./domains/corporate-actions/guide)
+* [Evidence](./domains/evidence/guide)
+* [Manufacturing](./domains/manufacturing/guide)
+* [Time Recording](./domains/time-recording/guide)
 
 For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work.  Simply substitute the name of the domain's directory
