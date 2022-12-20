@@ -2,32 +2,15 @@
 
 left to right direction
 
-' core types
+!include ../include/default.iuml
 
-class Agent
-Agent : id: String
-Agent : externalId: String
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
 
-class Activity
-Activity : id: String
-Activity : externalId: String
-Activity : startedAtTime: String
-Activity : endedAtTime: String
-
-class Entity
-Entity : id: String
-Entity : externalId: String
-
-' domain classes
-
-class Person
-Person : Name: String
-
-class Work
-Work : Task: String
-
-class Project
-Project : Name: String
+!include ../include/time-recording_Person.iuml
+!include ../include/time-recording_Work.iuml
+!include ../include/time-recording_Project.iuml
 
 ' types
 
@@ -38,7 +21,7 @@ Entity --|> Project
 ' relations
 
 Work --> Person : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Work --> Project : used
 

@@ -1,29 +1,26 @@
 @startuml
 
-' domain classes
+!include ../include/default.iuml
 
-class Person1 as "Person"
-Person1 : Name: String
+!include ../include/time-recording_Person1.iuml
 note left: staff-4366
 
-class Person2 as "Person"
-Person2 : Name: String
-note right: staff-3621
+!include ../include/time-recording_Person2.iuml
+note bottom: staff-3621
 
-class Person3 as "Person"
-Person3 : Name: String
+!include ../include/time-recording_Person3.iuml
 note right: staff-3150
 
-class Timesheet
-note top: ts-32205
+!include ../include/time-recording_Timesheet.iuml
+note left: ts-32205
 
-class Revision
+!include ../include/time-recording_Revision.iuml
 note top: rts-2130
 
-class Submit
+!include ../include/time-recording_Submit.iuml
 note top: submit-32470
 
-class Approve
+!include ../include/time-recording_Approve.iuml
 note top: approve-31305
 
 ' relations
@@ -33,17 +30,18 @@ Submit --> Revision : wasInformedBy
 Approve -> Submit : wasInformedBy
 
 Timesheet --> Person1 : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Revision --> Person1 : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Submit --> Person1 : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Approve --> Person3 : wasAssociatedWith
-note on link: Role=ADMINISTRATOR
+note on link: Role: Administrator
 
 Person3 --> Person2 : actedOnBehalfOf
+note on link: Role: Supervisor
 
 @enduml

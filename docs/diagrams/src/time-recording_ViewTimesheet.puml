@@ -2,22 +2,13 @@
 
 left to right direction
 
-' core types
+!include ../include/default.iuml
 
-class Activity
-Activity : id: String
-Activity : externalId: String
-Activity : startedAtTime: String
-Activity : endedAtTime: String
+!include ../include/activity.iuml
 
-' domain classes
-
-class Person
-Person : Name: String
-
-class Timesheet
-
-class View
+!include ../include/time-recording_Person.iuml
+!include ../include/time-recording_Timesheet.iuml
+!include ../include/time-recording_View.iuml
 
 ' types
 
@@ -27,6 +18,6 @@ Activity --|> View
 
 View --> Timesheet : wasInformedBy
 View --> Person : wasAssociatedWith
-note on link: Role=SUPERVISOR
+note on link: Role: Supervisor
 
 @enduml
