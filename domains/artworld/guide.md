@@ -1,6 +1,6 @@
 # Artworld Guide
 
-## Modelling the Artworld
+## Modeling the Artworld
 
 ## Recording the Artworld
 

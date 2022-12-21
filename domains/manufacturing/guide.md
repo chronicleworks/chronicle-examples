@@ -1,6 +1,6 @@
 # Manufacturing Guide
 
-## Modelling Manufacturing
+## Modeling Manufacturing
 
 We want to record the batch manufacture of high specification items such as
 rotor blades by a contractor, which then inspects these individually and issues
@@ -14,7 +14,7 @@ high specification rotor blades, which it does so in batches.
 
 ![Item Manufactured](/docs/diagrams/out/manufacturing_ItemManufactured.svg)
 
-#### Modelling the Contractor Agent
+#### Modeling the Contractor Agent
 
 The `Contractor` agent has two attributes, its `CompanyName` and its `Location`.
 In our Chronicle domain specification this is captured as follows -
@@ -32,7 +32,7 @@ agents:
       - Location
 ```
 
-#### Modelling the Item Entity
+#### Modeling the Item Entity
 
 The `Item` entity has one attribute, its `PartID`.
 
@@ -46,7 +46,7 @@ entities:
       - PartID
 ```
 
-#### Modelling the ItemManufactured Activity
+#### Modeling the ItemManufactured Activity
 
 The `ItemManufactured` activity has one attribute, its `BatchID`. It also has a
 `Manufacturer` role.
@@ -72,7 +72,7 @@ Therefore this activity uses the item and issues a certificate for it.
 
 ![Item Manufactured](/docs/diagrams/out/manufacturing_ItemCertified.svg)
 
-#### Modelling the Certificate Entity
+#### Modeling the Certificate Entity
 
 The `Certificate` entity has one attribute, its `CertID`.
 
@@ -86,7 +86,7 @@ entities:
       - CertID
 ```
 
-#### Modelling the ItemCertified Activity
+#### Modeling the ItemCertified Activity
 
 The `ItemCertified` activity has no attributes but it has a role `Certifier`.
 

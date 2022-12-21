@@ -1,6 +1,6 @@
 # Evidence Guide
 
-## Modelling Evidence
+## Modeling Evidence
 
 ## Recording Evidence
 
