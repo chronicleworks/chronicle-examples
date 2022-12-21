@@ -1,0 +1,2 @@
+class Person3 as "Person"
+Person3 : name

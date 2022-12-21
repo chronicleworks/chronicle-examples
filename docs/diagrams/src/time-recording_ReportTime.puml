@@ -2,26 +2,14 @@
 
 left to right direction
 
-' core types
+!include ../include/default.iuml
 
-class Activity
-Activity : id: String
-Activity : externalId: String
-Activity : startedAtTime: String
-Activity : endedAtTime: String
+!include ../include/activity.iuml
 
-' domain classes
-
-class Person
-Person : Name: String
-
-class Project
-Project : Name: String
-
-class Work
-Work : Task: String
-
-class Timesheet
+!include ../include/time-recording_Person.iuml
+!include ../include/time-recording_Project.iuml
+!include ../include/time-recording_Work.iuml
+!include ../include/time-recording_Timesheet.iuml
 
 ' types
 
@@ -32,10 +20,10 @@ Activity --|> Timesheet
 Timesheet --> Work : wasInformedBy
 
 Timesheet --> Person : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Work --> Person : wasAssociatedWith
-note on link: Role=WORKER
+note on link: Role: Worker
 
 Work --> Project : used
 
