@@ -1,6 +1,6 @@
 # Corporate Actions Guide
 
-## Modelling Corporate Actions
+## Modeling Corporate Actions
 
 A stock split is a corporate action that divides the value of each of the outstanding
 shares of a company. This simple example captures some aspects of a stock split,
@@ -13,7 +13,7 @@ This is prior to the stock split.
 
 ![Shareholding Acquired](/docs/diagrams/out/corporate-actions_ShareholdingAcquired.svg)
 
-#### Modelling the Company Agent
+#### Modeling the Company Agent
 
 The `Company` agent has two attributes, its `Name` and its `Location`.
 In our Chronicle domain specification this is captured as follows -
@@ -31,7 +31,7 @@ agents:
       - Location
 ```
 
-#### Modelling the Person Agent
+#### Modeling the Person Agent
 
 The `Person` agent has two attributes, its `Name` and its `Location`.
 In our Chronicle domain specification this is captured as follows -
@@ -49,7 +49,7 @@ agents:
       - Location
 ```
 
-#### Modelling the Shareholding Entity
+#### Modeling the Shareholding Entity
 
 The `Shareholding` entity has two attributes, its `Quantity` and the `NominalPrice`
 per share.
@@ -67,7 +67,7 @@ entities:
       - NominalPrice
 ```
 
-#### Modelling the ShareholdingAcquired Activity
+#### Modeling the ShareholdingAcquired Activity
 
 The `ShareholdingAcquired` activity has no attributes, but it has an
 `Issuer` and a `Shareholder`role.
@@ -89,7 +89,7 @@ information about the split ratio, record date, pay date, and exdate.
 
 ![Split Announced](/docs/diagrams/out/corporate-actions_SplitAnnounced.svg)
 
-#### Modelling the Announcement Entity
+#### Modeling the Announcement Entity
 
 The `Announcement` entity has four attributes, its `Ratio`, its `RecordDate`, its
 `PayDate`, and its `ExDate`.
@@ -113,7 +113,7 @@ entities:
       - ExDate
 ```
 
-#### Modelling the SplitAnnounced Activity
+#### Modeling the SplitAnnounced Activity
 
 The `SplitAnnounced` activity has one attribute `PressDate`, and it also has a role
 `Issuer`.
@@ -138,7 +138,7 @@ stock split.
 
 ![Shareholding Updated](/docs/diagrams/out/corporate-actions_ShareholdingUpdated.svg)
 
-#### Modelling the TransferAgent Agent
+#### Modeling the TransferAgent Agent
 
 The `TransferAgent` agent has two attributes, its `Name` and its `Location`.
 In our Chronicle domain specification this is captured as follows -
@@ -156,7 +156,7 @@ agents:
       - Location
 ```
 
-#### Modelling the ShareholdingUpdated Activity
+#### Modeling the ShareholdingUpdated Activity
 
 The `ShareholdingUpdated` activity has no attributes, but it has two roles
 `Issuer` and `Registrar`.
