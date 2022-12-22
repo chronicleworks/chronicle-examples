@@ -142,31 +142,45 @@ file, the debug and inmem docker image will be `chronicle-mydomain-inmem:local`.
 
 The `domain.yaml` definition is typically the smaller part of what there is to
 say about the domain's usage. Users will appreciate an accompanying `guide.md`
-markdown document that follows the form of those for other example domains.
-Suggested structure is:
+markdown document structured like those for the other example domains. Take a
+look through those domains' guides because they illustrate how to write the
+principal sections:
 
 1. Modeling
 2. Recording
 3. Querying
 
-Briefly explain what the domain is then, for each of the most important
-activities, describe the participating agents and entities, provide a diagram
-of how they relate to the activity, then show how each is modeled in the
-`domain.yaml`. Conclude these by bringing those descriptions together as the
-full `domain.yaml`. Note that `yaml` can be specified for the highlighting in
-domain definitions.
+Briefly explain what your domain is. Then, for the first section, take each
+of the domain's most important activities, describe the participating agents
+and entities, provide a diagram of how they relate to the activity, then show
+how each is modeled in the `domain.yaml`. In this way, you can step through
+various aspects of your domain, allowing the reader to accumulate a full
+picture gradually. Conclude these by bringing those descriptions together as
+the full `domain.yaml`. Note that `yaml` can be specified for the highlighting
+in domain definitions.
 
-For producing those diagrams, ensure that [PlantUML](https://plantuml.com/) is
-installed, and follow the lead from other domains. Specifically, we use [class
+For producing those diagrams, use [PlantUML](https://plantuml.com/)'s [class
 diagrams](https://plantuml.com/class-diagram) with *extension* `--|>` arrows
 showing which are agents, entities, and activities, and *directed association*
 `-->` arrows for how those relate to each other. Include typed attributes as
-fields in the class boxes where appropriate. `make <domain>-diagrams` compiles
-the diagrams in your domain's `diagrams/` folder into the SVG files to which
-you link in your guide.
+fields in the class boxes where appropriate. Notice that the `docs/diagrams/`
+folder has two subdirectories; review their contents and follow the same
+pattern. Each of your domain agents, entities, and activities gets a
+corresponding `include/*.iuml` file and, from your diagrams in `src/*.puml`,
+you can `!include` the provided `default.iuml`, `agent.iuml`, `entity.iuml`,
+`activity.iuml`, and your extra `*.iuml` for consistency across your diagrams
+and those of the other example domains.
 
-Follow with some example mutations and queries expressed in GraphQL, and
-show how the responses should look, to give users some simple stories to try
-out in the Apollo Sandbox in their browser. These examples should lead them
-through the core usage of your domain. Note that `graphql` for requests and
-`json` for responses can be specified for highlighting those interactions.
+Follow the above tour of your domain with the other two sections: provide
+example mutations and queries expressed in GraphQL, and show how the responses
+should look, to give users some simple stories to try out in the Apollo
+Sandbox in their browser. These examples should lead them through the most
+important and common uses of your domain, giving them enough starting points
+to easily try it out in their own applications. Note that `graphql` for
+requests and `json` for responses can be specified for highlighting those
+interactions.
+
+For rendering your new guide locally, `docs/` also includes a list of the
+Python dependencies required for running `mkdocs serve`. In using it to review
+your guide, check that you have explained every aspect of your domain clearly
+so the community can draw the greatest benefit from your work.
