@@ -7,7 +7,7 @@ theme:
     scheme: btp
   logo: docs/assets/logos/logo.png
   favicon: docs/assets/logos/favicon.png
-copyright: Copyright &copy; 2022 BTP
+copyright: Copyright &copy; 2022-23 Blockchain Technology Partners Limited
 plugins:
   - same-dir
   - search
