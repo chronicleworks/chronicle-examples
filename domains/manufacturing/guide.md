@@ -225,7 +225,7 @@ The output should look something like this -
 
 ```graphql
 mutation {
-  defineItemManufacturedActivity(externalId: "rotorblademake-run-001", attributes:{ batchIdAttribute: "run-001" }) {
+  defineItemManufacturedActivity(externalId: "rotorblademake-run-001", attributes:{ batchIDAttribute: "run-001" }) {
     context
     txId
   }
@@ -306,11 +306,11 @@ For each rotor blade produced by this activity, we first record its creation.
 
 **NOTE** that here we are focusing on a single rotor blade. However, in a real
 world example, this process would be repeated and we would need to make sure
-that the `externalId` and `partId` were incremented.
+that the `externalId` and `PartID` were incremented.
 
 ```graphql
 mutation {
-  defineItemEntity(externalId:"rotorblade-run-001-001",attributes:{partIdAttribute:"run-001-001"}) {
+  defineItemEntity(externalId:"rotorblade-run-001-001",attributes:{partIDAttribute:"run-001-001"}) {
     context
     txId
   }
@@ -415,7 +415,7 @@ In this example, each rotor blade is certified, using a distinct activity.
 
 #### Record Certification Activity Instance
 
-Here, the identity of the activity can incorporate the partId.
+Here, the identity of the activity can incorporate the PartID.
 
 ```graphql
 mutation {
@@ -497,12 +497,12 @@ The output should look something like this -
 #### Record the Certification of a Rotor Blade
 
 For each rotor blade certified by this activity, we first record its
-corresponding certificate generation along with its certId. In this simplified
-example, the certId of the rotor blade is the same as its partId.
+corresponding certificate generation along with its CertID. In this simplified
+example, the CertID of the rotor blade is the same as its PartID.
 
 ```graphql
 mutation {
-  defineCertificateEntity(externalId: "rotorbladecert-run-001-001", attributes:{ certIdAttribute: "run-001-001" }) {
+  defineCertificateEntity(externalId: "rotorbladecert-run-001-001", attributes:{ certIDAttribute: "run-001-001" }) {
     context
     txId
   }
@@ -621,13 +621,13 @@ There are many queries that can be run. Here are a couple of examples.
 query {
   q1: entityById(id: { externalId: "rotorblade-run-001-001" }) {
     ... on ItemEntity {
-      partIdAttribute
+      partIDAttribute
       wasGeneratedBy { ... on ItemManufacturedActivity { id } }
     }
   }
   q2: entityById(id: {externalId: "rotorbladecert-run-001-001"}) {
     ... on CertificateEntity {
-      certIdAttribute
+      certIDAttribute
       wasGeneratedBy { ... on ItemCertifiedActivity { id } }
     }
   }
@@ -640,7 +640,7 @@ The output should look something like this -
 {
   "data": {
     "q1": {
-      "partIdAttribute": "run-001-001",
+      "partIDAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
           "id": "chronicle:activity:rotorblademake%2Drun%2D001"
@@ -648,7 +648,7 @@ The output should look something like this -
       ]
     },
     "q2": {
-      "certIdAttribute": "run-001-001",
+      "certIDAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
           "id": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001"
