@@ -16,6 +16,5 @@ Contractor -> ItemManufactured : wasAssociatedWith
 note on link: Role: Manufacturer
 Item -up-> ItemManufactured : wasGeneratedBy
 ItemManufactured -down-> Item : generated*
-ItemCertified -> Item : used
 
 @enduml
