@@ -13,7 +13,7 @@ left to right direction
 
 ' types
 
-Activity --|> Timesheet
+activity --|> Timesheet
 
 ' relations
 

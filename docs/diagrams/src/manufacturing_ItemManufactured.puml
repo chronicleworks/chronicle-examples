@@ -8,13 +8,14 @@
 !include ../include/manufacturing_item.iuml
 !include ../include/manufacturing_item_manufactured.iuml
 
-Contractor <|-- Agent
-Item <|-- Entity
-ItemManufactured <|-- Activity
+Contractor <|-down- agent
+Item <|-down- entity
+ItemManufactured <|-down- activity
 
-Contractor -> ItemManufactured : wasAssociatedWith
+Contractor -right-> ItemManufactured : wasAssociatedWith
 note on link: Role: Manufacturer
-Item -up-> ItemManufactured : wasGeneratedBy
-ItemManufactured -down-> Item : generated*
+Contractor -[hidden]> Item
+Item -right-> ItemManufactured : wasGeneratedBy
+ItemManufactured -left-> Item : generated*
 
 @enduml

@@ -12,7 +12,7 @@ left to right direction
 
 ' types
 
-Activity --|> View
+activity --|> View
 
 ' relations
 

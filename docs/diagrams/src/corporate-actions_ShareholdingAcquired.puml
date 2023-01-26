@@ -8,10 +8,10 @@
 !include ../include/corporate-actions_person.iuml
 !include ../include/corporate-actions_shareholding.iuml
 
-Company <|-- Agent
-Person <|-- Agent
-Shareholding <|-- Entity
-ShareholdingAcquired <|-- Activity
+Company <|-- agent
+Person <|-- agent
+Shareholding <|-- entity
+ShareholdingAcquired <|-- activity
 
 Company -> ShareholdingAcquired : wasAssociatedWith
 note on link: Role: Issuer

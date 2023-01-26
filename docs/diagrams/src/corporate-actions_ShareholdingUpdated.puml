@@ -9,21 +9,22 @@
 !include ../include/corporate-actions_shareholding.iuml
 !include ../include/corporate-actions_transfer_agent.iuml
 
-Company <|-- Agent
-TransferAgent <|-- Agent
-Announcement <|-- Entity
-Shareholding <|-- Entity
-ShareholdingUpdated <|-- Activity
+Company <|-down- agent
+TransferAgent <|-down- agent
+Announcement <|-down- entity
+Shareholding <|-down- entity
+ShareholdingUpdated <|-down- activity
 
 Company -> TransferAgent : actedOnBehalfOf
 TransferAgent -> Company : actedOnBehalfOf
-Company -> ShareholdingUpdated : wasAssociatedWith
+Company -up-> ShareholdingUpdated : wasAssociatedWith
 note on link: Role: Issuer
 TransferAgent -> ShareholdingUpdated : wasAssociatedWith
 note on link: Role: Registrar
-Shareholding -up-> ShareholdingUpdated : wasGeneratedBy
-ShareholdingUpdated -down-> Shareholding : used
+Shareholding -> ShareholdingUpdated : wasGeneratedBy
+ShareholdingUpdated -> Shareholding : used
 Shareholding -> Shareholding : wasRevisionOf
 ShareholdingUpdated -> Announcement : used
+Shareholding <-[hidden]- Announcement
 
 @enduml

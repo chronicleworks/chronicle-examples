@@ -11,8 +11,8 @@
 
 ' types
 
-Activity --|> Submit
-Activity --|> Accept
+activity --|> Submit
+activity --|> Accept
 
 ' relations
 
