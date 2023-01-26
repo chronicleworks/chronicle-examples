@@ -7,9 +7,9 @@
 !include ../include/corporate-actions_announcement.iuml
 !include ../include/corporate-actions_company.iuml
 
-Company <|-- Agent
-Announcement <|-- Entity
-SplitAnnounced <|-- Activity
+Company <|-- agent
+Announcement <|-- entity
+SplitAnnounced <|-- activity
 
 Company -> SplitAnnounced : wasAssociatedWith
 note on link: Role: Issuer

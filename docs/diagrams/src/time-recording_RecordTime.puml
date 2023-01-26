@@ -14,9 +14,9 @@ left to right direction
 
 ' types
 
-Agent --|> Person
-Activity --|> Work
-Entity --|> Project
+agent --|> Person
+activity --|> Work
+entity --|> Project
 
 ' relations
 

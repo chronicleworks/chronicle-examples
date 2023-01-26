@@ -8,9 +8,9 @@
 !include ../include/manufacturing_contractor.iuml
 !include ../include/manufacturing_item.iuml
 
-Contractor <|-down- Agent
-Certificate <|-down- Entity
-ItemCertified <|-down- Activity
+Contractor <|-down- agent
+Certificate <|-down- entity
+ItemCertified <|-down- activity
 
 Contractor -right-> ItemCertified : wasAssociatedWith
 note on link: Role: Certifier

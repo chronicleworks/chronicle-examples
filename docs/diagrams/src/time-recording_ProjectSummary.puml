@@ -14,7 +14,7 @@ left to right direction
 
 ' types
 
-Activity --|> Summary
+activity --|> Summary
 
 ' relations
 
