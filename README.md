@@ -30,7 +30,6 @@ Choose from one of the following examples:
 
 * [Artworld](./domains/artworld/guide)
 * [Corporate Actions](./domains/corporate-actions/guide)
-* [Evidence](./domains/evidence/guide)
 * [Manufacturing](./domains/manufacturing/guide)
 * [Time Recording](./domains/time-recording/guide)
 
