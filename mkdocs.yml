@@ -37,6 +37,5 @@ nav:
   - Overview: README.md
   - Artworld: domains/artworld/guide.md
   - Corporate Actions: domains/corporate-actions/guide.md
-  - Evidence: domains/evidence/guide.md
   - Manufacturing: domains/manufacturing/guide.md
   - Time Recording: domains/time-recording/guide.md
