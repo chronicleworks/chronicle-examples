@@ -1,0 +1,26 @@
+@startuml
+
+!include ../include/default.iuml
+!include ../include/activity.iuml
+!include ../include/agent.iuml
+!include ../include/entity.iuml
+!include ../include/artwork.iuml
+!include ../include/artist.iuml
+!include ../include/collector.iuml
+!include ../include/created.iuml
+!include ../include/sold.iuml
+
+Artwork <|-down- entity
+Collector <|-down- agent
+Artist <|-left- agent
+Created <|-down- activity
+Sold <|-down- activity
+
+Artist -up-> Created : wasAssociatedWith
+note on link: Role: Creator
+Artwork -right-> Created : wasGeneratedBy
+Collector -right-> Sold : wasAssociatedWith
+note on link: Role: Seller
+Sold -right-> Artwork: used
+
+@enduml
