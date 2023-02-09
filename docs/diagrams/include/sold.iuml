@@ -1,0 +1,4 @@
+abstract Sold {
+    + purchaseValue
+    + purchaseValueCurrency
+}
