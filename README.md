@@ -1,8 +1,9 @@
 # Chronicle Examples
 
-This project contains contributed examples for Chronicle.  Documentation for
-Chronicle can be found
-[here](https://docs.btp.works/chronicle/).
+This project contains contributed examples for Chronicle.  The markdown
+documents in this repository are published on
+[their own site](https://examples.btp.works). Documentation for
+Chronicle in general may be found [here](https://docs.btp.works/chronicle/).
 
 ## Prerequisites
 
@@ -146,8 +147,8 @@ look through those domains' guides because they illustrate how to write the
 principal sections:
 
 1. Modeling
-2. Recording
-3. Querying
+1. Recording
+1. Querying
 
 Briefly explain what your domain is. Then, for the first section, take each
 of the domain's most important activities, describe the participating agents
