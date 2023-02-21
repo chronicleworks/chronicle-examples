@@ -40,30 +40,30 @@ roles:
   - PROFESSOR
 attributes:
   StudentID:
-    type: "String"
+    type: String
   Grade:
-    type: "String"
+    type: String
   StaffID:
-    type: "String"
+    type: String
   Department:
-    type: "String"
+    type: String
   Reaction:
-    type: "String"
+    type: String
   Reagents:
-    type: "String"
+    type: String
   Approval:
-    type: "String"
+    type: String
   RawData:
-    type: "String"
+    type: String
   ReportURL:
-    type: "String"
+    type: String
   Purity:
-    type: "String"
+    type: String
   Yield:
-    type: "String"
+    type: String
   Marks:
-    type: "String"
+    type: String
   FeedbackURL:
-    type: "String"
+    type: String
   Workplan:
-    type: "String"
+    type: String

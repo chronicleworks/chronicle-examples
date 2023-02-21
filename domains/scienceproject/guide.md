@@ -1,14 +1,14 @@
 # Science Project Guide
 
-## Modelling a University Science Project
+## Modeling a University Science Project
 
-Academic dishonesty is unfortunately rife in Universities. Here we show a
-chronicle domain that can be used to track the activities of a student and the
+Academic dishonesty is unfortunately rife in universities. Here we show a
+Chronicle domain that can be used to track the activities of a student and the
 subsequent marking by the university professor
 
-### Modellng Labwork
+### Modeling Labwork
 
-#### Modelling the Student Agent
+#### Modeling the Student Agent
 
 The `Student` agent has two attributes, its `StudentID` and its `Grade`.
 In our Chronicle domain specification this is captured as follows -
@@ -26,7 +26,7 @@ attributes:
     type: "String"
 ```
 
-#### Modelling the Experiment Entity
+#### Modeling the Experiment Entity
 
 The `Experiment` entity has three attributes, its `Reaction`, the `Reagents`
 used in the reaction, and the `Approval` status of the reaction.
@@ -39,14 +39,14 @@ used in the reaction, and the `Approval` status of the reaction.
       - Approval
 attributes:
   Reaction:
-    type: "String"
+    type: String
   Reagents:
-    type: "String"
+    type: String
   Approval:
-    type: "String"
+    type: String
 ```
 
-### Modelling the Labwork Activity
+### Modeling the Labwork Activity
 
 The `Labwork` activity has three attributes, the `StudentID` doing the labwork,
 the `Workplan` of the labwork, and the `Approval` status of the Labwork.
@@ -59,17 +59,17 @@ the `Workplan` of the labwork, and the `Approval` status of the Labwork.
       - Approval
 attributes:
     StudentID:
-        type: "String"
+        type: String
     Workplan:
-        type: "String"
+        type: String
     Approval:
-        type: "String"
+        type: String
 
 ```
 
 ### Modeling the results of Labwork
 
-the students lab-work generates the `Results` entity that has 4 attributes. The
+the student's lab-work generates the `Results` entity that has 4 attributes. The
 `RawData`, the `ReportURL`, the `Purity` of the chemistry produced, and the
 `Yield`.
 
@@ -82,7 +82,7 @@ Results:
     - Yield
 ```
 
-### Assesment of Labwork
+### Assessment of Labwork
 
 In this Model the Labwork is being assessed by a Professor
 
@@ -100,7 +100,7 @@ entities:
       - FeedbackURL
 ```
 
-#### Modelling the Assesment Activity
+#### Modeling the Assessment Activity
 
 The `Assessment` activity has two attributes the `StaffID` of the assessor and
 the `ReportURL` being assessed.
@@ -160,54 +160,54 @@ roles:
   - professor
 attributes:
   StudentID:
-    type: "String"
+    type: String
   Grade:
-    type: "String"
+    type: String
   StaffID:
-    type: "String"
+    type: String
   Department:
-    type: "String"
+    type: String
   Reaction:
-    type: "String"
+    type: String
   Reagents:
-    type: "String"
+    type: String
   Approval:
-    type: "String"
+    type: String
   RawData:
-    type: "String"
+    type: String
   ReportURL:
-    type: "String"
+    type: String
   Purity:
-    type: "String"
+    type: String
   Yield:
-    type: "String"
+    type: String
   Marks:
-    type: "String"
+    type: String
   FeedbackURL:
-    type: "String"
+    type: String
   Workplan:
-    type: "String"
+    type: String
 ```
 
-## Recording the Science project
+## Recording the Science Project
 
-In this example we will create a 'Student' and 'Professor' agent. These agents
+In this example we will create a `Student` and `Professor` agent. These agents
 will complete the following activities:
 
-1. "Labwork" activity to record when a student has completed some labwork to be
+1. `Labwork` activity to record when a student has completed some labwork to be
    graded.
-1. "Assesment" an activity to record when a professor has assesed a students
+1. `Assessment` an activity to record when a professor has assesed a students
    labwork.
 
-### Defining agents
+### Defining Agents
 
 Here is where we define who is involved in this example. In a real world example
-there would likley be many more students and a few more professor agents.
+there would likely be many more students and a few more professor agents.
 
 ```graphql
 mutation defineAgents {
   defineStudentAgent(
-    externalId: "Joe BLoggs"
+    externalId: "Joe Bloggs"
     attributes: { studentIDAttribute: "Joe Blogs", gradeAttribute: "A" }
   ) {
     context
@@ -243,9 +243,9 @@ Which will output something similar to
 }
 ```
 
-### Recording the start of labwork
+### Recording the start of Labwork
 
-the Labwork activity is started simply with the following mutation
+the `Labwork` activity is started simply with the following mutation
 
 ```graphql
 mutation{
@@ -392,7 +392,7 @@ OUTPUT
 }
 ```
 
-With the Labwork done and the activity is brought to an end
+With the Labwork done the activity is brought to an end
 
 ```graphql
 mutation{
@@ -420,13 +420,13 @@ OUTPUT
 }
 ```
 
-### Recording the assessment of LabWork
+### Recording the Assessment of LabWork
 
 With the labwork complete and submitted the Professor then begins the marking
 
 ```graphql
 mutation {
-  startActivity(id: { externalId: "Assesment" }) {
+  startActivity(id: { externalId: "Assessment" }) {
     context
     txId
   }
@@ -439,7 +439,7 @@ OUTPUT
 {
   "data": {
     "startActivity": {
-      "context": "chronicle:activity:Assesment",
+      "context": "chronicle:activity:Assessment",
       "txId": "89943f70-8fa7-4f90-bd58-4b10c1a13a3b"
     }
   }
@@ -552,7 +552,7 @@ OUTPUT
 
 This concludes a cycle tracking what output a student made and who marked it
 
-## Querying the science project
+## Querying the science Project
 
 In this query we are asking in q1 what was the reaction that was the
 reactionAttribute of the "Chemistry experiment" experiment entity in q2 we ask
