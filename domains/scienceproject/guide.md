@@ -49,7 +49,7 @@ attributes:
 ### Modeling the Labwork Activity
 
 The `Labwork` activity has three attributes, the `StudentID` doing the labwork,
-the `Workplan` of the labwork, and the `Approval` status of the Labwork.
+the `Workplan` of the labwork, and the `Approval` status of the labwork.
 
 ```yaml
   Labwork:
@@ -86,7 +86,7 @@ Results:
 
 In this Model the Labwork is being assessed by a Professor
 
-#### Modelling the Marks Entity
+#### Modeling the Marks Entity
 
 The `Marks` entity has three attributes, its `Grade`, the total `Marks` awarded,
 and a `FeedbackURL`.
@@ -196,7 +196,7 @@ will complete the following activities:
 
 1. `Labwork` activity to record when a student has completed some labwork to be
    graded.
-1. `Assessment` an activity to record when a professor has assesed a students
+1. `Assessment` an activity to record when a professor has assessed a students
    labwork.
 
 ### Defining Agents
@@ -248,8 +248,8 @@ Which will output something similar to
 the `Labwork` activity is started simply with the following mutation
 
 ```graphql
-mutation{
-  startActivity(id:{externalId:"Labwork"}){
+mutation {
+  startActivity(id: { externalId: "Labwork" }) {
     context
     txId
   }
@@ -261,16 +261,18 @@ therefore the experiment entity is generated at the start of the labwork
 activity
 
 ```graphql
-mutation{
-defineExperimentEntity(
-externalId: "Chemistry labwork"
-attributes: {reactionAttribute: "Suzuki reaction R^1-x + R^2-BY -> R^1-R-2"
-reagentsAttribute: "Halide, OrganoBoron species, Pd catalyst, base"
-approvalAttribute: "Approved with safety sheet" }
-) {
-context
-txId
-}
+mutation {
+  defineExperimentEntity(
+    externalId: "Chemistry labwork"
+    attributes: {
+      reactionAttribute: "Suzuki reaction R^1-x + R^2-BY -> R^1-R-2"
+      reagentsAttribute: "Halide, OrganoBoron species, Pd catalyst, base"
+      approvalAttribute: "Approved with safety sheet"
+    }
+  ) {
+    context
+    txId
+  }
 }
 ```
 
@@ -278,28 +280,34 @@ OUTPUT
 
 ```json
 {
-"data": {
-"defineExperimentEntity": {
-"context": "chronicle:entity:Chemistry%20labwork",
-"txId": "0b441d99-4a83-439b-bb84-73c029a00bbd"
-}
-}
+  "data": {
+    "defineExperimentEntity": {
+      "context": "chronicle:entity:Chemistry%20labwork",
+      "txId": "0b441d99-4a83-439b-bb84-73c029a00bbd"
+    }
+  }
 }
 ```
 
 this entity is then generated and associated with the Labwork activity
 
 ```graphql
-mutation{
-  wasGeneratedBy(activity:{externalId:"Labwork"}
-  id:{externalId:"Chemistry experiment"}){
+mutation {
+  wasGeneratedBy(
+    activity: { externalId: "Labwork" }
+    id: { externalId: "Chemistry experiment" }
+  ) {
     context
     txId
   }
-  wasAssociatedWith(activity:{externalId:"Labwork"},
-  responsible:{externalId: "Joe Bloggs"},
-  role: STUDENT){context
-  txId}
+  wasAssociatedWith(
+    activity: { externalId: "Labwork" }
+    responsible: { externalId: "Joe Bloggs" }
+    role: STUDENT
+  ) {
+    context
+    txId
+  }
 }
 ```
 
@@ -395,8 +403,8 @@ OUTPUT
 With the Labwork done the activity is brought to an end
 
 ```graphql
-mutation{
-  endActivity(id:{externalId:"Labwork"}){
+mutation {
+  endActivity(id: { externalId: "Labwork" }) {
     context
     txId
   }
@@ -449,12 +457,13 @@ OUTPUT
 this generates marks
 
 ```graphql
-mutation{
-  defineMarksEntity(externalId:"Chemistry experiment marks"
+mutation {
+  defineMarksEntity(
+    externalId: "Chemistry experiment marks"
     attributes: {
       gradeAttribute: "A"
       marksAttribute: "95"
-      feedbackURLAttribute: "feebackURL"
+      feedbackURLAttribute: "feedbackURL"
     }
   ) {
     context
@@ -623,7 +632,7 @@ OUTPUT
       "gradeAttribute": "A",
       "wasGeneratedBy": [
         {
-          "id": "chronicle:activity:Assesment"
+          "id": "chronicle:activity:Assessment"
         }
       ]
     }
@@ -638,39 +647,40 @@ marks entity
 
 ```graphql
 query {
-activityTimeline(forEntity: [{ externalId: "Chemistry experiment marks" }],
-activityTypes: [],
-forAgent:[]
-) {
-pageInfo {
-hasPreviousPage
-hasNextPage
-startCursor
-endCursor
-}
-edges {
-node {
-**typename
-... on AssessmentActivity {
-started
-ended
-wasAssociatedWith {
-responsible {
-role
-agent {
-**typename
-... on ProfessorAgent {
-staffIDAttribute
-departmentAttribute
-}
-}
-}
-}
-}
-}
-cursor
-}
-}
+  activityTimeline(
+    forEntity: [{ externalId: "Chemistry experiment marks" }]
+    activityTypes: []
+    forAgent: []
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        __typename
+        ... on AssessmentActivity {
+          started
+          ended
+          wasAssociatedWith {
+            responsible {
+              role
+              agent {
+                __typename
+                ... on ProfessorAgent {
+                  staffIDAttribute
+                  departmentAttribute
+                }
+              }
+            }
+          }
+        }
+      }
+      cursor
+    }
+  }
 }
 ```
 
@@ -757,7 +767,6 @@ query {
     }
   }
 }
-
 ```
 
 OUTPUT
