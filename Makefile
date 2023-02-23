@@ -58,7 +58,14 @@ else
 	$(foreach DIAGRAM,$(wildcard domains/$(1)/diagrams/*.puml),plantuml -tsvg -nometadata "$(DIAGRAM)";)
 endif
 
-$(MARKERS)/$(1)-inmem: $(MARKERS)
+$(MARKERS)/$(1)-lint: $(MARKERS)
+	@echo "Checking domain definition for $(1)"
+	@docker run --volume $(shell pwd)/domains/$(1):/mnt \
+	            --entrypoint /usr/local/bin/chronicle-domain-lint --rm \
+	            $(CHRONICLE_BUILDER_IMAGE):$(CHRONICLE_VERSION) /mnt/domain.yaml
+	@touch $(MARKERS)/$@
+
+$(MARKERS)/$(1)-inmem: $(MARKERS)/$(1)-lint
 	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
@@ -70,7 +77,7 @@ $(MARKERS)/$(1)-inmem: $(MARKERS)
 		chronicle-$(1)-inmem:$(ISOLATION_ID)
 	@touch $(MARKERS)/$@
 
-$(MARKERS)/$(1)-stl: $(MARKERS)
+$(MARKERS)/$(1)-stl: $(MARKERS)/$(1)-lint
 	@echo "Building $(1) debug stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
@@ -82,7 +89,7 @@ $(MARKERS)/$(1)-stl: $(MARKERS)
 		chronicle-$(1)-stl:$(ISOLATION_ID)
 	@touch $(MARKERS)/$@
 
-$(MARKERS)/$(1)-inmem-release: $(MARKERS)
+$(MARKERS)/$(1)-inmem-release: $(MARKERS)/$(1)-lint
 	@echo "Building $(1) release inmem as docker image chronicle-$(1)-inmem-release:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
@@ -94,7 +101,7 @@ $(MARKERS)/$(1)-inmem-release: $(MARKERS)
 		chronicle-$(1)-inmem-release:$(ISOLATION_ID)
 	@touch $(MARKERS)/$@
 
-$(MARKERS)/$(1)-stl-release: $(MARKERS)
+$(MARKERS)/$(1)-stl-release: $(MARKERS)/$(1)-lint
 	@echo "Building $(1) release stl as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_COMPOSE) -f docker/docker-compose.yaml build -q \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
