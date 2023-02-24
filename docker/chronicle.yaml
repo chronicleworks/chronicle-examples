@@ -95,7 +95,7 @@ services:
     command:
       - -exc
       - |
-        sleep 10 \
+        sleep 10 && \
         /usr/local/bin/chronicle \
         --sawtooth tcp://validator:4004 \
         --console-logging pretty \
