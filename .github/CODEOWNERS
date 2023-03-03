@@ -1,0 +1,11 @@
+# Default owners
+* @btpworks/btp-engineering
+
+# Documentation has an additional team to review
+/docs/* @btpworks/btp-engineering @btpworks/btp-documentation
+
+# Domains has an additional team to review
+/domains/* @btpworks/btp-engineering @btpworks/btp-documentation
+
+# Repository Admin only for .github
+/.github/* @btpworks/repository-admin
