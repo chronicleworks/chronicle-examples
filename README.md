@@ -45,7 +45,7 @@ Now you can run up a standalone version of Chronicle which is a single node with
 a local database rather than backed by a blockchain.
 
 ```bash
-make run-manufacturing
+gmake run-manufacturing
 ```
 
 Now that you have built and run your Chronicle example, the terminal will
@@ -53,7 +53,7 @@ prompt you for configuration settings. You can just press Enter to answer with
 defaults. You should then see something like this in your terminal:
 
 ```bash
-$ make run-manufacturing
+$ gmake run-manufacturing
 docker run --env RUST_LOG=debug --publish 9982:9982 -it chronicle-manufacturing-inmem:local --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open
 No configuration found at /root/.chronicle/config.toml, create? (Y/n)
 Where should chronicle store state? (/root/.chronicle/store)
@@ -79,7 +79,7 @@ Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
 ### Build the Container Images
 
 ```bash
-make clean manufacturing
+gmake clean manufacturing
 ```
 
 ## Generate the GraphQL Schema
@@ -90,7 +90,7 @@ generate your domain's GraphQL schema simply run
 `make <domain>-sdl`.  For example, for the manufacturing domain:
 
 ```bash
-make manufacturing-sdl
+gmake manufacturing-sdl
 ```
 
 ## GraphQL Playground
