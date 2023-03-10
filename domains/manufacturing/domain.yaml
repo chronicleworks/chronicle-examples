@@ -1,4 +1,4 @@
-name: "manufacturing"
+name: Manufacturing
 attributes:
   BatchID:
     type: String

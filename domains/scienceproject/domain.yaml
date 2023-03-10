@@ -1,4 +1,4 @@
-name: "scienceproject"
+name: Scienceproject
 agents:
   Student:
     attributes:
