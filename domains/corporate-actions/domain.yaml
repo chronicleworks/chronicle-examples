@@ -1,4 +1,4 @@
-name: "corpactions"
+name: Corpactions
 attributes:
   ExDate:
     type: String

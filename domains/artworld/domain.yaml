@@ -1,17 +1,17 @@
-name: "artworld"
+name: Artworld
 attributes:
   Title:
-    type: "String"
+    type: String
   Location:
-    type: "String"
+    type: String
   PurchaseValue:
-    type: "String"
+    type: String
   PurchaseValueCurrency:
-    type: "String"
+    type: String
   Description:
-    type: "String"
+    type: String
   Name:
-    type: "String"
+    type: String
 agents:
   Collector:
     attributes:
