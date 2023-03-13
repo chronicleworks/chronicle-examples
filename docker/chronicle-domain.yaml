@@ -1,0 +1,37 @@
+---
+version: "3.9"
+services:
+  chronicle-pg:
+    environment:
+      - POSTGRES_DB=chronicle
+      - POSTGRES_USER=chronicle
+      - POSTGRES_PASSWORD=chronicle
+    image: postgres:13.9-alpine
+    ports:
+      - "5432:5432"
+
+  domain:
+    environment:
+      - RUST_BACKTRACE=full
+      - RUST_LOG=trace
+      - PGHOST=chronicle-pg
+      - PGPASSWORD=chronicle
+      - PGUSER=chronicle
+    image: &chronicleImage ${CHRONICLE_IMAGE}:${CHRONICLE_VERSION}
+    entrypoint: "/bin/bash"
+    command:
+      - -exc
+      - |
+        sleep 10 && \
+        /usr/local/bin/chronicle \
+        --console-logging pretty \
+        --remote-database \
+        serve-graphql \
+        --interface 0.0.0.0:9982 \
+        --open
+    expose:
+      - 9982
+    ports:
+      - "9982:9982"
+    depends_on:
+      - chronicle-pg

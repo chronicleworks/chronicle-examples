@@ -146,11 +146,7 @@ $(1)-sdl: domains/$(1)/chronicle.graphql
 
 .PHONY: run-$(1)
 run-$(1): $(1)-inmem
-	docker run -it -e RUST_LOG=debug -p 9982:9982 --rm \
-		chronicle-$(1)-inmem:$(ISOLATION_ID) \
-			--console-logging pretty \
-			--embedded-database \
-			serve-graphql --interface 0.0.0.0:9982 --open
+	CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
 
 .PHONY: run-stl-$(1)
 run-stl-$(1): $(1)-stl
