@@ -146,7 +146,7 @@ $(1)-sdl: domains/$(1)/chronicle.graphql
 
 .PHONY: run-$(1)
 run-$(1): $(1)-inmem
-	CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
+	-CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
 
 .PHONY: run-stl-$(1)
 run-stl-$(1): $(1)-stl
