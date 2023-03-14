@@ -25,7 +25,6 @@ git clone https://github.com/btpworks/chronicle-examples.git
 This contains several example domain yaml files, and Docker uses
 `blockchaintp/chronicle-builder:BTP2.1.0-0.6.0` as the builder image by default
 
-
 ## Build a Domain
 
 Choose from one of the following examples:
@@ -41,46 +40,20 @@ for `manufacturing` in the following instructions.
 
 ### Run a Standalone Node
 
-Now you can run up a standalone version of Chronicle which is a single node with
-a local database rather than backed by a blockchain.
+You can run up a standalone version of Chronicle which is a single node with a
+local database rather than backed by a blockchain.
 
 ```bash
 gmake run-manufacturing
 ```
-
-Now that you have built and run your Chronicle example, the terminal will
-prompt you for configuration settings. You can just press Enter to answer with
-defaults. You should then see something like this in your terminal:
-
-```bash
-$ gmake run-manufacturing
-docker run --env RUST_LOG=debug --publish 9982:9982 -it chronicle-manufacturing-inmem:local --console-logging pretty serve-graphql --interface 0.0.0.0:9982 --open
-No configuration found at /root/.chronicle/config.toml, create? (Y/n)
-Where should chronicle store state? (/root/.chronicle/store)
-Where should chronicle store secrets? (/root/.chronicle/secrets)
-What is the address of the sawtooth validator zeromq service? (tcp://localhost:4004)
-Generate a new default key in the secret store? (Y/n)
-Creating config dir /root/.chronicle/config.toml if needed
-Creating db dir /root/.chronicle/store if needed
-Creating secret dir /root/.chronicle/secrets if needed
-Writing config to /root/.chronicle/config.toml
-
-[secrets]
-path = "/root/.chronicle/secrets"
-[store]
-path = "/root/.chronicle/store"
-[validator]
-address = "tcp://localhost:4004"
-[namespace_bindings]
-```
-
-Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
 
 ### Build the Container Images
 
 ```bash
 gmake clean manufacturing
 ```
+
+Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
 
 ## Generate the GraphQL Schema
 
