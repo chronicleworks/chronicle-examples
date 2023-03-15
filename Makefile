@@ -31,6 +31,10 @@ DOCKER_TAG := docker tag
 .PHONY: clean_docker
 clean_docker: clean
 	docker buildx rm ctx-$(ISOLATION_ID) || true
+	docker buildx rm ctx-$(ISOLATION_ID)-id || true
+	docker buildx rm ctx-$(ISOLATION_ID)-ir || true
+	docker buildx rm ctx-$(ISOLATION_ID)-sd || true
+	docker buildx rm ctx-$(ISOLATION_ID)-sr || true
 
 define domain_tmpl =
 .PHONY: all-domains
@@ -42,11 +46,11 @@ inmem: $(1)-inmem
 .PHONY: stl
 stl: $(1)-stl
 
-$(1): $(1)-inmem $(1)-sdl $(1)-sdl $(1)-diagrams
+$(1): $(1)-inmem $(1)-stl $(1)-sdl $(1)-diagrams
 
-$(1)-inmem: $(1)-inmem $(1)-inmem-release
+$(1)-inmem: $(1)-inmem-debug $(1)-inmem-release
 
-$(1)-stl: $(1)-stl $(1)-stl-release
+$(1)-stl: $(1)-stl-debug $(1)-stl-release
 
 $(1)-diagrams:
 ifeq (,$(shell command -v plantuml))
@@ -63,20 +67,48 @@ $(1)-lint:
 	            --entrypoint /usr/local/bin/chronicle-domain-lint --rm \
 	            $(CHRONICLE_BUILDER_IMAGE):$(CHRONICLE_VERSION) /mnt/domain.yaml
 
-.PHONY: $(MARKERS)/ensure-context-$(1)
-$(MARKERS)/ensure-context-$(1): $(MARKERS)
-	docker buildx create --name ctx-$(ISOLATION_ID) \
+.PHONY: $(MARKERS)/ensure-context-$(1)-inmem-debug
+$(MARKERS)/ensure-context-$(1)-inmem-debug: $(MARKERS)
+	docker buildx create --name ctx-$(ISOLATION_ID)-id \
 		--driver docker-container \
 		--driver-opt network=host \
 		--bootstrap || true
-	docker buildx use ctx-$(ISOLATION_ID)
-	touch $(MARKERS)/ensure-context-$(1)
+	docker buildx use ctx-$(ISOLATION_ID)-id
+	touch $(MARKERS)/ensure-context-$(1)-inmem-debug
+
+.PHONY: $(MARKERS)/ensure-context-$(1)-stl-debug
+$(MARKERS)/ensure-context-$(1)-stl-debug: $(MARKERS)
+	docker buildx create --name ctx-$(ISOLATION_ID)-sd \
+		--driver docker-container \
+		--driver-opt network=host \
+		--bootstrap || true
+	docker buildx use ctx-$(ISOLATION_ID)-sd
+	touch $(MARKERS)/ensure-context-$(1)-stl-debug
+
+.PHONY: $(MARKERS)/ensure-context-$(1)-inmem-release
+$(MARKERS)/ensure-context-$(1)-inmem-release: $(MARKERS)
+	docker buildx create --name ctx-$(ISOLATION_ID)-ir \
+		--driver docker-container \
+		--driver-opt network=host \
+		--bootstrap || true
+	docker buildx use ctx-$(ISOLATION_ID)-ir
+	touch $(MARKERS)/ensure-context-$(1)-inmem-release
+
+.PHONY: $(MARKERS)/ensure-context-$(1)-stl-release
+$(MARKERS)/ensure-context-$(1)-stl-release: $(MARKERS)
+	docker buildx create --name ctx-$(ISOLATION_ID)-sr \
+		--driver docker-container \
+		--driver-opt network=host \
+		--bootstrap || true
+	docker buildx use ctx-$(ISOLATION_ID)-sr
+	touch $(MARKERS)/ensure-context-$(1)-stl-release
+
 
 .PHONY: ($1)-inmem
-$(1)-inmem: $(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
+$(1)-inmem-debug: $(MARKERS)/ensure-context-$(1)-inmem-debug domains/$(1)/domain.yaml $(1)-lint
 	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
 	$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
-		--builder ctx-$(ISOLATION_ID) \
+		--builder ctx-$(ISOLATION_ID)-id \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -88,10 +120,10 @@ $(1)-inmem: $(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
 		chronicle-$(1)-inmem:$(ISOLATION_ID)
 
 .PHONY: $(1)-stl
-$(1)-stl:$(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
+$(1)-stl-debug:$(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml $(1)-lint
 	@echo "Building $(1) debug chronicle stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
-		--builder ctx-$(ISOLATION_ID) \
+		--builder ctx-$(ISOLATION_ID)-sd \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -103,10 +135,10 @@ $(1)-stl:$(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
 		chronicle-$(1)-stl:$(ISOLATION_ID)
 
 .PHONY: $(1)-inmem-release
-$(1)-inmem-release: $(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
+$(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/domain.yaml $(1)-lint
 	@echo "Building $(1) release inmem as docker image chronicle-$(1)-inmem-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
-		--builder ctx-$(ISOLATION_ID) \
+		--builder ctx-$(ISOLATION_ID)-ir \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -118,10 +150,10 @@ $(1)-inmem-release: $(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)
 		chronicle-$(1)-inmem-release:$(ISOLATION_ID)
 
 .PHONY: $(1)-stl-release
-$(1)-stl-release: $(MARKERS)/ensure-context-$(1) domains/$(1)/domain.yaml $(1)-lint
+$(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain.yaml $(1)-lint
 	@echo "Building $(1) release chronicle stl  as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
-		--builder ctx-$(ISOLATION_ID) \
+		--builder ctx-$(ISOLATION_ID)-sr \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -145,11 +177,11 @@ clean-graphql-$(1):
 $(1)-sdl: domains/$(1)/chronicle.graphql
 
 .PHONY: run-$(1)
-run-$(1): $(1)-inmem
+run-$(1): $(1)-inmem-debug
 	-CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
 
 .PHONY: run-stl-$(1)
-run-stl-$(1): $(1)-stl
+run-stl-$(1): $(1)-stl-debug
 	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
@@ -157,21 +189,13 @@ run-stl-$(1): $(1)-stl
 	$(DOCKER_COMPOSE) -f docker/chronicle.yaml up --force-recreate -d
 
 .PHONY: stop-stl-$(1)
-stop-stl-$(1): $(1)-stl
+stop-stl-$(1): $(1)-stl-debug
 	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
 	export CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION); \
 	$(DOCKER_COMPOSE) -f docker/chronicle.yaml down
 
-.PHONY: build-end-to-end-test
-build-end-to-end-test:
-	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
-
-.PHONY: test-e2e
-test-e2e: build-end-to-end-test
-	COMPOSE_PROFILES=test CHRONICLE_IMAGE=chronicle-evidence-stl CHRONICLE_VERSION=$(ISOLATION_ID) \
-	 $(COMPOSE) -f docker/chronicle.yaml up --exit-code-from chronicle-test
 
 .PHONY: clean-images-$(1)
 clean-images-$(1): $(MARKERS)
@@ -188,6 +212,16 @@ clean-$(1): clean-images-$(1) clean-graphql-$(1)
 clean: clean-$(1)
 
 endef
+
+
+.PHONY: test-e2e
+test-e2e: build-end-to-end-test
+	COMPOSE_PROFILES=test CHRONICLE_IMAGE=chronicle-evidence-stl CHRONICLE_VERSION=$(ISOLATION_ID) \
+	 $(COMPOSE) -f docker/chronicle.yaml up --exit-code-from chronicle-test
+
+.PHONY: build-end-to-end-test
+build-end-to-end-test:
+	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
 
 test:
 

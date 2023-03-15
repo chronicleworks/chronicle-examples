@@ -4,6 +4,7 @@ markers
 site
 out
 docs
+build
 bin
 .git
 .buildx-cache
@@ -235,3 +236,9 @@ typings/
 
 # Project local
 **/*.env
+
+docker/**/*.dockerfile
+docker/**/*.yaml
+Jenkinsfile
+Makefile
+domains/**/chronicle.graphql
