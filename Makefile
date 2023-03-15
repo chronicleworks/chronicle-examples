@@ -67,6 +67,8 @@ $(1)-lint:
 	            --entrypoint /usr/local/bin/chronicle-domain-lint --rm \
 	            $(CHRONICLE_BUILDER_IMAGE):$(CHRONICLE_VERSION) /mnt/domain.yaml
 
+lint: $(1)-lint
+
 .PHONY: $(MARKERS)/ensure-context-$(1)-inmem-debug
 $(MARKERS)/ensure-context-$(1)-inmem-debug: $(MARKERS)
 	docker buildx create --name ctx-$(ISOLATION_ID)-id \
@@ -213,15 +215,18 @@ clean: clean-$(1)
 
 endef
 
+.PHONY: build-end-to-end-test
+build-end-to-end-test: artworld-stl-release
+	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
 
 .PHONY: test-e2e
 test-e2e: build-end-to-end-test
-	COMPOSE_PROFILES=test CHRONICLE_IMAGE=chronicle-evidence-stl CHRONICLE_VERSION=$(ISOLATION_ID) \
-	 $(COMPOSE) -f docker/chronicle.yaml up --exit-code-from chronicle-test
-
-.PHONY: build-end-to-end-test
-build-end-to-end-test:
-	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
+	COMPOSE_PROFILES=test \
+	CHRONICLE_IMAGE=chronicle-artworld-stl-release \
+	CHRONICLE_VERSION=$(ISOLATION_ID) \
+	CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE) \
+	CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION) \
+	 $(DOCKER_COMPOSE) -f docker/chronicle.yaml up --exit-code-from chronicle-test
 
 test:
 
