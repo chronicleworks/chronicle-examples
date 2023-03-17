@@ -47,53 +47,59 @@ local database rather than backed by a blockchain.
 gmake run-manufacturing
 ```
 
-### Build the Container Images
-
-```bash
-gmake clean manufacturing
-```
-
-Now you are ready to connect to the [GraphQL Playground](#graphql-playground).
+Now you are ready to connect to a GraphQL client, such as the
+[Altair GraphQL Client](#graphql-client).
 
 ## Generate the GraphQL Schema
 
-Integration with Chronicle is done primarily via GraphQL. The GraphQL schema is
-particular to the domain and is generated from the `domain.yaml` file. To
-generate your domain's GraphQL schema simply run
-`make <domain>-sdl`.  For example, for the manufacturing domain:
+Integration with Chronicle is primarily done through GraphQL. The GraphQL schema
+is specific to the domain and is generated from the domain.yaml file. To generate
+the GraphQL schema for your domain, simply run `gmake <domain>-sdl`. For example,
+for the manufacturing domain:
 
 ```bash
 gmake manufacturing-sdl
 ```
 
-## GraphQL Playground
+## GraphQL Client
 
-The [GraphQL playground](https://github.com/graphql/graphql-playground) is built
-into Chronicle, and served on the same port as the Chronicle API. Therefore you
-should be able to connect to it on <http://127.0.0.1:9982>, assuming that you
-are running locally.
+Chronicle Examples use Chronicle's `serve-graphql` function to provide the
+Chronicle GraphQL API. By using a GraphQL client, you can interact with Chronicle
+by running GraphQL queries, mutations, and subscriptions.
 
-The GraphQL playground is persistent via cookies etc, so running the same
+We recommend using the [Altair GraphQL Client](https://altairgraphql.dev/),
+which is available as a free desktop GraphQL IDE or web browser extension.
+
+If you have previously used Chronicle Examples, you can still access the
+[GraphQL Playground](https://github.com/graphql/graphql-playground) through your
+web browser at <http://127.0.0.1:9982>, however we will be deprecating support
+for GraphQL Playground in future releases.
+
+Both of these GraphQL clients are persistent via cookies, so running the same
 browser on the same machine will remember all your queries and tab positions.
 
 To add a new mutation or query tab, there is a `+` on the right-hand side of the
 tab bar.
 
 Once you get to this point, you are ready to explore the example. To do this,
-consult the relevant guide.
+refer to the relevant guide.
 
 ### Notes
 
-The *SCHEMA* and *DOCS* tabs are good for showing the relationship between
-your `domain.yaml` config and the resulting Chronicle API.
+If you are using Chronicle on default settings, point the GraphQL client to
+<http://127.0.0.1:9982>.
 
-Shift-refresh on the playground will remove previous result from query tabs,
-good to do before rerunning your example.
+The *SCHEMA* and *DOCS* tabs are useful for showing the relationship between
+your `domain.yaml` configuration and the resulting Chronicle API.
+
+Shift-refresh on the playground will remove previous results from query tabs,
+which is recommended before rerunning your example.
 
 ### Subscribe to Events
 
-Finally, to see what is happening in the playground you can subscribe to events
-in one of the tabs.
+Finally, to see what is happening as you run GraphQL mutations and queries, you
+can subscribe to events in one of the tabs by using the subscription URL
+<ws://localhost:9982/ws>.
 
 ```graphql
 subscription {
