@@ -244,16 +244,16 @@ which will then embark on the following activities:
 
 1. A `SplitAnnounced` activity to record that the company announces a stock split.
 
-1. A `ShareholdingUpdated` activity to record that the `TransferAgent`, acting on behalf
-   of the company, updated the investor's `Shareholding`.
+1. A `ShareholdingUpdated` activity to record that the `TransferAgent`, acting on
+   behalf of the company, updated the investor's `Shareholding`.
 
 ### Record Agents
 
 ```graphql
 mutation defineAgents {
   defineCompanyAgent(
-    externalId: "FTXCorp"
-    attributes: { nameAttribute: "FTXCorp", locationAttribute: "Bahamas" }
+    externalId: "AcmeCorp"
+    attributes: { nameAttribute: "AcmeCorp", locationAttribute: "Bahamas" }
   ) {
     context
     txId
@@ -281,7 +281,7 @@ The output should look something like this -
 {
   "data": {
     "defineCompanyAgent": {
-      "context": "chronicle:agent:FTXCorp",
+      "context": "chronicle:agent:AcmeCorp",
       "txId": "412701fd-9b4c-480b-a264-f6b05027704f"
     },
     "definePersonAgent": {
@@ -298,25 +298,25 @@ The output should look something like this -
 
 ### Record a ShareholdingAcquiredActivity
 
-Here we define the activity and the roles of the company as the `ISSUER` and the individual
-investor as the `SHAREHOLDER`.
+Here we define the activity and the roles of the company as the `ISSUER` and the
+individual investor as the `SHAREHOLDER`.
 
 ```graphql
 mutation defineShareholdingAcquisition {
-  defineShareholdingAcquiredActivity(externalId: "ShareholdingAcquired") {
+  defineShareholdingAcquiredActivity(externalId: "Acme-Shareholding-001") {
     context
     txId
   }
   company: wasAssociatedWith(
-    activity: { externalId: "ShareholdingAcquired" }
-    responsible: { externalId: "FTXCorp" }
+    activity: { externalId: "Acme-Shareholding-001" }
+    responsible: { externalId: "AcmeCorp" }
     role: ISSUER
   ) {
     context
     txId
   }
   shareholder: wasAssociatedWith(
-    activity: { externalId: "ShareholdingAcquired" }
+    activity: { externalId: "Acme-Shareholding-001" }
     responsible: { externalId: "NinjaCsilla" }
     role: SHAREHOLDER
   ) {
@@ -332,11 +332,11 @@ The output should look something like this -
 {
   "data": {
     "defineShareholdingAcquiredActivity": {
-      "context": "chronicle:activity:ShareholdingAcquired",
+      "context": "chronicle:activity:Acme-Shareholding-001",
       "txId": "0e4070cd-a096-4e60-93ec-3b4434999a9c"
     },
     "company": {
-      "context": "chronicle:agent:FTXCorp",
+      "context": "chronicle:agent:AcmeCorp",
       "txId": "f885d54a-b74f-41ce-a6ae-6907f0008c2a"
     },
     "shareholder": {
@@ -349,12 +349,13 @@ The output should look something like this -
 
 ### Record the Execution of the ShareholdingAcquiredActivity
 
-Here we record the instantaneous execution of a shareholding acquisition along with the
-details of the shareholding, in this case 100 shares each with a nominal value of $1.00.
+Here we record the instantaneous execution of a shareholding acquisition along with
+the details of the shareholding, in this case 100 shares each with a nominal value
+of $1.00.
 
 ```graphql
 mutation recordShareholdingAcquisition {
-  instantActivity(id: { externalId: "ShareholdingAcquired" }) {
+  instantActivity(id: { externalId: "Acme-Shareholding-001" }) {
     context
     txId
   }
@@ -366,7 +367,7 @@ mutation recordShareholdingAcquisition {
   }
   wasGeneratedBy(
     id: { externalId: "Shareholding" }
-    activity: { externalId: "ShareholdingAcquired" }
+    activity: { externalId: "Acme-Shareholding-001" }
   ) {
     context
     txId
@@ -380,7 +381,7 @@ The output should look something like this -
 {
   "data": {
     "instantActivity": {
-      "context": "chronicle:activity:ShareholdingAcquired",
+      "context": "chronicle:activity:Acme-Shareholding-001",
       "txId": "4ac7acad-d92e-41dc-9afc-9b0a10263fc8"
     },
     "defineShareHoldingEntity": {
@@ -409,7 +410,7 @@ mutation defineSplitAnnouncement {
   }
   wasAssociatedWith(
     activity: { externalId: "SplitAnnounced" }
-    responsible: { externalId: "FTXCorp" }
+    responsible: { externalId: "AcmeCorp" }
     role: ISSUER
   ) {
     context
@@ -428,7 +429,7 @@ The output should look something like this -
       "txId": "7df145b2-1ae9-4fc3-94fd-350c0cc6c91f"
     },
     "wasAssociatedWith": {
-      "context": "chronicle:agent:FTXCorp",
+      "context": "chronicle:agent:AcmeCorp",
       "txId": "8f26649f-292c-4470-a8c7-aa1224579564"
     }
   }
@@ -437,8 +438,8 @@ The output should look something like this -
 
 ### Record the Execution of the SplitAnnouncedActivity
 
-Here we record the instantaneous execution of a stock split announcement along with the
-details of the stock split, in this case 2:1.
+Here we record the instantaneous execution of a stock split announcement along with
+the details of the stock split, in this case 2:1.
 
 ```graphql
 mutation recordSplitAnnouncement {
@@ -494,9 +495,8 @@ The output should look something like this -
 ### Record the ShareholdingUpdatedActivity
 
 Here we define the activity, the role of the transfer agent as the `REGISTRAR`, the
-fact that it is acting on behalf of the company as its `REGISTRAR`, and the fact that
-it uses both the original shareholding and the announcement.
-
+fact that it is acting on behalf of the company as its `REGISTRAR`, and the fact
+that it uses both the original shareholding and the announcement.
 
 ```graphql
 mutation defineShareholdingUpdate {
@@ -525,7 +525,7 @@ mutation defineShareholdingUpdate {
     context
   }
   actedOnBehalfOf(
-    responsible: { externalId: "FTXCorp" }
+    responsible: { externalId: "AcmeCorp" }
     activity: { externalId: "ShareholdingUpdated" }
     delegate: { externalId: "Bank" }
     role: REGISTRAR
@@ -556,7 +556,7 @@ The output should look something like this -
       "context": "chronicle:entity:Shareholding"
     },
     "actedOnBehalfOf": {
-      "context": "chronicle:agent:FTXCorp",
+      "context": "chronicle:agent:AcmeCorp",
       "txId": "45d4187c-f19c-4daf-b7a8-7dc8976d8590"
     }
   }
@@ -688,7 +688,7 @@ Here are the results of the timeline query:
         },
         {
           "__typename": "ShareholdingAcquiredActivity",
-          "id": "chronicle:activity:ShareholdingAcquired",
+          "id": "chronicle:activity:Acme-Shareholding-001",
           "wasAssociatedWith": [
             {
               "responsible": {
