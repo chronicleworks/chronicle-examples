@@ -1,6 +1,0 @@
-abstract Announcement {
-    + ratio
-    + recordDate
-    + payDate
-    + exDate
-}

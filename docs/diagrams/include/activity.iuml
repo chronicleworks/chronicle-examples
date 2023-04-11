@@ -1,6 +1,0 @@
-abstract activity {
-    + id
-    + externalId
-    + startedAtTime
-    + endedAtTime
-}
