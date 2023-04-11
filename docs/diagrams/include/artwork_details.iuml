@@ -1,4 +1,0 @@
-abstract ArtworkDetails {
-    + title
-    + description
-}
