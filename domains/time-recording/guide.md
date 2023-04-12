@@ -904,10 +904,10 @@ The search results come back as,
         "wasAssociatedWith": [
           {
             "responsible": {
-              "role": "ADMINISTRATOR",
+              "role": "SUPERVISOR",
               "agent": {
-                "externalId": "staff-3150",
-                "nameAttribute": "Suzanne Modeski"
+                "externalId": "staff-3621",
+                "nameAttribute": "Roland Fuller"
               }
             }
           }
@@ -934,10 +934,10 @@ The search results come back as,
 }
 ```
 
-where Duane's initial timesheet was approved by Roland, their supervisor.
-Subsequently, their revised timesheet was approved by Suzanne in their role as
-administrator. Let us check that Suzanne was acting on Roland's behalf in
-that,
+where Duane's initial timesheet was approved by Roland, their supervisor. As
+shown above, Roland was also _responsible_ for approving Duane's revised
+timesheet. However, we can check that, in Suzanne's role as administrator,
+they approved it on Roland's behalf as their _delegate_,
 
 ```graphql
 {
