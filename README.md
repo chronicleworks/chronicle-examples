@@ -2,7 +2,7 @@
 
 This repo serves as a base for setting up your own Chronicle domain.
 
-It contains the structure and Makefile which can be used to build docker
+It contains the structure and `Makefile` which can be used to build docker
 images and run a local instance of Chronicle.
 
 It does not contain an example domain, however if you would like to test it,
