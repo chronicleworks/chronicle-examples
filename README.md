@@ -34,11 +34,10 @@ repository which you can use for reference.
    *Please note, if you download or copy the repo rather than cloning it,
    you will need to make sure you keep it up to date with the latest Chronicle
    releases in the future.*
-1. Add your domain.yaml file in its own directory inside the
-   `domains` directory. Both the name of the directory and the name of the yaml
-   file should be the same as the name of your domain.
-   For example, if your domain is called `manufacturing`, you would
-   create `domains/manufacturing/manufacturing.yaml`
+1. Add your `domain.yaml` file in its own directory inside the `domains`
+   directory. The name of its directory should be the name of your domain. For
+   example, if your domain is called `manufacturing`, you would create
+   `domains/manufacturing/domain.yaml`.
 
 ## Running your domain
 
