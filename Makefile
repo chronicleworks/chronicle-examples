@@ -221,12 +221,11 @@ build-end-to-end-test: artworld-stl-release
 
 .PHONY: test-e2e
 test-e2e: build-end-to-end-test
-	COMPOSE_PROFILES=test \
 	CHRONICLE_IMAGE=chronicle-artworld-stl-release \
 	CHRONICLE_VERSION=$(ISOLATION_ID) \
 	CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE) \
 	CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION) \
-	 $(DOCKER_COMPOSE) -f docker/chronicle.yaml up --exit-code-from chronicle-test
+	 $(DOCKER_COMPOSE) -f docker/chronicle-test.yaml up --exit-code-from chronicle-test
 
 test:
 
