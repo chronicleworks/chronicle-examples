@@ -10,7 +10,7 @@ Chronicle in general may be found [here](https://docs.btp.works/chronicle/).
 To get started, there are some basic prerequisites which must be installed:
 
 * [Docker](https://docs.docker.com/install/)
-* [Docker Compose v2+](https://docs.docker.com/compose/install/)
+* [Docker Compose](https://docs.docker.com/compose/install/)
 * [GNU Make v4.0+](https://www.gnu.org/software/make/)
 
 In addition, a working knowledge of GraphQL is assumed. If you are new to this,
