@@ -19,6 +19,8 @@ CLEAN_DIRS := $(CLEAN_DIRS)
 DOMAINS := $(shell find . -mindepth 3 -maxdepth 3 -name domain.yaml \
 	-exec dirname {} \; | awk -F/ '{print $$NF}')
 
+TEST_DOMAIN := $(word $(shell echo | awk '{print 1+int(rand()*$(words $(DOMAINS)))}'), $(DOMAINS))
+
 distclean: clean_docker clean_markers
 
 $(MARKERS):
@@ -216,12 +218,12 @@ clean: clean-$(1)
 endef
 
 .PHONY: build-end-to-end-test
-build-end-to-end-test: artworld-stl-release
+build-end-to-end-test: $(TEST_DOMAIN)-stl-release
 	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
 
 .PHONY: test-e2e
 test-e2e: build-end-to-end-test
-	CHRONICLE_IMAGE=chronicle-artworld-stl-release \
+	CHRONICLE_IMAGE=chronicle-$(TEST_DOMAIN)-stl-release \
 	CHRONICLE_VERSION=$(ISOLATION_ID) \
 	CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE) \
 	CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION) \
