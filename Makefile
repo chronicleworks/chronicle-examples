@@ -242,8 +242,9 @@ build-end-to-end-test: $(TEST_DOMAIN)-stl-release
 	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
 
 .PHONY: test-e2e
-test-e2e: policies/bundle.tar.gz build-end-to-end-test
-	CHRONICLE_IMAGE=chronicle-$(TEST_DOMAIN)-stl-release \
+
+test-e2e: build-end-to-end-test
+	CHRONICLE_IMAGE=chronicle-artworld-stl-release \
 	CHRONICLE_VERSION=$(ISOLATION_ID) \
 	CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE) \
 	CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION) \

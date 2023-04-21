@@ -24,7 +24,7 @@ RUN if [ "${RELEASE}" = "yes" ]; then \
 FROM cache as builder
 ARG RELEASE=no
 ARG FEATURES=""
-ARG DOMAIN=artworld
+ARG DOMAIN
 
 COPY domains/${DOMAIN}/domain.yaml crates/chronicle-domain/domain.yaml
 RUN /usr/local/bin/chronicle-domain-lint crates/chronicle-domain/domain.yaml
