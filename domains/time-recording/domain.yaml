@@ -2,8 +2,6 @@ name: Time Recording
 attributes:
   Name:
     type: String
-  Task:
-    type: String
   Reason:
     type: String
 agents:
