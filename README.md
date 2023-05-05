@@ -23,7 +23,7 @@ git clone https://github.com/btpworks/chronicle-examples.git
 ```
 
 This contains several example domain yaml files, and Docker uses
-`blockchaintp/chronicle-builder:BTP2.1.0-0.6.0` as the builder image by default
+`blockchaintp/chronicle-builder:BTP2.1.0-0.6.1` as the builder image by default
 
 ## Build a Domain
 
