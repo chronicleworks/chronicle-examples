@@ -8,7 +8,7 @@ ARCH_TYPE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 HOST_ARCHITECTURE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder-$(ARCH_TYPE)
 CHRONICLE_TP_IMAGE ?= blockchaintp/chronicle-tp-$(ARCH_TYPE)
-CHRONICLE_VERSION ?= BTP2.1.0-0.6.1
+CHRONICLE_VERSION ?= BTP2.1.0-0.6.2
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
