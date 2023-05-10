@@ -72,8 +72,9 @@ which is available as a free desktop GraphQL IDE or web browser extension.
 
 If you have previously used Chronicle Examples, you can still access the
 [GraphQL Playground](https://github.com/graphql/graphql-playground) through your
-web browser at <http://127.0.0.1:9982>, however we will be deprecating support
-for GraphQL Playground in future releases.
+web browser at <http://127.0.0.1:9982> but the feature is now deprecated. In a
+future release of Chronicle Examples, GraphQL Playground will no longer be
+available.
 
 Both of these GraphQL clients are persistent via cookies, so running the same
 browser on the same machine will remember all your queries and tab positions.
