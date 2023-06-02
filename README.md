@@ -35,13 +35,16 @@ Choose from one of the following examples:
 * [Time Recording](./domains/time-recording/guide)
 
 For the purposes of these instructions we will use the `manufacturing` domain,
-but any domain will work.  Simply substitute the name of the domain's directory
-for `manufacturing` in the following instructions.
+but any domain will work. Simply substitute the name of the domain's directory
+for `manufacturing` in the following instructions. For the other listed
+domains, instead substitute `artworld`, `corporate-actions`, or
+`time-recording`, as desired.
 
 ### Run a Standalone Node
 
 You can run up a standalone version of Chronicle which is a single node with a
-local database rather than backed by a blockchain.
+local database, recording transactions on an in-memory ledger rather than a
+blockchain.
 
 ```bash
 gmake run-manufacturing
@@ -49,6 +52,60 @@ gmake run-manufacturing
 
 Now you are ready to connect to a GraphQL client, such as the
 [Altair GraphQL Client](#graphql-client).
+
+To stop this node, simply use control-C or otherwise terminate the process.
+
+### Run a Sawtooth-Backed Node
+
+You can also run up a standalone node that, while still a single node with a
+local database, also includes a local Sawtooth node whose validator is used
+for recording transactions on a blockchain:
+
+```bash
+gmake run-stl-manufacturing
+```
+
+To stop this node, a further command shuts it down:
+
+```bash
+gmake stop-stl-manufacturing
+```
+
+### Deploy to a Cluster
+
+Rather than running a live Chronicle node locally, you may build an image that
+is ready for deployment on a cluster with the help of the
+[Chronicle cookbook](https://docs.btp.works/cookbooks/chronicle/rancher).
+Options to decide on are:
+
+- Which domain example to build.
+
+- `inmem` for the in-memory ledger or `stl` for blockchain deployment on
+  Sawtooth.
+
+- `debug` for a debug build or `release` for a release build. The release
+  build includes less debug information and takes longer to build but is
+  more performant.
+
+For example, for a debug build of the manufacturing domain with an in-memory
+ledger,
+```bash
+gmake manufacturing-inmem-debug
+```
+or a release build that is to be backed by Sawtooth,
+```
+gmake manufacturing-stl-release
+```
+
+As above, the name of any of the other listed domains may be substituted for
+`manufacturing`.
+
+After the build, `docker image ls` should show the built image that can then
+be pushed to the appropriate registry for installation.
+
+By default, the images are given tags like, say,
+`chronicle-manufacturing-stl-release:local`. A value other than `local` can
+be set in the `ISOLATION_ID` environment variable prior to build.
 
 ## Generate the GraphQL Schema
 
@@ -104,6 +161,8 @@ can subscribe to events in one of the tabs by using the subscription URL
 ```graphql
 subscription {
   commitNotifications {
+    stage
+    error
     delta
   }
 }
