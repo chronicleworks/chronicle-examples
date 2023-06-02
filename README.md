@@ -42,8 +42,10 @@ domains, instead substitute `artworld`, `corporate-actions`, or
 
 ### Run a Standalone Node
 
-You can run up a standalone version of Chronicle which is a single node with a
-local database, recording transactions on an in-memory ledger rather than a
+#### In-Memory Ledger
+
+You can run up a version of Chronicle which is a single node with a local
+database, recording transactions on an in-memory ledger rather than a
 blockchain.
 
 ```bash
@@ -55,11 +57,12 @@ Now you are ready to connect to a GraphQL client, such as the
 
 To stop this node, simply use control-C or otherwise terminate the process.
 
-### Run a Sawtooth-Backed Node
+#### Backed by Sawtooth
 
 You can also run up a standalone node that, while still a single node with a
 local database, also includes a local Sawtooth node whose validator is used
-for recording transactions on a blockchain:
+by Chronicle's transaction processor for recording transactions on a
+blockchain:
 
 ```bash
 gmake run-stl-manufacturing
@@ -71,28 +74,25 @@ To stop this node, a further command shuts it down:
 gmake stop-stl-manufacturing
 ```
 
-### Deploy to a Cluster
+### Deploy to a Chronicle-on-Sawtooth Environment
 
-Rather than running a live Chronicle node locally, you may build an image that
-is ready for deployment on a cluster with the help of the
+Rather than running a live Chronicle node locally, you may build a typed
+Chronicle image that is ready for deployment into an environment with Sawtooth
+nodes using the
 [Chronicle cookbook](https://docs.btp.works/cookbooks/chronicle/rancher).
-Options to decide on are:
+Options to decide on include:
 
-- Which domain example to build.
-
-- `inmem` for the in-memory ledger or `stl` for blockchain deployment on
-  Sawtooth.
+- Which domain example to build for Chronicle's typing.
 
 - `debug` for a debug build or `release` for a release build. The release
   build includes less debug information and takes longer to build but is
   more performant.
 
-For example, for a debug build of the manufacturing domain with an in-memory
-ledger,
+For example, for a debug build of the manufacturing domain,
 ```bash
-gmake manufacturing-inmem-debug
+gmake manufacturing-stl-debug
 ```
-or a release build that is to be backed by Sawtooth,
+or a release build for the same domain,
 ```
 gmake manufacturing-stl-release
 ```
@@ -100,8 +100,8 @@ gmake manufacturing-stl-release
 As above, the name of any of the other listed domains may be substituted for
 `manufacturing`.
 
-After the build, `docker image ls` should show the built image that can then
-be pushed to the appropriate registry for installation.
+After the build, running `docker image ls` should show the built image that
+can then be pushed to the appropriate registry for installation.
 
 By default, the images are given tags like, say,
 `chronicle-manufacturing-stl-release:local`. A value other than `local` can
