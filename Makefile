@@ -117,7 +117,7 @@ $(MARKERS)/ensure-context-$(1)-stl-release: $(MARKERS)
 
 .PHONY: ($1)-inmem
 $(1)-inmem-debug: $(MARKERS)/ensure-context-$(1)-inmem-debug domains/$(1)/domain.yaml $(1)-lint
-	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
+	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-$(ARCH_TYPE)-inmem:$(ISOLATION_ID)"
 	$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-id \
 		--platform linux/$(ARCH_TYPE) \
@@ -129,11 +129,11 @@ $(1)-inmem-debug: $(MARKERS)/ensure-context-$(1)-inmem-debug domains/$(1)/domain
 		--build-arg DOMAIN=$(1) . \
 		--load
 	@$(DOCKER_TAG) chronicle-domain:$(ISOLATION_ID) \
-		chronicle-$(1)-inmem:$(ISOLATION_ID)
+		chronicle-$(1)-$(ARCH_TYPE)-inmem:$(ISOLATION_ID)
 
 .PHONY: $(1)-stl
 $(1)-stl-debug:$(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml $(1)-lint
-	@echo "Building $(1) debug chronicle stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
+	@echo "Building $(1) debug chronicle stl as docker image as docker image chronicle-$(1)-$(ARCH_TYPE)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sd \
 		--platform linux/$(ARCH_TYPE) \
@@ -145,11 +145,11 @@ $(1)-stl-debug:$(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml
 		--build-arg DOMAIN=$(1) . \
 		--load
 	@$(DOCKER_TAG) chronicle-domain:$(ISOLATION_ID) \
-		chronicle-$(1)-stl:$(ISOLATION_ID)
+		chronicle-$(1)-$(ARCH_TYPE)-stl:$(ISOLATION_ID)
 
 .PHONY: $(1)-inmem-release
 $(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/domain.yaml $(1)-lint
-	@echo "Building $(1) release inmem as docker image chronicle-$(1)-inmem-release:$(ISOLATION_ID)"
+	@echo "Building $(1) release inmem as docker image chronicle-$(1)-$(ARCH_TYPE)-inmem-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-ir \
 		--platform linux/$(ARCH_TYPE) \
@@ -161,11 +161,11 @@ $(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/do
 		--build-arg DOMAIN=$(1) . \
 		--load
 	@$(DOCKER_TAG) chronicle-domain:$(ISOLATION_ID) \
-		chronicle-$(1)-inmem-release:$(ISOLATION_ID)
+		chronicle-$(1)-$(ARCH_TYPE)-inmem-release:$(ISOLATION_ID)
 
 .PHONY: $(1)-stl-release
 $(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain.yaml $(1)-lint
-	@echo "Building $(1) release chronicle stl  as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
+	@echo "Building $(1) release chronicle stl  as docker image chronicle-$(1)-$(ARCH_TYPE)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sr \
 		--platform linux/$(ARCH_TYPE) \
@@ -177,11 +177,11 @@ $(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain
 		--build-arg DOMAIN=$(1) . \
 		--load
 	@$(DOCKER_TAG) chronicle-domain:$(ISOLATION_ID) \
-		chronicle-$(1)-stl-release:$(ISOLATION_ID)
+		chronicle-$(1)-$(ARCH_TYPE)-stl-release:$(ISOLATION_ID)
 
 domains/$(1)/chronicle.graphql: $(1)-inmem
 	@echo "Generating $(1) GraphQL schema in file: domains/$(1)/chronicle.graphql"
-	@docker run --env RUST_LOG=debug chronicle-$(1)-inmem:$(ISOLATION_ID) \
+	@docker run --env RUST_LOG=debug chronicle-$(1)-$(ARCH_TYPE)-inmem:$(ISOLATION_ID) \
 		export-schema > domains/$(1)/chronicle.graphql
 
 .PHONY: clean-graphql-$(1)
@@ -193,11 +193,11 @@ $(1)-sdl: domains/$(1)/chronicle.graphql
 
 .PHONY: run-$(1)
 run-$(1): $(1)-inmem-debug
-	-CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
+	-CHRONICLE_IMAGE=chronicle-$(1)-$(ARCH_TYPE)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
 
 .PHONY: run-stl-$(1)
 run-stl-$(1): $(1)-stl-debug
-	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
+	export CHRONICLE_IMAGE=chronicle-$(1)-$(ARCH_TYPE)-stl; \
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
 	export CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION); \
@@ -205,7 +205,7 @@ run-stl-$(1): $(1)-stl-debug
 
 .PHONY: stop-stl-$(1)
 stop-stl-$(1): $(1)-stl-debug
-	export CHRONICLE_IMAGE=chronicle-$(1)-stl; \
+	export CHRONICLE_IMAGE=chronicle-$(1)-$(ARCH_TYPE)-stl; \
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
 	export CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION); \
@@ -215,11 +215,11 @@ stop-stl-$(1): $(1)-stl-debug
 .PHONY: clean-images-$(1)
 clean-images-$(1): $(MARKERS)
 	docker buildx rm ctx-$(ISOLATION_ID) || true
-	docker rmi chronicle-$(1)-inmem:$(ISOLATION_ID) || true
-	docker rmi chronicle-$(1)-inmem-release:$(ISOLATION_ID) || true
-	docker rmi chronicle-$(1)-stl:$(ISOLATION_ID) || true
-	docker rmi chronicle-$(1)-stl-release:$(ISOLATION_ID) || true
-	docker rmi chronicle-test$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-$(ARCH_TYPE)-inmem:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-$(ARCH_TYPE)-inmem-release:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-$(ARCH_TYPE)-stl:$(ISOLATION_ID) || true
+	docker rmi chronicle-$(1)-$(ARCH_TYPE)-stl-release:$(ISOLATION_ID) || true
+	docker rmi chronicle-test:$(ISOLATION_ID) || true
 	rm -f $(MARKERS)/*-$(1)
 
 clean-$(1): clean-images-$(1) clean-graphql-$(1)

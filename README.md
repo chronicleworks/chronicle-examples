@@ -34,10 +34,10 @@ Choose from one of the following examples:
 * [Manufacturing](./domains/manufacturing/guide)
 * [Time Recording](./domains/time-recording/guide)
 
-For the purposes of these instructions we will use the `manufacturing` domain,
-but any domain will work. Simply substitute the name of the domain's directory
-for `manufacturing` in the following instructions. For the other listed
-domains, instead substitute `artworld`, `corporate-actions`, or
+For the purposes of the following instructions we will use the `manufacturing`
+domain, but any domain will work. Simply substitute the name of the domain's
+directory for `manufacturing` in the following instructions. For the other
+listed domains, instead substitute `artworld`, `corporate-actions`, or
 `time-recording`, as desired.
 
 ### Run a Standalone Node
@@ -80,39 +80,67 @@ Rather than running a live Chronicle node locally, you may build a typed
 Chronicle image that is ready for deployment into an environment with Sawtooth
 nodes using the
 [Chronicle cookbook](https://docs.btp.works/cookbooks/chronicle/rancher).
+
+#### Environment Variables
+
+* `ARCH_TYPE` defaults to the hardware platform you are building the images on and
+  determines what hardware platform you are targeting for your Chronicle image. For
+  example, if you are using a MacBook Pro with an M Series chip this defaults to
+  `arm64` so assuming you cluster is x86 it needs to be set to `amd64`.
+
+* `ISOLATION_ID` defaults to `local` which is fine when you are working locally but
+  this needs to be changed to a meaningful *TAG* when you are building an image.
+
+#### Building Chronicle Image
+
 Options to decide on include:
 
-- Which domain example to build for Chronicle's typing.
+* Which example you want to build for your Chronicle-on-Sawtooth deployment. As
+  noted previously, we will use the `manufacturing` domain here.
 
-- `debug` for a debug build or `release` for a release build. The release
-  build includes less debug information and takes longer to build but is
-  more performant.
+* What type of build: `debug` for a debug build or `release` for a release build.
+  The release build includes less debug information and takes longer to build but
+  is more performant
 
-For example, for a debug build of the manufacturing domain,
+For example, if you are using MacBook Pro with a M Series chip to create a debug
+build of the `manufacturing` domain designed to run on x86 use this command:
+
 ```bash
-gmake manufacturing-stl-debug
-```
-or a release build for the same domain,
-```
-gmake manufacturing-stl-release
+ARCH_TYPE=amd64 ISOLATION_ID=0.6.2 gmake manufacturing-stl-debug
 ```
 
-As above, the name of any of the other listed domains may be substituted for
-`manufacturing`.
+This will create an image `chronicle-manufacturing-amd64-stl:0.6.2` whereas
+to create a release build for the same domain use this command:
 
-After the build, running `docker image ls` should show the built image that
-can then be pushed to the appropriate registry for installation.
+```bash
+ARCH_TYPE=amd64 ISOLATION_ID=0.6.2 gmake manufacturing-stl-release
+```
 
-By default, the images are given tags like, say,
-`chronicle-manufacturing-stl-release:local`. A value other than `local` can
-be set in the `ISOLATION_ID` environment variable prior to build.
+This will create an image `chronicle-manufacturing-amd64-stl-release:0.6.2`.
+
+After the build, you can run the following command:
+
+```bash
+docker images | grep chronicle-manufacturing-stl
+```
+
+#### Publishing Chronicle Image
+
+This should show the built image that can then be pushed to the appropriate registry
+for use in a deployment. For example, if your registry is `myregistry` then these
+commands will :
+
+```bash
+docker tag chronicle-manufacturing-amd64-stl-release:0.6.2 myregistry/chronicle-manufacturing-stl-release:0.6.2
+docker push myregistry/chronicle-manufacturing-amd64-stl-release:0.6.2
+```
 
 ## Generate the GraphQL Schema
 
 Integration with Chronicle is primarily done through GraphQL. The GraphQL schema
 is specific to the domain and is generated from the domain.yaml file. To generate
 the GraphQL schema for your domain, simply run `gmake <domain>-sdl`. For example,
-for the manufacturing domain:
+for the `manufacturing` domain:
 
 ```bash
 gmake manufacturing-sdl
