@@ -136,9 +136,6 @@ docker tag chronicle-manufacturing-amd64-stl-release:0.6.2 myregistry/chronicle-
 docker push myregistry/chronicle-manufacturing-amd64-stl-release:0.6.2
 ```
 
-__NOTE__ that you will need to create the target repository in `myregistry`
-  first time around.
-
 ## Generate the GraphQL Schema
 
 Integration with Chronicle is primarily done through GraphQL. The GraphQL schema
