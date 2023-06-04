@@ -38,6 +38,13 @@ clean_docker: clean
 	docker buildx rm ctx-$(ISOLATION_ID)-sd || true
 	docker buildx rm ctx-$(ISOLATION_ID)-sr || true
 
+$(MARKERS)/binfmt:
+	mkdir -p $(MARKERS)
+	if [ `uname -m` = "x86_64" ]; then \
+                docker run --rm --privileged multiarch/qemu-user-static --reset -p yes; \
+        fi
+	touch $@
+
 define domain_tmpl =
 .PHONY: all-domains
 all-domains: $(1)
@@ -63,7 +70,7 @@ else
 endif
 
 .PHONY: $(1)-lint
-$(1)-lint:
+$(1)-lint: $(MARKERS)/binfmt
 	@echo "Checking domain definition for $(1)"
 	@docker run --volume $(shell pwd)/domains/$(1):/mnt \
 	            --entrypoint /usr/local/bin/chronicle-domain-lint --rm \
@@ -113,6 +120,7 @@ $(1)-inmem-debug: $(MARKERS)/ensure-context-$(1)-inmem-debug domains/$(1)/domain
 	@echo "Building $(1) debug inmem as docker image chronicle-$(1)-inmem:$(ISOLATION_ID)"
 	$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-id \
+		--platform linux/$(ARCH_TYPE) \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -128,6 +136,7 @@ $(1)-stl-debug:$(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml
 	@echo "Building $(1) debug chronicle stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sd \
+		--platform linux/$(ARCH_TYPE) \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -143,6 +152,7 @@ $(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/do
 	@echo "Building $(1) release inmem as docker image chronicle-$(1)-inmem-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-ir \
+		--platform linux/$(ARCH_TYPE) \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
@@ -158,6 +168,7 @@ $(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain
 	@echo "Building $(1) release chronicle stl  as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sr \
+		--platform linux/$(ARCH_TYPE) \
 		--tag chronicle-domain:$(ISOLATION_ID) \
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
