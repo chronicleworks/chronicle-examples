@@ -91,7 +91,7 @@ nodes using the
 * `ISOLATION_ID` defaults to `local` which is fine when you are working locally but
   this needs to be changed to a meaningful *TAG* when you are building an image.
 
-#### Building Chronicle Image
+#### Building a Chronicle Image
 
 Options to decide on include:
 
@@ -124,16 +124,20 @@ After the build, you can run the following command:
 docker images | grep chronicle-manufacturing-stl
 ```
 
-#### Publishing Chronicle Image
+#### Publishing a Chronicle Image
 
 This should show the built image that can then be pushed to the appropriate registry
 for use in a deployment. For example, if your registry is `myregistry` then these
-commands will :
+commands will let you publish the recent build
+`chronicle-manufacturing-amd64-stl-release:0.6.2`:
 
 ```bash
 docker tag chronicle-manufacturing-amd64-stl-release:0.6.2 myregistry/chronicle-manufacturing-stl-release:0.6.2
 docker push myregistry/chronicle-manufacturing-amd64-stl-release:0.6.2
 ```
+
+__NOTE__ that you will need to create the target repository in `myregistry`
+  first time around.
 
 ## Generate the GraphQL Schema
 
