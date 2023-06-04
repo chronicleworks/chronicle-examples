@@ -109,14 +109,14 @@ build of the `manufacturing` domain designed to run on x86 use this command:
 ARCH_TYPE=amd64 ISOLATION_ID=0.6.2 gmake manufacturing-stl-debug
 ```
 
-This will create an image `chronicle-manufacturing-amd64-stl:0.6.2` whereas
+This will create an image `chronicle-manufacturing-stl-amd64:0.6.2` whereas
 to create a release build for the same domain use this command:
 
 ```bash
 ARCH_TYPE=amd64 ISOLATION_ID=0.6.2 gmake manufacturing-stl-release
 ```
 
-This will create an image `chronicle-manufacturing-amd64-stl-release:0.6.2`.
+This will create an image `chronicle-manufacturing-stl-release-amd64:0.6.2`.
 
 After the build, you can run the following command:
 
@@ -129,11 +129,11 @@ docker images | grep chronicle-manufacturing-stl
 This should show the built image that can then be pushed to the appropriate registry
 for use in a deployment. For example, if your registry is `myregistry` then these
 commands will let you publish the recent build
-`chronicle-manufacturing-amd64-stl-release:0.6.2`:
+`chronicle-manufacturing-stl-release-amd64:0.6.2`:
 
 ```bash
-docker tag chronicle-manufacturing-amd64-stl-release:0.6.2 myregistry/chronicle-manufacturing-stl-release:0.6.2
-docker push myregistry/chronicle-manufacturing-amd64-stl-release:0.6.2
+docker tag chronicle-manufacturing-stl-release-amd64:0.6.2 myregistry/chronicle-manufacturing-stl-release-amd64:0.6.2
+docker push myregistry/chronicle-manufacturing-stl-release-amd64:0.6.2
 ```
 
 ## Generate the GraphQL Schema
