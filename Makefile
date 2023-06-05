@@ -124,7 +124,7 @@ $(1)-inmem-debug: $(MARKERS)/ensure-context-$(1)-inmem-debug domains/$(1)/domain
 		chronicle-$(1)-inmem:$(ISOLATION_ID)
 
 .PHONY: $(1)-stl
-$(1)-stl-debug:$(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml $(1)-lint
+$(1)-stl-debug: $(MARKERS)/ensure-context-$(1)-stl-debug domains/$(1)/domain.yaml $(1)-lint
 	@echo "Building $(1) debug chronicle stl as docker image as docker image chronicle-$(1)-stl:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sd \
@@ -147,7 +147,7 @@ $(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/do
 		--build-arg CHRONICLE_VERSION=$(CHRONICLE_VERSION) \
 		--build-arg CHRONICLE_BUILDER_IMAGE=$(CHRONICLE_BUILDER_IMAGE) \
 		--build-arg RELEASE=yes \
-		--build-arg FEATURES="inmem" \
+		--build-arg FEATURES=inmem \
 		--build-arg DOMAIN=$(1) . \
 		--load
 	@$(DOCKER_TAG) chronicle-domain:$(ISOLATION_ID) \
@@ -155,7 +155,7 @@ $(1)-inmem-release: $(MARKERS)/ensure-context-$(1)-inmem-release domains/$(1)/do
 
 .PHONY: $(1)-stl-release
 $(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain.yaml $(1)-lint
-	@echo "Building $(1) release chronicle stl  as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
+	@echo "Building $(1) release chronicle stl as docker image chronicle-$(1)-stl-release:$(ISOLATION_ID)"
 	@$(DOCKER_BUILD) -f docker/chronicle.dockerfile \
 		--builder ctx-$(ISOLATION_ID)-sr \
 		--tag chronicle-domain:$(ISOLATION_ID) \
@@ -238,4 +238,4 @@ $(foreach domain,$(DOMAINS),$(eval $(call domain_tmpl,$(domain))))
 sdl: $(foreach domain,$(DOMAINS), $(domain)-sdl )
 
 .PHONY: build
-build: sdl
+build: $(foreach domain,$(DOMAINS), $(domain) )
