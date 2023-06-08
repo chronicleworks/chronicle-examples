@@ -1,0 +1,5 @@
+[secrets]
+path = "/tmp/secrets"
+[validator]
+address = "tcp://validator:4004"
+[namespace_bindings]
