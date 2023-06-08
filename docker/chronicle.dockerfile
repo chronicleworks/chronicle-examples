@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 ARG CHRONICLE_BUILDER_IMAGE=blockchaintp/chronicle-builder-${TARGETARCH}
-ARG CHRONICLE_VERSION=BTP2.1.0-0.6.2
+ARG CHRONICLE_VERSION=BTP2.1.0-0.7.3
 
 FROM ${CHRONICLE_BUILDER_IMAGE}:${CHRONICLE_VERSION} as cache
 ARG RELEASE=no
@@ -8,17 +8,17 @@ ARG FEATURES=""
 
 # Build a layer for incremental compilation and cache it
 RUN if [ "${RELEASE}" = "yes" ]; then \
-    if [ -n "${FEATURES}" ]; then \
-      cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
-    else \
-      cargo build --release --frozen --bin chronicle; \
-    fi ; \
+  if [ -n "${FEATURES}" ]; then \
+  cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
   else \
-    if [ -n "${FEATURES}" ]; then \
-      cargo build --frozen --features "${FEATURES}" --bin chronicle; \
-    else \
-      cargo build --frozen --bin chronicle; \
-    fi ; \
+  cargo build --release --frozen --bin chronicle; \
+  fi ; \
+  else \
+  if [ -n "${FEATURES}" ]; then \
+  cargo build --frozen --features "${FEATURES}" --bin chronicle; \
+  else \
+  cargo build --frozen --bin chronicle; \
+  fi ; \
   fi;
 
 FROM cache as builder
@@ -34,19 +34,19 @@ RUN touch crates/chronicle-domain/domain.yaml
 RUN cat crates/chronicle-domain/domain.yaml
 
 RUN if [ "${RELEASE}" = "yes" ]; then \
-    if [ -n "${FEATURES}" ]; then \
-      cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
-    else \
-      cargo build --release --frozen --bin chronicle; \
-    fi \
-    && cp target/release/chronicle /usr/local/bin/; \
+  if [ -n "${FEATURES}" ]; then \
+  cargo build --release --frozen --features "${FEATURES}" --bin chronicle; \
   else \
-    if [ -n "${FEATURES}" ]; then \
-      cargo build --frozen --features "${FEATURES}" --bin chronicle; \
-    else \
-      cargo build --frozen --bin chronicle; \
-    fi \
-    && cp target/debug/chronicle /usr/local/bin/; \
+  cargo build --release --frozen --bin chronicle; \
+  fi \
+  && cp target/release/chronicle /usr/local/bin/; \
+  else \
+  if [ -n "${FEATURES}" ]; then \
+  cargo build --frozen --features "${FEATURES}" --bin chronicle; \
+  else \
+  cargo build --frozen --bin chronicle; \
+  fi \
+  && cp target/debug/chronicle /usr/local/bin/; \
   fi;
 
 WORKDIR /
@@ -61,11 +61,11 @@ RUN apt-get update && \
   ca-certificates
 
 RUN chmod 755 \
-    /entrypoint \
-    /usr/local/bin/chronicle
+  /entrypoint \
+  /usr/local/bin/chronicle
 
 RUN groupadd -g 999 chronicle && \
-    useradd -m -r -u 999 -g chronicle chronicle
+  useradd -m -r -u 999 -g chronicle chronicle
 
 USER chronicle
 

@@ -8,7 +8,7 @@ ARCH_TYPE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 HOST_ARCHITECTURE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder-$(ARCH_TYPE)
 CHRONICLE_TP_IMAGE ?= blockchaintp/chronicle-tp-$(ARCH_TYPE)
-CHRONICLE_VERSION ?= BTP2.1.0-0.6.2
+CHRONICLE_VERSION ?= BTP2.1.0-0.7.3
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
@@ -222,7 +222,7 @@ build-end-to-end-test: $(TEST_DOMAIN)-stl-release
 	docker build -t chronicle-test:$(ISOLATION_ID) -f docker/chronicle-test/chronicle-test.dockerfile .
 
 .PHONY: test-e2e
-test-e2e: build-end-to-end-test
+test-e2e: policies/bundle.tar.gz build-end-to-end-test
 	CHRONICLE_IMAGE=chronicle-$(TEST_DOMAIN)-stl-release \
 	CHRONICLE_VERSION=$(ISOLATION_ID) \
 	CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE) \
@@ -231,7 +231,6 @@ test-e2e: build-end-to-end-test
 
 test:
 
-
 $(foreach domain,$(DOMAINS),$(eval $(call domain_tmpl,$(domain))))
 
 .PHONY: sdl
@@ -239,3 +238,47 @@ sdl: $(foreach domain,$(DOMAINS), $(domain)-sdl )
 
 .PHONY: build
 build: sdl
+
+uname_S := $(shell uname -s)
+uname_M := $(shell uname -m)
+
+ifeq ($(uname_S), Linux)
+	OS = linux
+	OPA_SUFFIX = _static
+else ifeq ($(uname_S), Darwin)
+	OS = darwin
+else
+	OS = windows
+	ARCH = amd64
+endif
+
+ifeq ($(uname_M), x86_64)
+	ARCH = amd64
+else ifeq ($(uname_M), arm)
+	ARCH = arm64
+	OPA_SUFFIX = _static
+else ifeq ($(uname_M), arm64)
+	ARCH = arm64
+	OPA_SUFFIX = _static
+else ifeq ($(uname_M), aarch64)
+	ARCH = arm64
+	OPA_SUFFIX = _static
+endif
+
+OPA_VERSION=v0.49.2
+OPA_DOWNLOAD_URL=https://openpolicyagent.org/downloads/$(OPA_VERSION)/opa_$(OS)_$(ARCH)$(OPA_SUFFIX)
+
+build/opa:
+	mkdir -p build
+	curl -sSL -o build/opa $(OPA_DOWNLOAD_URL)
+	chmod 755 build/opa
+
+policies/bundle.tar.gz: build/opa
+	mkdir -p policies
+	build/opa build -t wasm -o policies/bundle.tar.gz -b policies -e "allow_transactions" -e "common_rules"
+
+clean: clean-opa
+.PHONY: clean-opa
+clean-opa:
+	$(RM) policies/*.tar.gz
+
