@@ -13,7 +13,7 @@ services:
   domain:
     environment:
       - RUST_BACKTRACE=full
-      - RUST_LOG=trace
+      - RUST_LOG=trace,cranelift_codegen=off,wasmtime_jit=off,wasmtime_cranelift=off,regalloc2::ion=off,cranelift_wasm=off
       - PGHOST=chronicle-pg
       - PGPASSWORD=chronicle
       - PGUSER=chronicle
@@ -28,7 +28,7 @@ services:
         --remote-database \
         serve-graphql \
         --interface 0.0.0.0:9982 \
-        --open
+        --unlock-cors
     expose:
       - 9982
     ports:
