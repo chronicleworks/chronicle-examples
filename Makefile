@@ -27,6 +27,7 @@ $(MARKERS):
 	mkdir -p $(MARKERS)
 
 DOCKER_COMPOSE := docker-compose
+DOCKER_COMPOSE_ENV ?= chronicle-environment
 DOCKER_BUILD := docker buildx build
 DOCKER_TAG := docker tag
 
@@ -182,7 +183,10 @@ $(1)-sdl: domains/$(1)/chronicle.graphql
 
 .PHONY: run-$(1)
 run-$(1): $(1)-inmem-debug
-	-CHRONICLE_IMAGE=chronicle-$(1)-inmem CHRONICLE_VERSION=$(ISOLATION_ID) $(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
+	export CHRONICLE_IMAGE=chronicle-$(1)-inmem; \
+	export CHRONICLE_VERSION=$(ISOLATION_ID); \
+	export CHRONICLE_ENV_FILE=$(DOCKER_COMPOSE_ENV); \
+	$(DOCKER_COMPOSE) -f ./docker/chronicle-domain.yaml up --force-recreate
 
 .PHONY: run-stl-$(1)
 run-stl-$(1): $(1)-stl-debug
@@ -190,6 +194,7 @@ run-stl-$(1): $(1)-stl-debug
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
 	export CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION); \
+	export CHRONICLE_ENV_FILE=$(DOCKER_COMPOSE_ENV); \
 	$(DOCKER_COMPOSE) -f docker/chronicle.yaml up --force-recreate -d
 
 .PHONY: stop-stl-$(1)
