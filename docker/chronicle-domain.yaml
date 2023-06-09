@@ -27,8 +27,7 @@ services:
         --console-logging pretty \
         --remote-database \
         serve-graphql \
-        --interface 0.0.0.0:9982 \
-        --unlock-cors
+        --interface 0.0.0.0:9982
     expose:
       - 9982
     ports:
