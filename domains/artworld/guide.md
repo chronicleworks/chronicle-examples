@@ -322,8 +322,8 @@ ultimately enhancing trust in the art market.
 
 With a comprehensive record of the artworld in place, it is now possible to query
 this record and gain insights into the industry. For example, one could query the
-record to determine the average sale price of artworks created by a particular
-artist, or to see which artists are exhibiting their works in a particular location.
+record to determine the sale prices of artworks created by a particular artist,
+or to see which artists are exhibiting their works in a particular location.
 
 ### Querying the Associations of the Sale of an Artwork and the Output
 
