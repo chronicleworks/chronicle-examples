@@ -203,6 +203,7 @@ stop-stl-$(1): $(1)-stl-debug
 	export CHRONICLE_TP_IMAGE=$(CHRONICLE_TP_IMAGE); \
 	export CHRONICLE_VERSION=$(ISOLATION_ID); \
 	export CHRONICLE_TP_VERSION=$(CHRONICLE_VERSION); \
+	export CHRONICLE_ENV_FILE=$(DOCKER_COMPOSE_ENV); \
 	$(DOCKER_COMPOSE) -f docker/chronicle.yaml down
 
 
