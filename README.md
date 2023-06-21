@@ -118,6 +118,38 @@ for the manufacturing domain:
 gmake manufacturing-sdl
 ```
 
+## Understanding the Makefile targets and Docker images
+
+As described above, Chronicle can be built either
+[with an in-memory ledger or backed by Sawtooth](#run-a-standalone-node).
+These have `inmem` or `stl` in their image name, respectively. Also, it can be
+built  either as [a debug or a release
+build](#deploy-to-a-chronicle-on-sawtooth-environment). The former suffixes
+image names with `-debug`, the latter with `-release`.
+
+The `gmake build` target builds the in-memory release images for every example
+domain. For Sawtooth-backed release builds, use `gmake stl-release` instead.
+
+The `run-*` targets build debug versions, other targets typically build
+release builds. Debug builds the code much faster for incremental changes but
+this advantage is irrelevant when each build is done in a fresh Docker
+container. Therefore, the better-optimized release builds are typically
+recommended.
+
+To build any specific Docker image, use the form `gmake A-B-C` where,
+
+A
+: the name of the domain, e.g., `manufacturing`
+
+B
+: either `inmem` or `stl`
+
+C
+: either `release` or `debug`
+
+which builds and tags an image named `chronicle-A-B-C`. The previous
+`chronicle-A-B` tag names are deprecated.
+
 ## GraphQL Client
 
 Chronicle Examples use Chronicle's `serve-graphql` function to provide the
