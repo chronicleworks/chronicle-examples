@@ -29,10 +29,10 @@ This contains several example domain yaml files, and Docker uses
 
 Choose from one of the following examples:
 
-* [Artworld](./domains/artworld/guide)
-* [Corporate Actions](./domains/corporate-actions/guide)
-* [Manufacturing](./domains/manufacturing/guide)
-* [Time Recording](./domains/time-recording/guide)
+* [Artworld](./domains/artworld/guide.md)
+* [Corporate Actions](./domains/corporate-actions/guide.md)
+* [Manufacturing](./domains/manufacturing/guide.md)
+* [Time Recording](./domains/time-recording/guide.md)
 
 For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work. Simply substitute the name of the domain's directory
