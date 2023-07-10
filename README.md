@@ -16,18 +16,12 @@ For example, the [manufacturing domain](https://github.com/btpworks/chronicle-ex
 Documentation for Chronicle in general may be found [here](https://docs.btp.works/chronicle/).
 Example domains may be found [here](https://examples.btp.works).
 
-## Prerequisites
-
-To get started, there are some basic prerequisites which must be installed:
-
-* [Docker](https://docs.docker.com/install/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
-* [GNU Make v4.0+](https://www.gnu.org/software/make/)
-
 ## Setting up your own domain
 
-This repository follow the same structure as the [Chronicle Examples](https://github.com/btpworks/chronicle-examples)
-repository which you can use for reference.
+This repository follows the same structure as the [Chronicle Examples](https://github.com/btpworks/chronicle-examples)
+repository, which you can use for reference.
+
+To get started with Chronicle Bootstrap:
 
 1. Clone this repo, or download it as a zip file from GitHub
    [here](https://github.com/btpworks/chronicle-bootstrap/archive/refs/heads/main.zip).
