@@ -107,6 +107,28 @@ By default, the images are given tags like, say,
 `chronicle-manufacturing-stl-release:local`. A value other than `local` can
 be set in the `ISOLATION_ID` environment variable prior to build.
 
+### Set Environment Variables
+
+Additional environment variables can be set that are recogized by the running
+Chronicle process. You may list these in the `docker/chronicle-environment`
+file which is initially empty. To instead read them from a different file,
+set its location in the `DOCKER_COMPOSE_ENV` environment variable.
+
+For example, to have Chronicle require all API requests to be
+authenticated, you could write your authentication provider's
+[OIDC endpoints](https://docs.btp.works/chronicle/auth/) into
+`docker/chronicle-environment` thus,
+
+```properties
+REQUIRE_AUTH=1
+JWKS_URI=https://id.example.com:80/.well-known/jwks.json
+USERINFO_URI=https://id.example.com:80/userinfo
+```
+
+taking the variable names from `chronicle serve-api --help`. Then, after you
+use `gmake run-my-domain` or similar, the running Chronicle will use the
+specified authentication provider to verify incoming requests.
+
 ## Generate the GraphQL Schema
 
 Integration with Chronicle is primarily done through GraphQL. The GraphQL schema
