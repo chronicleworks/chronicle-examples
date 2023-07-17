@@ -68,7 +68,7 @@ services:
     environment: &rustenv
       - RUST_BACKTRACE=full
       - RUST_LOG=info,cranelift_codegen=off,wasmtime_cranelift=off,regalloc2::ion=off,cranelift_wasm=off
-    image: &chronicleTpImage blockchaintp/chronicle-tp-amd64:${CHRONICLE_TP_VERSION}
+    image: &chronicleTpImage dev.catenasys.com:8083/joseph/chronicle-tp-amd64:main
     entrypoint: /bin/bash
     command:
       - -exc
@@ -85,7 +85,7 @@ services:
     environment:
       - RUST_BACKTRACE=full
       - RUST_LOG=info,cranelift_codegen=off,wasmtime_cranelift=off,regalloc2::ion=off,cranelift_wasm=off
-    image: &chronicleOpaTpImage blockchaintp/opa-tp-amd64:${CHRONICLE_TP_VERSION}
+    image: &chronicleOpaTpImage dev.catenasys.com:8083/joseph/opa-tp-amd64:main
     entrypoint: >
       /bin/bash -xc "/usr/local/bin/opa-tp
       -C tcp://validator:4004
@@ -176,7 +176,7 @@ services:
       - domain
 
   opa-init:
-    image: blockchaintp/opactl-amd64:${CHRONICLE_TP_VERSION}
+    image: dev.catenasys.com:8083/joseph/opactl-amd64:main
     entrypoint: /bin/bash
     environment:
       - RUST_BACKTRACE=full

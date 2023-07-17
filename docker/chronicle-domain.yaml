@@ -29,6 +29,10 @@ services:
         --remote-database \
         serve-graphql \
         --interface 0.0.0.0:9982
+    volumes:
+      - type: bind
+        source: ../import.json
+        target: /import.json
     expose:
       - 9982
     ports:
