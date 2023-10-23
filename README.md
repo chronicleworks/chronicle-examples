@@ -2,8 +2,8 @@
 
 This project contains contributed examples for Chronicle.  The markdown
 documents in this repository are published on
-[their own site](https://examples.btp.works). Documentation for
-Chronicle in general may be found [here](https://docs.btp.works/chronicle/).
+[their own site](https://examples.chronicle.works). Documentation for
+Chronicle in general may be found [here](https://docs.chronicle.works/).
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ a good starting point is [Introduction to GraphQL](https://graphql.org/learn/).
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/btpworks/chronicle-examples.git
+git clone https://github.com/chronicleworks/chronicle-examples
 ```
 
 This contains several example domain yaml files, and Docker uses
@@ -79,21 +79,24 @@ gmake stop-stl-manufacturing
 Rather than running a live Chronicle node locally, you may build a typed
 Chronicle image that is ready for deployment into an environment with Sawtooth
 nodes using the
-[Chronicle cookbook](https://docs.btp.works/cookbooks/chronicle/rancher).
+[Chronicle cookbook](https://docs.chronicle.works/cookbooks/chronicle/rancher).
 Options to decide on include:
 
-- Which domain example to build for Chronicle's typing.
+* Which domain example to build for Chronicle's typing.
 
-- `debug` for a debug build or `release` for a release build. The release
+* `debug` for a debug build or `release` for a release build. The release
   build includes less debug information and takes longer to build but is
   more performant.
 
 For example, for a debug build of the manufacturing domain,
+
 ```bash
 gmake manufacturing-stl-debug
 ```
+
 or a release build for the same domain,
-```
+
+```bash
 gmake manufacturing-stl-release
 ```
 
