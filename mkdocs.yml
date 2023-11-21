@@ -1,5 +1,6 @@
 ---
 site_name: Chronicle Examples
+site_author: Chronicle Team
 docs_dir: .
 theme:
   name: material
@@ -9,7 +10,7 @@ theme:
   favicon: docs/assets/logos/favicon.png
   features:
     - content.code.copy
-copyright: Copyright &copy; 2022-23 Blockchain Technology Partners Limited
+copyright: Copyright &copy; 2023 The Chronicle Authors | Documentation distributed under CC BY 4.0
 plugins:
   - same-dir
   - search
