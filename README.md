@@ -79,7 +79,7 @@ gmake stop-stl-manufacturing
 Rather than running a live Chronicle node locally, you may build a typed
 Chronicle image that is ready for deployment into an environment with Sawtooth
 nodes using the
-[Chronicle cookbook](https://docs.chronicle.works/cookbooks/chronicle/rancher).
+[Chronicle Rancher by SUSE Cookbook](https://docs.chronicle.works/rancher).
 Options to decide on include:
 
 * Which domain example to build for Chronicle's typing.
