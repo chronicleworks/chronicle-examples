@@ -119,7 +119,7 @@ set its location in the `DOCKER_COMPOSE_ENV` environment variable.
 
 For example, to have Chronicle require all API requests to be
 authenticated, you could write your authentication provider's
-[OIDC endpoints](https://docs.btp.works/chronicle/auth/) into
+[OIDC endpoints](https://docs.chronicle.works/auth/) into
 `docker/chronicle-environment` thus,
 
 ```properties
