@@ -32,13 +32,14 @@ Choose from one of the following examples:
 * [Artworld](./domains/artworld/guide.md)
 * [Corporate Actions](./domains/corporate-actions/guide.md)
 * [Manufacturing](./domains/manufacturing/guide.md)
+* [Science Project](./domains/science-project/guide.md)
 * [Time Recording](./domains/time-recording/guide.md)
 
 For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work. Simply substitute the name of the domain's directory
 for `manufacturing` in the following instructions. For the other listed
-domains, instead substitute `artworld`, `corporate-actions`, or
-`time-recording`, as desired.
+domains, instead substitute `artworld`, `corporate-actions`,
+`science-project`, or `time-recording`, as desired.
 
 ### Run a Standalone Node
 
@@ -52,8 +53,8 @@ blockchain.
 gmake run-manufacturing
 ```
 
-Now you are ready to connect to a GraphQL client, such as the
-[Altair GraphQL Client](#graphql-client).
+Now you are ready to connect to Chronicle and interact with this example, using
+a GraphQL client as detailed [below](#graphql-client).
 
 To stop this node, simply use control-C or otherwise terminate the process.
 
@@ -67,6 +68,9 @@ blockchain:
 ```bash
 gmake run-stl-manufacturing
 ```
+
+Now you are ready to connect to Chronicle and interact with this example, using
+a GraphQL client as detailed [below](#graphql-client).
 
 To stop this node, a further command shuts it down:
 
@@ -178,8 +182,8 @@ which builds and tags an image named `chronicle-A-B-C`. The previous
 ## GraphQL Client
 
 Chronicle Examples use Chronicle's `serve-graphql` function to provide the
-Chronicle GraphQL API. By using a GraphQL client, you can interact with Chronicle
-by running GraphQL queries, mutations, and subscriptions.
+Chronicle GraphQL API. By using a GraphQL client, you can interact with
+Chronicle by running GraphQL queries, mutations, and subscriptions.
 
 We recommend using the [Altair GraphQL Client](https://altairgraphql.dev/),
 which is available as a free desktop GraphQL IDE or web browser extension.
@@ -195,16 +199,17 @@ browser on the same machine will remember all your queries and tab positions.
 To add a new mutation or query tab, there is a `+` on the right-hand side of the
 tab bar.
 
-Once you get to this point, you are ready to explore the example. To do this,
+Once you get to this point, you are ready to explore the examples. To do this,
 refer to the relevant guide.
 
 ### Notes
 
-If you are using Chronicle on default settings, point the GraphQL client to
+If you are using Chronicle on default settings, point your GraphQL client to
 <http://127.0.0.1:9982>.
 
-The *SCHEMA* and *DOCS* tabs are useful for showing the relationship between
-your `domain.yaml` configuration and the resulting Chronicle API.
+In the case of the GraphQL Playground the *SCHEMA* and *DOCS* tabs are useful
+for showing the relationship between your `domain.yaml` configuration and the
+resulting Chronicle API.
 
 Shift-refresh on the playground will remove previous results from query tabs,
 which is recommended before rerunning your example.
@@ -218,12 +223,22 @@ can subscribe to events in one of the tabs by using the subscription URL
 ```graphql
 subscription {
   commitNotifications {
+    txId
     stage
     error
     delta
   }
 }
 ```
+
+__NOTE__ that if you are using JWT authorization you will need to install the
+a GraphQL client that supports subscriptions in this scenario. We have verified
+that [GQL 3](https://gql.readthedocs.io/en/latest/intro.html) works.
+
+Once installed you can run the same subscription using `gql-cli`. To faciliate
+this we provide a script [subscription.sh](./scripts/subscription.sh). Simply
+run this and respond to the prompts. If you haven't locked down your
+environment using JWT the bearer token will be ignored.
 
 ## Adding a Domain
 

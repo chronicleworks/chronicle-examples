@@ -45,14 +45,14 @@ repos:
     hooks:
       - id: forbid-binary
         exclude: ".*.(png|jpg|jpeg|ico)$"
+      - id: script-must-have-extension
+      - id: script-must-not-have-extension
       - id: shellcheck
         args:
           - -a
           - -x
           - -P
           - SCRIPTDIR
-      - id: script-must-have-extension
-      - id: script-must-not-have-extension
       - id: shfmt
         args:
           - -l
