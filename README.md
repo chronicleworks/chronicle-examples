@@ -223,8 +223,8 @@ can subscribe to events in one of the tabs by using the subscription URL
 ```graphql
 subscription {
   commitNotifications {
-    txId
     stage
+    txId
     error
     delta
   }
