@@ -32,13 +32,14 @@ Choose from one of the following examples:
 * [Artworld](./domains/artworld/guide.md)
 * [Corporate Actions](./domains/corporate-actions/guide.md)
 * [Manufacturing](./domains/manufacturing/guide.md)
+* [Science Project](./domains/science-project/guide.md)
 * [Time Recording](./domains/time-recording/guide.md)
 
 For the purposes of these instructions we will use the `manufacturing` domain,
 but any domain will work. Simply substitute the name of the domain's directory
 for `manufacturing` in the following instructions. For the other listed
-domains, instead substitute `artworld`, `corporate-actions`, or
-`time-recording`, as desired.
+domains, instead substitute `artworld`, `corporate-actions`,
+`science-project`, or `time-recording`, as desired.
 
 ### Run a Standalone Node
 
@@ -52,8 +53,8 @@ blockchain.
 gmake run-manufacturing
 ```
 
-Now you are ready to connect to a GraphQL client, such as the
-[Altair GraphQL Client](#graphql-client).
+Now you are ready to connect to Chronicle and interact with this example, using
+a GraphQL client as detailed [below](#using-the-graphql-client).
 
 To stop this node, simply use control-C or otherwise terminate the process.
 
@@ -67,6 +68,9 @@ blockchain:
 ```bash
 gmake run-stl-manufacturing
 ```
+
+Now you are ready to connect to Chronicle and interact with this example, using
+a GraphQL client as detailed [below](#using-the-graphql-client).
 
 To stop this node, a further command shuts it down:
 
@@ -175,55 +179,76 @@ C
 which builds and tags an image named `chronicle-A-B-C`. The previous
 `chronicle-A-B` tag names are deprecated.
 
-## GraphQL Client
+## Using the GraphQL Client
 
 Chronicle Examples use Chronicle's `serve-graphql` function to provide the
-Chronicle GraphQL API. By using a GraphQL client, you can interact with Chronicle
-by running GraphQL queries, mutations, and subscriptions.
+Chronicle GraphQL API. By using a GraphQL client, you can interact with
+Chronicle by running GraphQL queries, mutations, and subscriptions.
 
 We recommend using the [Altair GraphQL Client](https://altairgraphql.dev/),
 which is available as a free desktop GraphQL IDE or web browser extension.
 
 If you have previously used Chronicle Examples, you can still access the
 [GraphQL Playground](https://github.com/graphql/graphql-playground) through your
-web browser at <http://127.0.0.1:9982>, however we will be deprecating support
-for GraphQL Playground in future releases.
+web browser at <http://127.0.0.1:9982>, unless you are using port forwarding
+or an ingress. However we will be deprecating support for the playground in
+future releases.
 
-Both of these GraphQL clients are persistent via cookies, so running the same
-browser on the same machine will remember all your queries and tab positions.
+Both of the playground and the Altair GraphQL Client are persistent via cookies,
+therefore running the same browser on the same machine will preserves all your
+queries and tab positions, simplifying resubmittng them if you are iterating on
+an idea for example.
 
 To add a new mutation or query tab, there is a `+` on the right-hand side of the
-tab bar.
+tab bar. Don't forget to use Shift-R to refresh your client before rerunning an
+example.
 
-Once you get to this point, you are ready to explore the example. To do this,
-refer to the relevant guide.
+In the case of the GraphQL Playground, the *SCHEMA* and *DOCS* tabs make it
+easy to explore the relationship between your `domain.yaml` configuration and
+the resulting strongly-typed Chronicle GraphQL API.
 
-### Notes
+### Subscribing to Events (1)
 
-If you are using Chronicle on default settings, point the GraphQL client to
-<http://127.0.0.1:9982>.
-
-The *SCHEMA* and *DOCS* tabs are useful for showing the relationship between
-your `domain.yaml` configuration and the resulting Chronicle API.
-
-Shift-refresh on the playground will remove previous results from query tabs,
-which is recommended before rerunning your example.
-
-### Subscribe to Events
-
-Finally, to see what is happening as you run GraphQL mutations and queries, you
-can subscribe to events in one of the tabs by using the subscription URL
-<ws://localhost:9982/ws>.
+In order to see what is happening as you run GraphQL mutations and queries, you
+can subscribe to async events in one of the tabs. The GraphQL Playround handles
+this automatically upgrading your HTTP connection to a websocket end point.
+However, other GraphQL clients may ask you to explicitly provide this. Again,
+the default is <ws://127.0.0.1:9982/ws>.
 
 ```graphql
 subscription {
   commitNotifications {
     stage
+    txId
     error
     delta
   }
 }
 ```
+
+### Subscribing to Events (2)
+
+If you are using JWT authorization you will need to install a GraphQL client
+that supports subscriptions correctly by passing the `Authorization` header.
+
+Neither the Altair GraphQL Client nor the GraphQL Playground support this.
+However, we have verified that the CLI
+[gql-cli](https://gql.readthedocs.io/en/latest/gql-cli/intro.html)
+included in [GQL 3](https://gql.readthedocs.io/en/latest/intro.html) handles
+this gracefully. To install this use `pip`:
+
+```bash
+pip install "gql[all]"
+```
+
+Once `gql-cli` is installed you can use it to run the same subscription. To
+faciliate this we have provided a script [subscription.sh](./scripts/subscription.sh).
+
+We recommend that you run this script first, then experiment with mutations and
+queries using your preferred GraphQL client.
+
+__NOTE__ If you haven't locked down your environment using JWT, the bearer token
+will be ignored.
 
 ## Adding a Domain
 
