@@ -1,25 +1,28 @@
 #!/bin/bash
 
+# Authorization
+read -er -p "Enter bearer token: " wstoken
+wstoken=${wstoken:-beertoken}
+
 # Chronicle host
-read -erp "Enter hostname: " wshost
+read -er -p "Enter hostname: " wshost
 wshost=${wshost:-127.0.0.1}
 
 # Chronicle port
-read -erp "Enter port: " wsport
+read -er -p "Enter port: " wsport
 wsport=${wsport:-9982}
 
-# Authorization
-read -erp "Enter bearer token: " wstoken
-wstoken=${wstoken:-beertoken}
+wsendpoint="ws://$wshost:$wsport/ws"
 
-echo "$wshost"
-echo "$wsport"
-echo "$wstoken"
+echo "Establishing subscription"
 
-read -rp "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+echo "Using bearer token: $wstoken"
+echo "Using ws end point: $wsendpoint"
+
+read -r -p "Continue? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
 
 echo "subscription{ commitNotifications {stage,txId,delta,error}}" | gql-cli \
   --headers "Authorization: Bearer $wstoken" \
-  --transport websockets -v ws://"$wshost":"$wsport"/ws
+  --transport websockets -v "$wsendpoint"
 
 exit 0
