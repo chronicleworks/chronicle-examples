@@ -204,21 +204,21 @@ refer to the relevant guide.
 
 ### Notes
 
-If you are using Chronicle on default settings, point your GraphQL client to
-<http://127.0.0.1:9982>.
+If you are using Chronicle with default settings, point your GraphQL client or
+browser <http://127.0.0.1:9982>.
 
-In the case of the GraphQL Playground the *SCHEMA* and *DOCS* tabs are useful
-for showing the relationship between your `domain.yaml` configuration and the
-resulting Chronicle API.
+In the case of the GraphQL Playground, the *SCHEMA* and *DOCS* tabs make it
+easy to explore the relationship between your `domain.yaml` configuration and
+the resulting strongly-typed Chronicle GraphQL API.
 
-Shift-refresh on the playground will remove previous results from query tabs,
-which is recommended before rerunning your example.
+__NOTE__ Use Shift-R to refresh the playground before rerunning your example.
 
-### Subscribe to Events
+### Subscribing to Events (1)
 
 Finally, to see what is happening as you run GraphQL mutations and queries, you
-can subscribe to events in one of the tabs by using the subscription URL
-<ws://localhost:9982/ws>.
+can subscribe to async events in one of the tabs. The GraphQL Playround handles
+this automatically but other GraphQL clients may ask you to explicitly provide
+the websocket end point. The default is <ws://localhost:9982/ws>.
 
 ```graphql
 subscription {
@@ -231,14 +231,29 @@ subscription {
 }
 ```
 
-__NOTE__ that if you are using JWT authorization you will need to install the
-a GraphQL client that supports subscriptions in this scenario. We have verified
-that [GQL 3](https://gql.readthedocs.io/en/latest/intro.html) works.
+### Subscribing to Events (2)
 
-Once installed you can run the same subscription using `gql-cli`. To faciliate
-this we provide a script [subscription.sh](./scripts/subscription.sh). Simply
-run this and respond to the prompts. If you haven't locked down your
-environment using JWT the bearer token will be ignored.
+If you are using JWT authorization you will need to install a GraphQL client
+that supports subscriptions correctly by passing the `Authorization` header.
+
+Neither the Altair GraphQL Client or the GraphQL Playground support this.
+However, we have verified that the CLI
+[gql-cli](https://gql.readthedocs.io/en/latest/gql-cli/intro.html)
+included in [GQL 3](https://gql.readthedocs.io/en/latest/intro.html) handles
+this gracefully. To install this use `pip`:
+
+```bash
+pip install "gql[all]"
+```
+
+Once `gql-cli` is installed you can use it to run the same subscription. To
+faciliate this we have provided a script [subscription.sh](./scripts/subscription.sh).
+
+We recommend that you run this script first, then experiment with mutations and
+queries using your preferred GraphQL client.
+
+__NOTE__ If you haven't locked down your environment using JWT, the bearer token
+will be ignored.
 
 ## Adding a Domain
 

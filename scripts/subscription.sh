@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # Authorization
-read -er -p "Enter bearer token: " wstoken
+read -er -p "Enter bearer token [beertoken]: " wstoken
 wstoken=${wstoken:-beertoken}
 
 # Chronicle host
-read -er -p "Enter hostname: " wshost
+read -er -p "Enter hostname [127.0.0.1]: " wshost
 wshost=${wshost:-127.0.0.1}
 
 # Chronicle port
-read -er -p "Enter port: " wsport
+read -er -p "Enter port [9982]: " wsport
 wsport=${wsport:-9982}
 
 wsendpoint="ws://$wshost:$wsport/ws"
 
-echo "Establishing subscription"
+echo "Establishing subscription..."
 
 echo "Using bearer token: $wstoken"
 echo "Using ws end point: $wsendpoint"
