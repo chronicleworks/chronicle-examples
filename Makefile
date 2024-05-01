@@ -8,7 +8,7 @@ ARCH_TYPE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 HOST_ARCHITECTURE ?= $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 CHRONICLE_BUILDER_IMAGE ?= blockchaintp/chronicle-builder-$(ARCH_TYPE)
 CHRONICLE_TP_IMAGE ?= blockchaintp/chronicle-tp-$(ARCH_TYPE)
-CHRONICLE_VERSION ?= BTP2.1.0-0.7.4
+CHRONICLE_VERSION ?= BTP2.1.0-0.7.6
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
@@ -183,7 +183,7 @@ $(1)-stl-release: $(MARKERS)/ensure-context-$(1)-stl-release domains/$(1)/domain
 
 domains/$(1)/chronicle.graphql: $(1)-inmem-release
 	@echo "Generating $(1) GraphQL schema in file: domains/$(1)/chronicle.graphql"
-	@docker run --env RUST_LOG=debug chronicle-$(1)-inmem-release:$(ISOLATION_ID) \
+	@docker run --env RUST_LOG=info chronicle-$(1)-inmem-release:$(ISOLATION_ID) \
 		export-schema > domains/$(1)/chronicle.graphql
 
 .PHONY: clean-graphql-$(1)
