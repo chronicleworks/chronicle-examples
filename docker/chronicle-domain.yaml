@@ -14,7 +14,7 @@ services:
     env_file: "${CHRONICLE_ENV_FILE}"
     environment:
       - RUST_BACKTRACE=full
-      - RUST_LOG=trace,cranelift_codegen=off,wasmtime_jit=off,wasmtime_cranelift=off,regalloc2::ion=off,cranelift_wasm=off
+      - RUST_LOG=debug,cranelift_codegen=off,wasmtime_jit=off,wasmtime_cranelift=off,regalloc2::ion=off,cranelift_wasm=off
       - PGHOST=chronicle-pg
       - PGPASSWORD=chronicle
       - PGUSER=chronicle
