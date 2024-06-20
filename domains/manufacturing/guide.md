@@ -225,7 +225,7 @@ The output should look something like this -
 
 ```graphql
 mutation {
-  defineItemManufacturedActivity(externalId: "rotorblademake-run-001", attributes:{ batchIDAttribute: "run-001" }) {
+  defineItemManufacturedActivity(externalId: "rotorblade-manufacture-run-001", attributes:{ batchIDAttribute: "run-001" }) {
     context
     txId
   }
@@ -238,7 +238,7 @@ The output should look something like this -
 {
   "data": {
     "defineItemManufacturedActivity": {
-      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "context": "chronicle:activity:rotorblade%2Dmanufacture%2Drun%2D001",
       "txId": "93ad8dd6-4e97-45e0-9c60-ddb079863830"
     }
   }
@@ -253,7 +253,7 @@ as a `Manufacturer` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: { externalId: "rotorblademake-run-001" },
+    activity: { externalId: "rotorblade-manufacture-run-001" },
     responsible: { externalId: "helicoptersplc" },
     role: MANUFACTURER) {
     context
@@ -280,7 +280,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id: { externalId: "rotorblademake-run-001" }) {
+    id: { externalId: "rotorblade-manufacture-run-001" }) {
     context
     txId
   }
@@ -293,7 +293,7 @@ The output should look something like this -
 {
   "data": {
     "startActivity": {
-      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "context": "chronicle:activity:rotorblade%2Dmanufacture%2Drun%2D001",
       "txId": "36d58122-35ec-4e66-a31b-1534710e310b"
     }
   }
@@ -335,7 +335,7 @@ Then we assert that it `wasGeneratedBy` by the relevant manufacturing activity.
 ```graphql
 mutation {
   wasGeneratedBy(id: { externalId: "rotorblade-run-001-001" },
-    activity: { externalId: "rotorblademake-run-001" }) {
+    activity: { externalId: "rotorblade-manufacture-run-001" }) {
     context
     txId
   }
@@ -355,12 +355,12 @@ The output should look something like this -
 }
 ```
 
-For completeness, we record that the activity `used` it.
+For completeness, we record that the activity `generated` it.
 
 ```graphql
 mutation {
-  used(id: { externalId: "rotorblade-run-001-001" },
-    activity: { externalId: "rotorblademake-run-001" }) {
+  generated(id: { externalId: "rotorblade-run-001-001" },
+    activity: { externalId: "rotorblade-manufacture-run-001" }) {
     context
     txId
   }
@@ -372,7 +372,7 @@ The output should look something like this -
 ```json
 {
   "data": {
-    "used": {
+    "generated": {
       "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
       "txId": "87a1fcde-beff-48ea-85a0-b67bb40114e3"
     }
@@ -389,7 +389,7 @@ to an end.
 ```graphql
 mutation {
   endActivity(
-    id:{ externalId: "rotorblademake-run-001" }) {
+    id:{ externalId: "rotorblade-manufacture-run-001" }) {
     context
     txId
   }
@@ -402,7 +402,7 @@ The output should look something like this -
 {
   "data": {
     "endActivity": {
-      "context": "chronicle:activity:rotorblademake%2Drun%2D001",
+      "context": "chronicle:activity:rotorblade%2Dmanufacture%2Drun%2D001",
       "txId": "51839346-b068-4946-9491-334d465faa56"
     }
   }
@@ -419,7 +419,7 @@ Here, the identity of the activity can incorporate the PartID.
 
 ```graphql
 mutation {
-  defineItemCertifiedActivity(externalId: "rotorbladecert-run-001-001") {
+  defineItemCertifiedActivity(externalId: "rotorblade-certify-run-001-001") {
     context
     txId
   }
@@ -432,7 +432,7 @@ The output should look something like this -
 {
   "data": {
     "defineItemCertifiedActivity": {
-      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "context": "chronicle:activity:rotorblade%2Dcertify%2Drun%2D001%2D001",
       "txId": "e2ca580a-f0dd-4ea5-8bce-297a4f6800b7"
     }
   }
@@ -447,7 +447,7 @@ as a `CERTIFIER` using the `wasAssociatedWith` relationship -
 ```graphql
 mutation {
     wasAssociatedWith(
-    activity: { externalId: "rotorbladecert-run-D001-D001" },
+    activity: { externalId: "rotorblade-certify-run-001-001" },
     responsible: { externalId: "helicoptersplc" },
     role: CERTIFIER) {
     context
@@ -474,7 +474,7 @@ The output should look something like this -
 ```graphql
 mutation {
   startActivity(
-    id: { externalId: "rotorbladecert-run-001-001" }) {
+    id: { externalId: "rotorblade-certify-run-001-001" }) {
     context
     txId
   }
@@ -487,7 +487,7 @@ The output should look something like this -
 {
   "data": {
     "startActivity": {
-      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "context": "chronicle:activity:rotorblade%2Dcertify%2Drun%2D001%2D001",
       "txId": "fc1570a7-1077-4839-9277-c906c834a8b4"
     }
   }
@@ -502,7 +502,7 @@ example, the CertID of the rotor blade is the same as its PartID.
 
 ```graphql
 mutation {
-  defineCertificateEntity(externalId: "rotorbladecert-run-001-001", attributes:{ certIDAttribute: "run-001-001" }) {
+  defineCertificateEntity(externalId: "rotorblade-certificate-run-001-001", attributes:{ certIDAttribute: "run-001-001" }) {
     context
     txId
   }
@@ -515,7 +515,7 @@ The output should look something like this -
 {
   "data": {
     "defineCertificateEntity": {
-      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+      "context": "chronicle:entity:rotorblade%2Dcertificate%2Drun%2D001%2D001",
       "txId": "2db682a4-c1cf-4ebd-8f07-8f81d6c9da2f"
     }
   }
@@ -526,8 +526,8 @@ Then, we assert that it `wasGeneratedBy` by the certification activity.
 
 ```graphql
 mutation {
-  wasGeneratedBy(id: { externalId: "rotorbladecert-run-001-001" },
-    activity: { externalId: "rotorbladecert-run-001-001" }) {
+  wasGeneratedBy(id: { externalId: "rotorblade-certificate-run-001-001" },
+    activity: { externalId: "rotorblade-certify-run-001-001" }) {
     context
     txId
   }
@@ -540,26 +540,25 @@ The output should look something like this -
 {
   "data": {
     "wasGeneratedBy": {
-      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+      "context": "chronicle:entity:rotorblade%2Dcertificate%2Drun%2D001%2D001",
       "txId": "83acf7e3-afcc-4685-8f76-b34a91acff7f"
     }
   }
 }
 ```
 
-For completeness, we record that the activity `used` the certificate. (In a
-future release, this will be replaced by `generated`.) However, this time we also
+For completeness, we record that the activity `generated` the certificate. However, this time we also
 record the fact that the activity `used` the rotor blade.
 
 ```graphql
 mutation {
-  cert: used(id: { externalId: "rotorbladecert-run-001-001" },
-    activity: { externalId: "rotorbladecert-run-001-001" }) {
+  generated(id: { externalId: "rotorblade-certificate-run-001-001" },
+    activity: { externalId: "rotorblade-certify-run-001-001" }) {
     context
     txId
   }
-  blade: used(id: { externalId: "rotorblade-run-001-001" },
-    activity: { externalId: "rotorbladecert-run-001-001" }) {
+  used(id: { externalId: "rotorblade-run-001-001" },
+    activity: { externalId: "rotorblade-certify-run-001-001" }) {
     context
     txId
   }
@@ -571,11 +570,11 @@ The output should look something like this -
 ```json
 {
   "data": {
-    "cert": {
-      "context": "chronicle:entity:rotorbladecert%2Drun%2D001%2D001",
+    "generated": {
+      "context": "chronicle:entity:rotorblade%2Dcertificate%2Drun%2D001%2D001",
       "txId": "6eb76aa2-4e87-45ec-bdad-37a930f1970d"
     },
-    "blade": {
+    "used": {
       "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
       "txId": "d0eb8691-29e0-4264-aebb-31733f4ffb21"
     }
@@ -591,7 +590,7 @@ the activity.
 ```graphql
 mutation {
   endActivity(
-    id: { externalId: "rotorbladecert-run-001-001" }) {
+    id: { externalId: "rotorblade-certify-run-001-001" }) {
     context
     txId
   }
@@ -604,7 +603,7 @@ The output should look something like this -
 {
   "data": {
     "endActivity": {
-      "context": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001",
+      "context": "chronicle:activity:rotorblade%2Dcertify%2Drun%2D001%2D001",
       "txId": "ae86576a-9e1f-4bef-9b74-c5c45c8b6ff7"
     }
   }
@@ -625,7 +624,7 @@ query {
       wasGeneratedBy { ... on ItemManufacturedActivity { id } }
     }
   }
-  q2: entityById(id: {externalId: "rotorbladecert-run-001-001"}) {
+  q2: entityById(id: {externalId: "rotorblade-certificate-run-001-001"}) {
     ... on CertificateEntity {
       certIDAttribute
       wasGeneratedBy { ... on ItemCertifiedActivity { id } }
@@ -643,7 +642,7 @@ The output should look something like this -
       "partIDAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
-          "id": "chronicle:activity:rotorblademake%2Drun%2D001"
+          "id": "chronicle:activity:rotorblade%2Dmanufacture%2Drun%2D001"
         }
       ]
     },
@@ -651,7 +650,7 @@ The output should look something like this -
       "certIDAttribute": "run-001-001",
       "wasGeneratedBy": [
         {
-          "id": "chronicle:activity:rotorbladecert%2Drun%2D001%2D001"
+          "id": "chronicle:activity:rotorblade%2Dcertify%2Drun%2D001%2D001"
         }
       ]
     }
