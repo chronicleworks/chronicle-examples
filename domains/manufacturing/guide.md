@@ -355,30 +355,8 @@ The output should look something like this -
 }
 ```
 
-For completeness, we record that the activity `generated` it.
-
-```graphql
-mutation {
-  generated(id: { externalId: "rotorblade-run-001-001" },
-    activity: { externalId: "rotorblade-manufacture-run-001" }) {
-    context
-    txId
-  }
-}
-```
-
-The output should look something like this -
-
-```json
-{
-  "data": {
-    "generated": {
-      "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
-      "txId": "87a1fcde-beff-48ea-85a0-b67bb40114e3"
-    }
-  }
-}
-```
+**NOTE** that this is a bidirectional relationship and the fact that the manufacturing
+activity `generated` this rotor blade is inferred.
 
 In this guide, we are only showing the recording of a single rotor blade, however,
 in practice, a batch will be associated with this activity, before the activity comes
@@ -547,16 +525,13 @@ The output should look something like this -
 }
 ```
 
-For completeness, we record that the activity `generated` the certificate. However, this time we also
-record the fact that the activity `used` the rotor blade.
+**NOTE** that this is a bidirectional relationship and the fact that the certification
+activity `generated` this certificate is inferred.
+
+However, this time we also record the fact that the activity `used` the rotor blade.
 
 ```graphql
 mutation {
-  generated(id: { externalId: "rotorblade-certificate-run-001-001" },
-    activity: { externalId: "rotorblade-certify-run-001-001" }) {
-    context
-    txId
-  }
   used(id: { externalId: "rotorblade-run-001-001" },
     activity: { externalId: "rotorblade-certify-run-001-001" }) {
     context
@@ -570,10 +545,6 @@ The output should look something like this -
 ```json
 {
   "data": {
-    "generated": {
-      "context": "chronicle:entity:rotorblade%2Dcertificate%2Drun%2D001%2D001",
-      "txId": "6eb76aa2-4e87-45ec-bdad-37a930f1970d"
-    },
     "used": {
       "context": "chronicle:entity:rotorblade%2Drun%2D001%2D001",
       "txId": "d0eb8691-29e0-4264-aebb-31733f4ffb21"
