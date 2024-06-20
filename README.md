@@ -305,3 +305,24 @@ For rendering your new guide locally, `docs/` also includes a list of the
 Python dependencies required for running `mkdocs serve`. In using it to review
 your guide, check that you have explained every aspect of your domain clearly
 so the community can draw the greatest benefit from your work.
+
+## MKDOCS setup
+
+Contributors responsible for maintaining documentation can review this locally
+by installing `mkdocs` plus associated themes and plugins using the following
+commands:
+
+```bash
+pip install mkdocs
+pip install mkdocs-material
+pip install mkdocs-same-dir
+pip install mkdocs-build-plantuml-plugin
+```
+
+You can then review the documentation locally:
+
+```bash
+mkdocs serve
+```
+
+Once you are happy you can create a pull request.
